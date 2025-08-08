@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ez-chess", "ez-chess.csproj", "{EA84081E-B541-4AB8-9AC4-5D1F89CA8F78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA84081E-B541-4AB8-9AC4-5D1F89CA8F78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA84081E-B541-4AB8-9AC4-5D1F89CA8F78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA84081E-B541-4AB8-9AC4-5D1F89CA8F78}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{EA84081E-B541-4AB8-9AC4-5D1F89CA8F78}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{EA84081E-B541-4AB8-9AC4-5D1F89CA8F78}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{EA84081E-B541-4AB8-9AC4-5D1F89CA8F78}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal

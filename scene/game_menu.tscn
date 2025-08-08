@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dfh5wv1amf5c6"]
+
+[node name="MenuBar" type="MenuBar"]
+
+[node name="文件" type="PopupMenu" parent="."]
+auto_translate_mode = 1
+item_count = 1
+item_0/text = "打开游戏"
+item_0/id = 0
