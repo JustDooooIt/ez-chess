@@ -3,5 +3,5 @@ using Godot;
 
 public partial class InfantryState : PieceState
 {
-  private PieceState pieceState;
+  
 }

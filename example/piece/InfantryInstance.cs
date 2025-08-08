@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public partial class Infantry : PieceInstance
+public partial class InfantryInstance : PieceInstance
 {
   
 }

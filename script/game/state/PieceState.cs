@@ -5,10 +5,6 @@ public partial class PieceState : RefCounted, IPiece
 {
   public event Action<int> ActionCompleted;
 
-  protected int _faction;
-  
+  public int Faction { get; set; }
   public Vector2I Position { get; set; }
-  public float AttackPower { get; set; }
-  public float DefensePower{ get; set; }
-  public float Movement { get; set; }
 }
