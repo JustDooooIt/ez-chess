@@ -12,7 +12,7 @@ public partial class PieceAdapter : Node, IPiece
   {
     State = state;
     Instance = instance;
-    if (Instance is PieceDecorator decorator)
+    if (Instance is PieceDecorator<IPieceInstance> decorator)
     {
       AddChild(decorator.Origin);
     }
