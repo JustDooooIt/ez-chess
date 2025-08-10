@@ -1,11 +1,12 @@
 
 using System.Threading.Tasks;
 
-public partial class MoveStateValve(IPieceState pieceState, MoveEvent moveEvent) : StateValve(pieceState)
+public partial class MoveStateValve(IPieceState pieceState, RenderMoveEvent moveEvent) : StateValve(pieceState)
 {
-  private MoveEvent _moveEvent = moveEvent;
+  private RenderMoveEvent _moveEvent = moveEvent;
+
   protected override async Task DoLaunch()
   {
-    PipelineEventBus.Instance.Publish<MoveEvent>(this.GetInstanceId(), _moveEvent);
+    PipelineEventBus.Instance.Publish(GetInstanceId(), _moveEvent);
   }
 }

@@ -38,21 +38,25 @@ public partial class PipelineEventBus
 
 public abstract record Event
 {
+  public Event(ulong pieceId)
+  {
+    this.pieceId = pieceId;
+  }
 
+  public ulong pieceId;
 }
 
 public record RenderEvent : Event
 {
-  public int valveId;
-  public ulong pieceId;
+  public RenderEvent(ulong piece) : base(piece) { }
 }
 
-public record MoveEvent : RenderEvent
+public record RenderMoveEvent : RenderEvent
 {
   public Vector2I from;
   public Vector2I to;
 
-  public MoveEvent(Vector2I from, Vector2I to)
+  public RenderMoveEvent(ulong piece, Vector2I from, Vector2I to) : base(piece)
   {
     this.from = from;
     this.to = to;

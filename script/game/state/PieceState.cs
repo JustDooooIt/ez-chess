@@ -8,13 +8,8 @@ public partial class PieceState : RefCounted, IPieceState
   public int Faction { get; set; }
   public Vector2I Position { get; set; }
 
-  public void AddChild(Node node)
+  public GodotObject GetOrigin()
   {
-    throw new NotImplementedException();
-  }
-
-  public void AddTo(Node node)
-  {
-    throw new NotImplementedException();
+    return this;
   }
 }

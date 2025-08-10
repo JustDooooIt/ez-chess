@@ -6,15 +6,17 @@ public class MoveStateDecorator(IPieceState piece, float movement) : PieceStateD
 
   public void Move(Vector2I from, Vector2I to)
   {
-    IValve moveValve = new MoveStateValve(Piece, new(from, to));
-    GameManager.StatePipeline.AddValve(moveValve);
+	ulong instance = PieceAdapter.GetInstanceFromState(Piece.GetInstanceId());
+	Valve moveValve = new MoveStateValve(Piece, new(instance, from, to));
+	GameManager.StatePipeline.AddValve(moveValve);
+	GameManager.RenderPipeline.RegisterValve<RenderMoveEvent>(moveValve);
   }
 
   public override V As<V>() where V : class
   {
-    if (typeof(V) == typeof(IMoveable))
-      return this as V;
+	if (typeof(V) == typeof(IMoveable))
+	  return this as V;
 
-    return base.As<V>();
+	return base.As<V>();
   }
 }

@@ -5,8 +5,3 @@ public abstract partial class ValveGroup : Pipeline
 {
 
 }
-
-public partial class ValveGroupImpl : PipelineImpl<ValveGroup>
-{
-  
-}
