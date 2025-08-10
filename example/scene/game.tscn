@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://cuavd51riac8e"]
+
+[ext_resource type="Script" uid="uid://pbh61lv6f6fh" path="res://example/script/piece/GameManager.cs" id="1_dyxfk"]
+[ext_resource type="Script" uid="uid://codwpkpai1cfl" path="res://script/game/pipeline/StatePipeline.cs" id="2_8jysa"]
+[ext_resource type="Script" uid="uid://c0re2mee034h5" path="res://script/game/pipeline/RenderPipeline.cs" id="3_sox6t"]
+[ext_resource type="PackedScene" uid="uid://rsksnlxc55pq" path="res://example/scene/general_piece.tscn" id="4_sox6t"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_dyxfk")
+
+[node name="Pipelines" type="Node" parent="."]
+
+[node name="state" type="Node" parent="Pipelines"]
+script = ExtResource("2_8jysa")
+
+[node name="render" type="Node" parent="Pipelines"]
+script = ExtResource("3_sox6t")
+
+[node name="Node" type="Node" parent="."]
+
+[node name="GeneralPiece" parent="Node" instance=ExtResource("4_sox6t")]

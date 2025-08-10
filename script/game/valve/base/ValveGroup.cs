@@ -1,14 +1,12 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public class ValveGroup : ILaunchable
+public abstract partial class ValveGroup : Pipeline
 {
-  private List<IValve> _valves;
+
+}
+
+public partial class ValveGroupImpl : PipelineImpl<ValveGroup>
+{
   
-  public void Launch()
-  {
-    foreach (var valve in _valves)
-    {
-      valve.Launch();
-    }
-  }
 }

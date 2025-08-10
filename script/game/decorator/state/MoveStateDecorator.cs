@@ -1,19 +1,20 @@
 using Godot;
 
-public class MoveStateDecorator(PieceState piece, float movement) : PieceStateDecorator(piece), IMoveable
+public class MoveStateDecorator(IPieceState piece, float movement) : PieceStateDecorator(piece), IMoveable
 {
   public float Movement { get; set; } = movement;
 
   public void Move(Vector2I from, Vector2I to)
   {
-
+    IValve moveValve = new MoveStateValve(Piece, new(from, to));
+    GameManager.StatePipeline.AddValve(moveValve);
   }
 
-  public override T As<T>() where T : class
+  public override V As<V>() where V : class
   {
-    if (typeof(T) == typeof(IMoveable))
-      return this as T;
+    if (typeof(V) == typeof(IMoveable))
+      return this as V;
 
-    return base.As<T>();
+    return base.As<V>();
   }
 }

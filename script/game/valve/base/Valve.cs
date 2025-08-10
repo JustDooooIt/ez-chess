@@ -1,12 +1,21 @@
-public abstract class Valve : IValve
-{
-  protected ValveStates _valveState;
-  protected PieceState _pieceState;
+using System.Threading.Tasks;
+using Godot;
 
-  public abstract void Launch();
+public abstract partial class Valve : RefCounted, IValve
+{
+  public ValveStates ValveState { get; protected set; } = ValveStates.IDLED;
+
+  public async Task Launch()
+  {
+    ValveState = ValveStates.LAUNCHING;
+    await DoLaunch();
+    ValveState = ValveStates.STOPED;
+  }
+
+  protected abstract Task DoLaunch();
 
   public enum ValveStates
-  { 
-    IDLE, LAUNCH, STOP
+  {
+    IDLED, LAUNCHING, STOPED
   }
 }

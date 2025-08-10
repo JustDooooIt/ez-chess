@@ -1,26 +1,16 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
-using System;
-using System.Collections.Generic;
 
-/*
- *
- */
-public partial class Pipeline : RefCounted, ILaunchable
+public abstract partial class Pipeline : Node, ILaunchable, IStopable
 {
 
-  private States state;
-  private List<ValveGroup> _valves;
-
-  /*
-   * 启动管线流程,直至接受到停止信号
-   */
-  public void Launch()
-  {
-
-  }
+  public abstract Task Launch();
+  public abstract Task Stop();
+  public abstract void AddValve(IValve launchable);
 
   public enum States
   {
-    IDLE, LAUNCH, STOP
+    IDLED, LAUNCHING, STOPED
   }
 }
