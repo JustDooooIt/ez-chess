@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://cuavd51riac8e"]
+[gd_scene load_steps=6 format=3 uid="uid://cuavd51riac8e"]
 
 [ext_resource type="Script" uid="uid://pbh61lv6f6fh" path="res://example/script/piece/GameManager.cs" id="1_dyxfk"]
 [ext_resource type="Script" uid="uid://codwpkpai1cfl" path="res://script/game/pipeline/StatePipeline.cs" id="2_8jysa"]
 [ext_resource type="Script" uid="uid://c0re2mee034h5" path="res://script/game/pipeline/RenderPipeline.cs" id="3_sox6t"]
 [ext_resource type="PackedScene" uid="uid://rsksnlxc55pq" path="res://example/scene/general_piece_adapter.tscn" id="4_sox6t"]
+
+[sub_resource type="TileSet" id="TileSet_sox6t"]
+tile_shape = 3
+tile_size = Vector2i(32, 32)
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_dyxfk")
@@ -19,3 +23,6 @@ script = ExtResource("3_sox6t")
 [node name="Node" type="Node" parent="."]
 
 [node name="GeneralPiece" parent="Node" instance=ExtResource("4_sox6t")]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = SubResource("TileSet_sox6t")
