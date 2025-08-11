@@ -1,4 +1,4 @@
 public interface IPieceProvider<out T>
 {
-  T Piece { get; }
+  T OriginPiece { get; }
 }

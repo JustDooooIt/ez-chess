@@ -8,7 +8,7 @@ public partial class PieceState : RefCounted, IPieceState
   public int Faction { get; set; }
   public Vector2I Position { get; set; }
 
-  public GodotObject GetOrigin()
+  public GodotObject GetWrapped()
   {
     return this;
   }

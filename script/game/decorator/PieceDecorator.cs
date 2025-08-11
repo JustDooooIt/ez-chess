@@ -1,13 +1,13 @@
 using System;
 using Godot;
 
-public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IInterfaceQueryable, IPieceProvider<T>
+public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider<T>, IInterfaceQueryable
 {
 	public event Action<int> ActionCompleted;
-
+ 
 	protected IPiece _wrapped = wrapped;
 
-	public T Piece => (T)_wrapped;
+	public T OriginPiece => (T)_wrapped;
 
 	public virtual V As<V>() where V : class
 	{
@@ -21,15 +21,15 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IInterfaceQuer
 		return null;
 	}
 
-	private V GetOrigin<V>()
+	private V GetWrapped<V>()
 	{
 		if (_wrapped is PieceInstanceDecorator decorator1)
 		{
-			return decorator1.GetOrigin<V>();
+			return decorator1.GetWrapped<V>();
 		}
 		else if (_wrapped is PieceStateDecorator decorator2)
 		{
-			return decorator2.GetOrigin<V>();
+			return decorator2.GetWrapped<V>();
 		}
 		else if (_wrapped is V w)
 		{
@@ -38,14 +38,14 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IInterfaceQuer
 		return default;
 	}
 
-	public GodotObject GetOrigin()
+	public GodotObject GetWrapped()
 	{
-		return GetOrigin<GodotObject>();
+		return GetWrapped<GodotObject>();
 	}
 
 	public ulong GetInstanceId()
 	{
-		return GetOrigin().GetInstanceId();
+		return GetWrapped().GetInstanceId();
 	}
 
 }

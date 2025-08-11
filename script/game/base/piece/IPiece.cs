@@ -3,6 +3,6 @@ using Godot;
 
 public interface IPiece : IInterfaceQueryable
 {
-  GodotObject GetOrigin();
+  GodotObject GetWrapped();
   ulong GetInstanceId();
 }

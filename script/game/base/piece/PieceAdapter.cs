@@ -19,7 +19,7 @@ public partial class PieceAdapter : Node, IPiece
     _node_state_dict[instance.GetInstanceId()] = state.GetInstanceId();
     if (Instance is PieceInstanceDecorator decorator)
     {
-      AddChild((Node)decorator.GetOrigin());
+      AddChild((Node)decorator.GetWrapped());
     } 
     else
     {
@@ -27,7 +27,7 @@ public partial class PieceAdapter : Node, IPiece
     }
   }
 
-  public GodotObject GetOrigin()
+  public GodotObject GetWrapped()
   {
     return this;
   }

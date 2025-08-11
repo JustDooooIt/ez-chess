@@ -9,7 +9,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 
   public Tween Tween { get => GetTween(); }
 
-  public GodotObject GetOrigin()
+  public GodotObject GetWrapped()
   {
     return this;
   }
