@@ -5,8 +5,6 @@ public partial class GeneralPiece : PieceAdapter
 {
 	private const string scenePath = "res://example/scene/general_piece.tscn";
 
-	private GameManager gameManager;
-
 	public override void _Ready()
 	{
 		var state = new PieceState()
@@ -19,10 +17,6 @@ public partial class GeneralPiece : PieceAdapter
 			.WithAttackAction();
 
 		Init(state, instance);
-
-		// Test
-		gameManager = GetNode<GameManager>("../..");
-		Move();
 	}
 
 	public void Move()
