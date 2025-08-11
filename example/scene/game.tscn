@@ -1,9 +1,7 @@
-[gd_scene load_steps=10 format=4 uid="uid://cuavd51riac8e"]
+[gd_scene load_steps=8 format=4 uid="uid://cuavd51riac8e"]
 
 [ext_resource type="Script" uid="uid://dn52qil1j45od" path="res://example/script/GameManager.cs" id="1_8n2gv"]
-[ext_resource type="Script" uid="uid://codwpkpai1cfl" path="res://script/framwork/pipeline/StatePipeline.cs" id="2_8jysa"]
 [ext_resource type="Script" uid="uid://dws1iy1edrqkw" path="res://script/framwork/loader/GameLoader.cs" id="2_8n2gv"]
-[ext_resource type="Script" uid="uid://c0re2mee034h5" path="res://script/framwork/pipeline/RenderPipeline.cs" id="3_sox6t"]
 [ext_resource type="Texture2D" uid="uid://cwdl83jcpsqfh" path="res://example/resource/image/hexagon-2.png" id="5_an1xj"]
 [ext_resource type="Texture2D" uid="uid://dpl6sifcpoxwv" path="res://example/resource/image/N44 Map-2015-FINAL-150.jpg" id="5_ksdpg"]
 [ext_resource type="Script" uid="uid://wk1rs8pbe3b6" path="res://script/utils/HexMap.cs" id="6_8n2gv"]
@@ -50,12 +48,6 @@ tile_set = SubResource("TileSet_sox6t")
 script = ExtResource("2_8n2gv")
 ConfigPath = "res://example/resource/config.json"
 
-[node name="Pipelines" type="Node" parent="."]
-
-[node name="state" type="Node" parent="Pipelines"]
-script = ExtResource("2_8jysa")
-
-[node name="render" type="Node" parent="Pipelines"]
-script = ExtResource("3_sox6t")
+[node name="Players" type="Node" parent="."]
 
 [node name="Pieces" type="Node" parent="."]

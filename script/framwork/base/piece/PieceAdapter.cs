@@ -10,6 +10,9 @@ public partial class PieceAdapter : Node, IPiece
   private readonly static Dictionary<ulong, ulong> _node_state_dict = [];
   public IPieceState State { get; protected set; }
   public IPieceInstance Instance { get; protected set; }
+  public Pipeline StatePipeline { get; set; }
+  public Pipeline RenderPipeline { get; set; }
+
 
   public void Init(IPieceState state, IPieceInstance instance)
   {

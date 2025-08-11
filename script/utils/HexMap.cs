@@ -7,16 +7,16 @@ public partial class HexMap : Sprite2D
 
   public override void _Ready()
   {
-    _baseTerrain = GetNode<TileMapLayer>("BaseTerrain");
+	_baseTerrain = GetNode<TileMapLayer>("BaseTerrain");
   }
 
   public void PlacePiece(Node2D piece, Vector2 vector)
   {
-    piece.Position = vector;
+	piece.Position = vector;
   }
 
   public void PlacePiece(Node2D piece, Vector2I vector)
   {
-    piece.Position = _baseTerrain.MapToLocal(vector) + _baseTerrain.Position;
+	piece.Position = _baseTerrain.MapToLocal(vector) + _baseTerrain.Position;
   }
 }

@@ -1,7 +1,7 @@
 {
 	"basePiece": "res://scene/piece_adapter.tscn",
-	"factions": ["British", "America", "German"],
-	"British": {
+	"factions": ["Axis", "Allies"],
+	"Allies": {
 		"pieces": [
 			{
 				"name": "1SS",
@@ -12,6 +12,9 @@
 				"scene": "res://example/scene/general_piece.tscn",
 				"position": {
 					"x": 0, "y": 0
+				},
+				"size": {
+					"x": 84, "y": 84
 				}
 			}
 		]

@@ -3,22 +3,16 @@ using System;
 
 public partial class GameManager : Node2D
 {
-  public static Pipeline StatePipeline { get; private set; }
-  public static Pipeline RenderPipeline { get; private set; }
+  private Node _players;
 
   public override void _Ready()
   {
-	StatePipeline = GetNode<Pipeline>("Pipelines/state");
-	RenderPipeline = GetNode<Pipeline>("Pipelines/render");
-	StatePipeline.Launch();
-	RenderPipeline.Launch();
-
-	// Test
-	// Move();
+    _players = GetNode<Node>("Players");
   }
 
-  private void Move()
+  public void AddPlayer(PipelineAdapter pipeline)
   {
-	GetNode<GeneralPiece>("Pieces/GeneralPiece").Move();
+    var players = GetNode<Node>("Players");
+    players.AddChild(pipeline);
   }
 }
