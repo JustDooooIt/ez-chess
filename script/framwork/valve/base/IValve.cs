@@ -1,0 +1,4 @@
+public interface IValve: ILaunchable
+{
+  
+}

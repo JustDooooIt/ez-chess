@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://rsksnlxc55pq"]
-
-[ext_resource type="Script" uid="uid://clibsvh3eedqe" path="res://example/script/piece/GeneralPiece.cs" id="1_pgcrj"]
-
-[node name="GeneralPieceAdapter" type="Node"]
-script = ExtResource("1_pgcrj")

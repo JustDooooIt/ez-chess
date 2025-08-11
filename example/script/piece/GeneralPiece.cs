@@ -7,16 +7,16 @@ public partial class GeneralPiece : PieceAdapter
 
 	public override void _Ready()
 	{
-		var state = new PieceState()
-			.WithAttackState(5)
-			.WithMovetState(5);
+		// var state = new PieceState()
+		// 	.WithAttackState(5)
+		// 	.WithMovetState(5);
 
-		var instance = GD.Load<PackedScene>(scenePath)
-			.Instantiate<GeneralInstance>()
-			.WithMovetAction()
-			.WithAttackAction();
+		// var instance = GD.Load<PackedScene>(scenePath)
+		// 	.Instantiate<GeneralInstance>()
+		// 	.WithMovetAction()
+		// 	.WithAttackAction();
 
-		Init(state, instance);
+		// Init(state, instance);
 	}
 
 	public void Move()

@@ -1,0 +1,19 @@
+{
+	"basePiece": "res://scene/piece_adapter.tscn",
+	"factions": ["British", "America", "German"],
+	"British": {
+		"pieces": [
+			{
+				"name": "1SS",
+				"imagePath": [
+					"res://example/resource/pieces/BR-1SS.png",
+					"res://example/resource/pieces/BR-1SS-B.png"
+				],
+				"scene": "res://example/scene/general_piece.tscn",
+				"position": {
+					"x": 0, "y": 0
+				}
+			}
+		]
+	}
+}

@@ -1,12 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://rsksnlxc55pq"]
+[gd_scene load_steps=2 format=3 uid="uid://rsksnlxc55pq"]
 
-[ext_resource type="Script" uid="uid://chymad478xsrq" path="res://example/script/piece/GeneralInstance.cs" id="1_pgcrj"]
-[ext_resource type="Texture2D" uid="uid://eo63ab1m2v5v" path="res://icon.svg" id="2_e2dmo"]
+[ext_resource type="Script" uid="uid://dt62faeuhtwrs" path="res://script/framwork/piece/base/PieceInstance.cs" id="1_pgcrj"]
 
 [node name="GeneralPiece" type="Node2D"]
 script = ExtResource("1_pgcrj")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(32, 32)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_e2dmo")
