@@ -5,16 +5,27 @@ public partial class PieceInstance : Node2D, IPieceInstance
 {
   public event Action<int> ActionCompleted;
 
-  public Tween Tween { get; private set; }
+  private Tween _tween;
+
+  public Tween Tween { get => GetTween(); }
 
   public GodotObject GetOrigin()
   {
     return this;
   }
 
-  public override void _Ready()
+  private Tween GetTween()
   {
-    Tween = CreateTween();
-    Tween.Pause();
+    if (_tween == null)
+    {
+      return CreateTween();
+    }
+    else
+    {
+      if (_tween.IsValid())
+        return _tween;
+      else
+        return CreateTween();
+    }
   }
 }

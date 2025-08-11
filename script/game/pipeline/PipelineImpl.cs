@@ -15,7 +15,7 @@ public abstract partial class PipelineImpl<T> : Pipeline, ILaunchableProvider<T>
   {
     if (State == States.LAUNCHING)
       return;
- 
+
     readCts = new CancellationTokenSource();
     State = States.LAUNCHING;
     while (await LaunchableList.Reader.WaitToReadAsync(readCts.Token))

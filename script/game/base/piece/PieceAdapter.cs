@@ -6,8 +6,8 @@ public partial class PieceAdapter : Node, IPiece
 {
   public event Action<int> ActionCompleted;
 
-  protected static Dictionary<ulong, ulong> _state_node_dict = [];
-  protected static Dictionary<ulong, ulong> _node_state_dict = [];
+  private readonly static Dictionary<ulong, ulong> _state_node_dict = [];
+  private readonly static Dictionary<ulong, ulong> _node_state_dict = []; 
   public IPieceState State { get; protected set; }
   public IPieceInstance Instance { get; protected set; }
 

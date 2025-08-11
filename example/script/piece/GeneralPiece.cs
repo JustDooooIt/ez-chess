@@ -3,11 +3,11 @@ using Godot;
 
 public partial class GeneralPiece : PieceAdapter
 {
-	private const string scenePath = "res://example/scene/inner_general_piece.tscn";
+	private const string scenePath = "res://example/scene/general_piece.tscn";
 
 	private GameManager gameManager;
 
-	public override async void _Ready()
+	public override void _Ready()
 	{
 		var state = new PieceState()
 			.WithAttackState(5)
@@ -22,7 +22,6 @@ public partial class GeneralPiece : PieceAdapter
 
 		// Test
 		gameManager = GetNode<GameManager>("../..");
-		await ToSignal(gameManager, "ready");
 		Move();
 	}
 
