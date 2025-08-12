@@ -10,10 +10,10 @@ public partial class PieceInstance : Node2D, IPieceInstance
 
 	public Tween Tween => GetTween();
 
-  public Pipeline StatePipeline { get; set; }
-  public Pipeline RenderPipeline { get; set; }
+	public Pipeline StatePipeline { get; set; }
+	public Pipeline RenderPipeline { get; set; }
 
-  public override void _Ready()
+	public override void _Ready()
 	{
 		_area = GetNode<Area2D>("Area2D");
 	}
@@ -53,4 +53,6 @@ public partial class PieceInstance : Node2D, IPieceInstance
 			rectangle.Size = size;
 		}
 	}
+
+	
 }

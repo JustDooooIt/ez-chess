@@ -15,23 +15,23 @@ public partial class PieceAdapter : Node, IPiece
 
   public void Init(IPieceState state, IPieceInstance instance)
   {
-	State = state;
-	Instance = instance;
-	_state_node_dict[state.GetInstanceId()] = instance.GetInstanceId();
-	_node_state_dict[instance.GetInstanceId()] = state.GetInstanceId();
-	if (Instance is PieceInstanceDecorator decorator)
-	{
-	  AddChild((Node)decorator.GetOrigin());
-	}
-	else
-	{
-	  AddChild(Instance as Node);
-	}
+    State = state;
+    Instance = instance;
+    _state_node_dict[state.GetInstanceId()] = instance.GetInstanceId();
+    _node_state_dict[instance.GetInstanceId()] = state.GetInstanceId();
+    if (Instance is PieceInstanceDecorator decorator)
+    {
+      AddChild((Node)decorator.GetOrigin());
+    }
+    else
+    {
+      AddChild(Instance as Node);
+    }
   }
 
   public GodotObject GetOrigin()
   {
-	return this;
+    return this;
   }
 
   public static ulong GetStateFromInstance(ulong id) { return _node_state_dict[id]; }

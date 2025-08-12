@@ -2,9 +2,13 @@ using System.Linq;
 using Godot;
 using Godot.Collections;
 
-public partial class PieceFactory : RefCounted, IPieceFactory
+public partial  class PieceFactory : PieceFactoryBase, IPieceFactory
 {
-	public PieceAdapter Create(int pieceType, params Variant[] args)
+  protected override string PieceAdapterScenePath => IPieceFactory.PIECE_ADAPTER_PATH;
+
+  protected override string PieceInstanceScenePath => IPieceFactory.PIECE_INSTANCE_PATH;
+
+  public override PieceAdapter Create(int pieceType, params Variant[] args)
 	{
 		return pieceType switch
 		{
@@ -13,10 +17,10 @@ public partial class PieceFactory : RefCounted, IPieceFactory
 		};
 	}
 
-	private static PieceAdapter CreateInfantry(Array<Dictionary<string, Variant>> data)
+	private PieceAdapter CreateInfantry(Array<Dictionary<string, Variant>> data)
 	{
-		var piece = GD.Load<PackedScene>(IPieceFactory.PIECE_ADAPTER_PATH).Instantiate<PieceAdapter>();
-		var instance = GD.Load<PackedScene>(IPieceFactory.PIECE_INSTANCE_PATH).Instantiate<PieceInstance>();
+		var piece = GD.Load<PackedScene>(PieceAdapterScenePath).Instantiate<PieceAdapter>();
+		var instance = GD.Load<PackedScene>(PieceInstanceScenePath).Instantiate<PieceInstance>();
 		var stateWrapper = new PieceState()
 			.WithMovetState([.. data.Select(e => (float)e["move"].AsDouble())])
 			.WithAttackState([.. data.Select(e => (float)e["attack"].AsDouble())]);
