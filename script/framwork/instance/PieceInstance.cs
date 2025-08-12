@@ -11,13 +11,12 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	private Shader _outline;
 
 	public Tween Tween => GetTween();
-	public Pipeline StatePipeline { get; set; }
-	public Pipeline RenderPipeline { get; set; }
 	public bool Selectable { get; set; } = true;
 	public GodotObject Origin => this;
 	private TileMapLayer HexMap => GetNode<TileMapLayer>("../../../../HexMap/BaseTerrain");
+  public PipelineAdapter PipelineAdapter { get; set; }
 
-	public override void _Ready()
+  public override void _Ready()
 	{
 		_area = GetNode<Area2D>("Area2D");
 		_area.MouseEntered += Select;

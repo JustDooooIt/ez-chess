@@ -8,15 +8,20 @@ public partial class PieceAdapter : Node, IPiece
 
   private readonly static Dictionary<ulong, ulong> _state_node_dict = [];
   private readonly static Dictionary<ulong, ulong> _node_state_dict = [];
-  private Pipeline _statePipeline;
-  private Pipeline _renderPipeline;
+  private PipelineAdapter _pipelineAdapter;
+  private PiecesManager _piecesManager;
 
   public IPieceState State { get; protected set; }
   public IPieceInstance Instance { get; protected set; }
-  public Pipeline StatePipeline { get => _statePipeline; set => SetStatePipeline(value); }
-  public Pipeline RenderPipeline { get => _renderPipeline; set => SetRenderPipeline(value); }
+  public PipelineAdapter PipelineAdapter { get; set; }
   GodotObject IPiece.Origin => this;
 
+  public override void _Ready()
+  {
+	_piecesManager = GetNode<PiecesManager>("..");
+	PipelineAdapter = GetNode<PipelineAdapter>($"../../../Players/{_piecesManager.Name}");
+	SetPipelineAdapter();
+  }
 
   public void Init(IPieceState state, IPieceInstance instance)
   {
@@ -38,17 +43,9 @@ public partial class PieceAdapter : Node, IPiece
 
   public static ulong GetInstanceFromState(ulong id) { return _state_node_dict[id]; }
 
-  private void SetStatePipeline(Pipeline pipeline)
+  private void SetPipelineAdapter()
   {
-	State.StatePipeline = pipeline;
-	Instance.StatePipeline = pipeline;
-	_statePipeline = pipeline;
-  }
-
-  private void SetRenderPipeline(Pipeline pipeline)
-  {
-	State.RenderPipeline = pipeline;
-	Instance.RenderPipeline = pipeline;
-	_renderPipeline = pipeline;
+	State.PipelineAdapter = PipelineAdapter;
+	Instance.PipelineAdapter = PipelineAdapter;
   }
 }

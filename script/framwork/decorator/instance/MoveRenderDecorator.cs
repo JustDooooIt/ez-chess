@@ -6,5 +6,4 @@ public class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecora
   {
     GD.Print($"Move from {from} to {to}");
   }
-
 } 

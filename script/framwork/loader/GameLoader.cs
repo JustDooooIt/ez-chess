@@ -40,7 +40,7 @@ public partial class GameLoader : Node
 		return Json.ParseString(file.GetAsText()).AsGodotDictionary<string, Variant>();
 	}
 
-	private void InitFirstFounded(IDictionary<string, Variant> config)
+	private async void InitFirstFounded(IDictionary<string, Variant> config)
 	{
 		var factionNames = config["factions"].AsGodotArray<string>();
 		foreach (var factionName in factionNames)
@@ -76,20 +76,12 @@ public partial class GameLoader : Node
 					defaultFace = defaultFace == -1 ? 0 : defaultFace;
 					var pieceAdapter = _pieceFactory.Create(pieceType, pieceName, faceImage, defaultFace, sizeVec, states);
 					factionNode.AddChild(pieceAdapter);
-					SetPipeline(pieceAdapter);
+					if (!_manager.IsNodeReady())
+						await ToSignal(_manager, "ready");
 					_map.PlacePiece(pieceAdapter, positionVec);
 				}
 			}
 		}
-	}
-
-	private void SetPipeline(PieceAdapter piece)
-	{
-		var factionName = piece.GetNode<Node>("..").Name;
-		var statePipeline = _manager.GetNode<Pipeline>($"Players/{factionName}/State");
-		var renderPipeline = _manager.GetNode<Pipeline>($"Players/{factionName}/Render"); ;
-		piece.StatePipeline = statePipeline;
-		piece.RenderPipeline = renderPipeline;
 	}
 
 	private void AddPlayer(string name)
@@ -110,7 +102,8 @@ public partial class GameLoader : Node
 
 	private async void StartPipeline()
 	{
-		await ToSignal(_manager, "ready");
+		if (!_manager.IsNodeReady())
+			await ToSignal(_manager, "ready");
 		_manager.StartPipelines();
 	}
 }

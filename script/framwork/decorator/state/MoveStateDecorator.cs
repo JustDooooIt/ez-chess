@@ -11,9 +11,9 @@ public class MoveStateDecorator(IPieceState piece, List<float> movements) : Piec
   public void Move(Vector2I from, Vector2I to)
   {
     ulong instance = PieceAdapter.GetInstanceFromState(Wrapped.GetInstanceId());
-    Valve moveValve = new MoveStateValve(Wrapped, new(instance, from, to));
-    StatePipeline.AddValve(moveValve);
-    RenderPipeline.RegisterValve<RenderMoveEvent>(moveValve);
+    Valve moveValve = new MoveStateValve(this, new(instance, from, to));
+    PipelineAdapter.StatePipeline.AddValve(moveValve);
+    PipelineAdapter.RenderPipeline.RegisterValve<RenderMoveEvent>(moveValve);
   }
 
   public override V As<V>() where V : class

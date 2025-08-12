@@ -7,11 +7,9 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 
 	protected IPiece _wrapped = wrapped;
 
-
-	public Pipeline StatePipeline { get => ((IPiece)Origin).StatePipeline; set => ((IPiece)Origin).StatePipeline = value; }
-	public Pipeline RenderPipeline { get => ((IPiece)Origin).RenderPipeline; set => ((IPiece)Origin).RenderPipeline = value; }
 	public GodotObject Origin => GetDeepWrapped<GodotObject>();
 	public T Wrapped => GetDeepWrapped<T>();
+	public PipelineAdapter PipelineAdapter { get => ((IPiece)Origin).PipelineAdapter; set => ((IPiece)Origin).PipelineAdapter = value; }
 
 	public virtual V As<V>() where V : class
 	{

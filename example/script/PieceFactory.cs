@@ -19,13 +19,13 @@ public partial class PieceFactory : PieceFactoryBase, IPieceFactory
 		var piece = new PieceAdapter();
 		var instance = GD.Load<PackedScene>(IPieceFactory.PIECE_INSTANCE_PATH).Instantiate<PieceInstance>();
 		var stateWrapper = new PieceState()
+			.WithSetupBoardState()
 			.WithMovetState([.. data.Select(e => (float)e["move"].AsDouble())])
-			.WithAttackState([.. data.Select(e => (float)e["attack"].AsDouble())])
-			.WithSetupBoardState();
+			.WithAttackState([.. data.Select(e => (float)e["attack"].AsDouble())]);
 		var instanceWrapper = instance
+			.WithSetupBoardAction()
 			.WithMovetAction()
-			.WithAttackAction()
-			.WithSetupBoardAction();
+			.WithAttackAction();
 		piece.Init(stateWrapper, instanceWrapper);
 		PieceAddCover(piece, images, defaultFace);
 		piece.Instance.SetAreaSize(areaSize);

@@ -6,9 +6,9 @@ public class SetupBoardStateDecorator(IPieceState wrapped) : PieceStateDecorator
 
   public void SetupBoard(Vector2I position)
   {
-    ulong instanceId = PieceAdapter.GetInstanceFromState(Wrapped.GetInstanceId());
-    var valve = new SetupBoardStateValve(this, new(instanceId, position));
-    StatePipeline.AddValve(valve);
-    RenderPipeline.RegisterValve<RenderSetupBoardEvent>(valve);
+	ulong instanceId = PieceAdapter.GetInstanceFromState(Wrapped.GetInstanceId());
+	var valve = new SetupBoardStateValve(this, new(instanceId, position));
+	PipelineAdapter.StatePipeline.AddValve(valve);
+	PipelineAdapter.RenderPipeline.RegisterValve<RenderSetupBoardEvent>(valve);
   }
 }

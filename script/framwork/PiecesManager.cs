@@ -4,16 +4,15 @@ using System.Collections.Generic;
 
 public partial class PiecesManager : Node
 {
-  private Group<Vector2I, PieceAdapter> _pieces = new();
+  public Group<Vector2I, PieceAdapter> Pieces { get; } = new();
 
   public override void _Ready()
   {
-	ChildEnteredTree += OnPieceAdded;
+
   }
 
-  public void OnPieceAdded(Node node)
+  public void AddPiece(Vector2I position, PieceAdapter piece)
   {
-	var piece = (PieceAdapter)node;
-	GD.Print();
+	Pieces.Add(position, piece);
   }
 }
