@@ -1,0 +1,40 @@
+{
+	"basePiece": "res://scene/piece_adapter.tscn",
+	"factions": ["Axis", "Allies"],
+	"Allies": {
+		"pieces": [
+			{
+				"name": "1SS",
+				"imagePath": [
+					"res://example/resource/pieces/BR-1SS.png",
+					"res://example/resource/pieces/BR-1SS-B.png"
+				],
+				"scene": "res://example/scene/general_piece.tscn",
+				"position": {
+					"x": 0, "y": 0
+				},
+				"size": {
+					"x": 84, "y": 84
+				}
+			}
+		]
+	},
+	"Axis": {
+		"pieces": [
+			{
+				"name": "1SS",
+				"imagePath": [
+					"res://example/resource/pieces/GE-1SS-1pzg.png",
+					"res://example/resource/pieces/GE-1SS-1pzg-B.png"
+				],
+				"scene": "res://example/scene/general_piece.tscn",
+				"position": {
+					"x": 0, "y": 0
+				},
+				"size": {
+					"x": 84, "y": 84
+				}
+			}
+		]
+	}
+}

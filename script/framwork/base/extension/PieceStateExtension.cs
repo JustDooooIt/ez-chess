@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+
 public static class PieceStateExtensions
 {
-    public static IPieceState WithMovetState(this IPieceState piece, float movement)
-        => new MoveStateDecorator(piece, movement);
+    public static IPieceState WithMovetState(this IPieceState piece, List<float> movements)
+        => new MoveStateDecorator(piece, movements);
         
-    public static IPieceState WithAttackState(this IPieceState piece, float attackPower)
-        => new AttackStateDecorator(piece, attackPower);
+    public static IPieceState WithAttackState(this IPieceState piece, List<float> attackPowers)
+        => new AttackStateDecorator(piece, attackPowers);
 }

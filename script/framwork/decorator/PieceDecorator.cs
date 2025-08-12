@@ -7,7 +7,7 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 
 	protected IPiece _wrapped = wrapped;
 
-	public T OriginPiece => (T)_wrapped;
+	public T Wrapped => (T)_wrapped;
 
 	public Pipeline StatePipeline { get => _wrapped.StatePipeline; set => _wrapped.StatePipeline = value; }
 	public Pipeline RenderPipeline { get => _wrapped.RenderPipeline; set => _wrapped.RenderPipeline = value; }
@@ -24,15 +24,15 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 		return null;
 	}
 
-	private V GetWrapped<V>()
+	private V GetOrigin<V>()
 	{
 		if (_wrapped is PieceInstanceDecorator decorator1)
 		{
-			return decorator1.GetWrapped<V>();
+			return decorator1.GetOrigin<V>();
 		}
 		else if (_wrapped is PieceStateDecorator decorator2)
 		{
-			return decorator2.GetWrapped<V>();
+			return decorator2.GetOrigin<V>();
 		}
 		else if (_wrapped is V w)
 		{
@@ -41,14 +41,14 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 		return default;
 	}
 
-	public GodotObject GetWrapped()
+	public GodotObject GetOrigin()
 	{
-		return GetWrapped<GodotObject>();
+		return GetOrigin<GodotObject>();
 	}
 
 	public ulong GetInstanceId()
 	{
-		return GetWrapped().GetInstanceId();
+		return GetOrigin().GetInstanceId();
 	}
 
 }

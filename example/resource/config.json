@@ -5,13 +5,56 @@
 		"pieces": [
 			{
 				"name": "1SS",
-				"imagePath": [
-					"res://example/resource/pieces/BR-1SS.png",
-					"res://example/resource/pieces/BR-1SS-B.png"
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://example/resource/pieces/BR-1SS.png",
+						"property":{
+							"attack": 5,
+							"move": 4
+						}
+					},
+					{
+						"image": "res://example/resource/pieces/BR-1SS-B.png",
+						"property": {
+							"attack": 3,
+							"move": 4
+						}
+					}
 				],
-				"scene": "res://example/scene/general_piece.tscn",
 				"position": {
 					"x": 0, "y": 0
+				},
+				"size": {
+					"x": 84, "y": 84
+				}
+			}
+		]
+	},
+	"Axis": {
+		"pieces": [
+			{
+				"name": "1SS",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://example/resource/pieces/GE-1SS-1pzg.png",
+						"property": {
+							"attack": 8,
+							"move": 5
+						}
+					},
+					{
+						"image": "res://example/resource/pieces/GE-1SS-1pzg-B.png",
+						"property": {
+							"attack": 5,
+							"move": 5
+						}
+					}
+					
+				],
+				"position": {
+					"x": 1, "y": 1
 				},
 				"size": {
 					"x": 84, "y": 84

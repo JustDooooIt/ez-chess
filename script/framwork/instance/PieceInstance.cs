@@ -18,7 +18,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 		_area = GetNode<Area2D>("Area2D");
 	}
 
-	public GodotObject GetWrapped()
+	public GodotObject GetOrigin()
 	{
 		return this;
 	}

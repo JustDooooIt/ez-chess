@@ -10,7 +10,7 @@ public partial class PieceState : RefCounted, IPieceState
   public Pipeline StatePipeline { get; set; }
   public Pipeline RenderPipeline { get; set; }
 
-  public GodotObject GetWrapped()
+  public GodotObject GetOrigin()
   {
     return this;
   }

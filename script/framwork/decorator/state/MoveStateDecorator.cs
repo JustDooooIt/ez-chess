@@ -1,15 +1,16 @@
+using System.Collections.Generic;
 using Godot;
 
-public class MoveStateDecorator(IPieceState piece, float movement) : PieceStateDecorator(piece), IMoveable
+public class MoveStateDecorator(IPieceState piece, List<float> movements) : PieceStateDecorator(piece), IMoveable, IReversible<IMoveable>
 {
-  private readonly float MOVEMENT = movement;
-
-  public float Movement { get; set; } = movement;
+  public List<float> Movements { get; set; } = movements;
+  public float CurMovement { get; set; } = movements[0];
+  public float ResidualMovement { get; set; } = movements[0];
 
   public void Move(Vector2I from, Vector2I to)
   {
-    ulong instance = PieceAdapter.GetInstanceFromState(OriginPiece.GetInstanceId());
-    Valve moveValve = new MoveStateValve(OriginPiece, new(instance, from, to));
+    ulong instance = PieceAdapter.GetInstanceFromState(Wrapped.GetInstanceId());
+    Valve moveValve = new MoveStateValve(Wrapped, new(instance, from, to));
     StatePipeline.AddValve(moveValve);
     RenderPipeline.RegisterValve<RenderMoveEvent>(moveValve);
   }
@@ -20,5 +21,10 @@ public class MoveStateDecorator(IPieceState piece, float movement) : PieceStateD
       return this as V;
 
     return base.As<V>();
+  }
+
+  public void Revers(int index)
+  {
+    CurMovement = Movements[index];
   }
 }

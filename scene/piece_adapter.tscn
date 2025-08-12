@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://rsksnlxc55pq"]
 
-[ext_resource type="Script" uid="uid://bjb8elxrmidjn" path="res://script/framwork/base/piece/PieceAdapter.cs" id="1_lwe65"]
+[ext_resource type="Script" uid="uid://8wjaeo0vvurj" path="res://script/framwork/adapter/PieceAdapter.cs" id="1_u0834"]
 
-[node name="GeneralPieceAdapter" type="Node"]
-script = ExtResource("1_lwe65")
+[node name="PieceAdapter" type="Node"]
+script = ExtResource("1_u0834")

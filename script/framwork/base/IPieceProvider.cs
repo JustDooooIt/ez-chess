@@ -1,4 +1,4 @@
 public interface IPieceProvider<out T>
 {
-  T OriginPiece { get; }
+  T Wrapped { get; }
 }

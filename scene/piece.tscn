@@ -1,33 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://b2qg3xo2kn1nu"]
+[gd_scene load_steps=3 format=3 uid="uid://c8kf6kg2rjjr4"]
 
-[sub_resource type="CSharpScript" id="CSharpScript_qsu4f"]
-script/source = "using System.Threading.Tasks;
-using Godot;
+[ext_resource type="Script" uid="uid://xxe1qokinjdb" path="res://script/framwork/instance/PieceInstance.cs" id="1_nrwpe"]
 
-public partial class GeneralPiece : PieceAdapter
-{
-	private const string scenePath = \"res://example/scene/general_piece.tscn\";
-
-	public override void _Ready()
-	{
-		// var state = new PieceState()
-		// 	.WithAttackState(5)
-		// 	.WithMovetState(5);
-
-		// var instance = GD.Load<PackedScene>(scenePath)
-		// 	.Instantiate<GeneralInstance>()
-		// 	.WithMovetAction()
-		// 	.WithAttackAction();
-
-		// Init(state, instance);
-	}
-
-	public void Move()
-	{
-		State.As<IMoveable>()?.Move(new(0, 0), new(100, 100));
-	}
-}
-"
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3653e"]
 
 [node name="Instance" type="Node2D"]
-script = SubResource("CSharpScript_qsu4f")
+script = ExtResource("1_nrwpe")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_3653e")

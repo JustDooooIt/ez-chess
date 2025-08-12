@@ -13,7 +13,6 @@ public partial class PieceAdapter : Node, IPiece
   public Pipeline StatePipeline { get; set; }
   public Pipeline RenderPipeline { get; set; }
 
-
   public void Init(IPieceState state, IPieceInstance instance)
   {
 	State = state;
@@ -22,7 +21,7 @@ public partial class PieceAdapter : Node, IPiece
 	_node_state_dict[instance.GetInstanceId()] = state.GetInstanceId();
 	if (Instance is PieceInstanceDecorator decorator)
 	{
-	  AddChild((Node)decorator.GetWrapped());
+	  AddChild((Node)decorator.GetOrigin());
 	}
 	else
 	{
@@ -30,7 +29,7 @@ public partial class PieceAdapter : Node, IPiece
 	}
   }
 
-  public GodotObject GetWrapped()
+  public GodotObject GetOrigin()
   {
 	return this;
   }

@@ -7,4 +7,8 @@ using Godot;
 public interface IPieceInstance : IPiece
 {
   public Tween Tween { get; }
+
+  void AddCover(Texture2D texture);
+  
+  void SetAreaSize(Vector2 size);
 }

@@ -3,7 +3,7 @@ using Godot;
 
 public interface IPiece : IInterfaceQueryable
 {
-  GodotObject GetWrapped();
+  GodotObject GetOrigin();
   ulong GetInstanceId();
 
   public Pipeline StatePipeline { get; set; }

@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using Godot;
 
-public class AttackStateDecorator(IPieceState piece, float attackPower) : PieceStateDecorator(piece), IAttackable
+public class AttackStateDecorator(IPieceState piece, List<float> attackPowers) : PieceStateDecorator(piece), IAttackable, IReversible<IAttackable>
 {
-  public float AttackPower { get; set; } = attackPower;
+  public List<float> AttackPowers { get; set; } = attackPowers;
+  public float CurAttackPower { get; set; } = attackPowers[0];
   
   public void Attack(Vector2I from, Vector2I to)
   {
@@ -15,5 +17,10 @@ public class AttackStateDecorator(IPieceState piece, float attackPower) : PieceS
       return this as T;
 
     return base.As<T>();
+  }
+
+  public void Revers(int index)
+  {
+    CurAttackPower = AttackPowers[index];
   }
 }
