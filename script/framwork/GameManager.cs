@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class GameManager : Node2D
 {
@@ -7,12 +9,27 @@ public partial class GameManager : Node2D
 
   public override void _Ready()
   {
-    _players = GetNode<Node>("Players");
+	_players ??= GetNode<Node>("Players");
   }
 
   public void AddPlayer(PipelineAdapter pipeline)
   {
-    var players = GetNode<Node>("Players");
-    players.AddChild(pipeline);
+	_players ??= GetNode<Node>("Players");
+	_players.AddChild(pipeline);
+  }
+
+  public List<PipelineAdapter> GetPipelines()
+  {
+	_players ??= GetNode<Node>("Players");
+	return [.. _players.GetChildren().Cast<PipelineAdapter>()];
+  }
+
+  public void StartPipelines()
+  {
+	foreach (var adapter in GetPipelines())
+	{
+	  adapter.StatePipeline.Launch();
+	  adapter.RenderPipeline.Launch();
+	}
   }
 }

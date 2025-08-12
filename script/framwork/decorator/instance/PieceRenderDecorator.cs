@@ -4,9 +4,11 @@ public abstract class PieceInstanceDecorator(IPieceInstance wrapped) : PieceDeco
 {
   public Tween Tween => (_wrapped as IPieceInstance).Tween;
 
-  public void AddCover(Texture2D texture)
+  public bool Selectable { get => ((IPieceInstance)Origin).Selectable; set => ((IPieceInstance)Origin).Selectable = value; }
+
+  public void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false)
   {
-    Wrapped.AddCover(texture);
+    Wrapped.AddCover(texture, faceIndex, defaultFace);
   }
 
   public void SetAreaSize(Vector2 size)

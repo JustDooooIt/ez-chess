@@ -12,7 +12,7 @@ public abstract partial class PipelineImpl<T> : Pipeline, ILaunchableProvider<T>
   public States State { get; protected set; } = States.IDLED;
 
   public override async Task Launch()
-  {
+  { 
     if (State == States.LAUNCHING)
       return;
 

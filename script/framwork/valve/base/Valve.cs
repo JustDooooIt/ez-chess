@@ -8,11 +8,11 @@ public abstract partial class Valve : RefCounted, IValve
   public async Task Launch()
   {
     ValveState = ValveStates.LAUNCHING;
-    await DoLaunch();
+    DoLaunch();
     ValveState = ValveStates.STOPED;
   }
 
-  protected abstract Task DoLaunch();
+  protected abstract void DoLaunch();
 
   public enum ValveStates
   {

@@ -8,7 +8,7 @@ public interface IPieceInstance : IPiece
 {
   public Tween Tween { get; }
 
-  void AddCover(Texture2D texture);
-  
+  bool Selectable { get; set; }
+  void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false);
   void SetAreaSize(Vector2 size);
 }

@@ -5,8 +5,8 @@ public partial class MoveStateValve(IPieceState pieceState, RenderMoveEvent move
 {
   private RenderMoveEvent _moveEvent = moveEvent;
 
-  protected override async Task DoLaunch()
+  protected override void DoLaunch()
   {
-	PipelineEventBus.Instance.Publish(GetInstanceId(), _moveEvent);
+    PipelineEventBus.Instance.Publish(GetInstanceId(), _moveEvent);
   }
 }

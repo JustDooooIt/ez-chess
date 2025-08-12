@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
 
@@ -14,6 +15,7 @@ public partial class GameLoader : Node
 	private HexMap _map;
 	private Node _piecesContainer;
 	private IPieceFactory _pieceFactory;
+	private PackedScene _piecesManagerScene;
 
 	[Export]
 	public string ConfigPath { get; set; }
@@ -25,9 +27,11 @@ public partial class GameLoader : Node
 		_manager = GetNode<GameManager>("..");
 		_map = GetNode<HexMap>("../HexMap");
 		_piecesContainer = GetNode<Node>("../Pieces");
+		_piecesManagerScene = GD.Load<PackedScene>("res://scene/pieces_manager.tscn");
 		_config = LoadConfig();
 		_pieceFactory = (IPieceFactory)PieceFactoryScript.New().AsGodotObject();
 		InitFirstFounded(_config);
+		StartPipeline();
 	}
 
 	private IDictionary<string, Variant> LoadConfig()
@@ -42,19 +46,14 @@ public partial class GameLoader : Node
 		foreach (var factionName in factionNames)
 		{
 			AddPlayer(factionName);
+			var factionNode = CreateFactionNode(factionName);
 			if (config.TryGetValue(factionName, out var vfaction))
 			{
 				var faction = vfaction.AsGodotDictionary<string, Variant>();
 				var pieces = faction["pieces"].AsGodotArray();
-				var factionNode = GetNodeOrNull<Node>($"../{factionName}");
-				if (factionNode == null)
+				foreach (var piecev in pieces)
 				{
-					factionNode = new Node { Name = factionName };
-					_piecesContainer.AddChild(factionNode);
-				}
-				foreach (var vpiece in pieces)
-				{
-					var piece = vpiece.AsGodotDictionary<string, Variant>();
+					var piece = piecev.AsGodotDictionary<string, Variant>();
 					var pieceName = piece["name"].AsString();
 					var faces = piece["faces"].AsGodotArray();
 					var pieceType = piece["type"].AsInt16();
@@ -62,7 +61,7 @@ public partial class GameLoader : Node
 					var positionVec = new Vector2I(position["x"], position["y"]);
 					var size = piece["size"].AsGodotDictionary<string, int>();
 					var sizeVec = new Vector2I(size["x"], size["y"]);
-					List<Texture2D> faceImage = [];
+					Array<Texture2D> faceImage = [];
 					Array<Godot.Collections.Dictionary<string, Variant>> states = [];
 					foreach (var facev in faces)
 					{
@@ -73,20 +72,24 @@ public partial class GameLoader : Node
 						faceImage.Add(image);
 						states.Add(property);
 					}
-					var pieceAdapter = _pieceFactory.Create(pieceType, states);
-					pieceAdapter.Name = pieceName;
-					faceImage.ForEach(pieceAdapter.Instance.AddCover);
-					pieceAdapter.Instance.SetAreaSize(sizeVec);
+					int defaultFace = faces.Select(e => e.AsGodotDictionary<string, Variant>()).ToList().FindIndex(e => e.ContainsKey("default") && e["default"].AsBool());
+					defaultFace = defaultFace == -1 ? 0 : defaultFace;
+					var pieceAdapter = _pieceFactory.Create(pieceType, pieceName, faceImage, defaultFace, sizeVec, states);
 					factionNode.AddChild(pieceAdapter);
-					_map.PlacePiece((Node2D)pieceAdapter.Instance.GetOrigin(), positionVec);
-					var a = _manager.GetNode("Players");
-					var statePipeline = _manager.GetNode<Pipeline>($"Players/{factionName}/State");
-					var renderPipeline = _manager.GetNode<Pipeline>($"Players/{factionName}/Render"); ;
-					pieceAdapter.StatePipeline = statePipeline;
-					pieceAdapter.RenderPipeline = renderPipeline;
+					SetPipeline(pieceAdapter);
+					_map.PlacePiece(pieceAdapter, positionVec);
 				}
 			}
 		}
+	}
+
+	private void SetPipeline(PieceAdapter piece)
+	{
+		var factionName = piece.GetNode<Node>("..").Name;
+		var statePipeline = _manager.GetNode<Pipeline>($"Players/{factionName}/State");
+		var renderPipeline = _manager.GetNode<Pipeline>($"Players/{factionName}/Render"); ;
+		piece.StatePipeline = statePipeline;
+		piece.RenderPipeline = renderPipeline;
 	}
 
 	private void AddPlayer(string name)
@@ -95,5 +98,19 @@ public partial class GameLoader : Node
 		var pipeline = pipelineScene.Instantiate<PipelineAdapter>();
 		pipeline.Name = name;
 		_manager.AddPlayer(pipeline);
+	}
+
+	private Node CreateFactionNode(string name)
+	{
+		var factionNode = _piecesManagerScene.Instantiate<PiecesManager>();
+		factionNode.Name = name;
+		_piecesContainer.AddChild(factionNode);
+		return factionNode;
+	}
+
+	private async void StartPipeline()
+	{
+		await ToSignal(_manager, "ready");
+		_manager.StartPipelines();
 	}
 }

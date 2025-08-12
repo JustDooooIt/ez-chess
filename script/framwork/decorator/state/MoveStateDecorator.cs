@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using Godot;
 
-public class MoveStateDecorator(IPieceState piece, List<float> movements) : PieceStateDecorator(piece), IMoveable, IReversible<IMoveable>
+public class MoveStateDecorator(IPieceState piece, List<float> movements) : PieceStateDecorator(piece), IMoveable, IPosition, IReversible<IMoveable>
 {
   public List<float> Movements { get; set; } = movements;
   public float CurMovement { get; set; } = movements[0];
   public float ResidualMovement { get; set; } = movements[0];
+  public Vector2I Position { get; set; }
 
   public void Move(Vector2I from, Vector2I to)
   {

@@ -3,3 +3,5 @@
 /android/
 .vscode
 **.uid
+.config
+.tmp

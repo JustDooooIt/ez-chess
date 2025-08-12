@@ -7,10 +7,11 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 
 	protected IPiece _wrapped = wrapped;
 
-	public T Wrapped => (T)_wrapped;
 
-	public Pipeline StatePipeline { get => _wrapped.StatePipeline; set => _wrapped.StatePipeline = value; }
-	public Pipeline RenderPipeline { get => _wrapped.RenderPipeline; set => _wrapped.RenderPipeline = value; }
+	public Pipeline StatePipeline { get => ((IPiece)Origin).StatePipeline; set => ((IPiece)Origin).StatePipeline = value; }
+	public Pipeline RenderPipeline { get => ((IPiece)Origin).RenderPipeline; set => ((IPiece)Origin).RenderPipeline = value; }
+	public GodotObject Origin => GetDeepWrapped<GodotObject>();
+	public T Wrapped => GetDeepWrapped<T>();
 
 	public virtual V As<V>() where V : class
 	{
@@ -24,15 +25,19 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 		return null;
 	}
 
-	private V GetOrigin<V>()
+	private V GetDeepWrapped<V>()
 	{
-		if (_wrapped is PieceInstanceDecorator decorator1)
+		if (_wrapped is PieceDecorator<IPieceState> decorator1)
 		{
-			return decorator1.GetOrigin<V>();
+			return decorator1.GetDeepWrapped<V>();
 		}
-		else if (_wrapped is PieceStateDecorator decorator2)
+		if (_wrapped is PieceDecorator<IPieceInstance> decorator2)
 		{
-			return decorator2.GetOrigin<V>();
+			return decorator2.GetDeepWrapped<V>();
+		}
+		if (_wrapped is PieceDecorator<IPiece> decorator3)
+		{
+			return decorator3.GetDeepWrapped<V>();
 		}
 		else if (_wrapped is V w)
 		{
@@ -41,14 +46,9 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 		return default;
 	}
 
-	public GodotObject GetOrigin()
-	{
-		return GetOrigin<GodotObject>();
-	}
-
 	public ulong GetInstanceId()
 	{
-		return GetOrigin().GetInstanceId();
+		return Origin.GetInstanceId();
 	}
 
 }

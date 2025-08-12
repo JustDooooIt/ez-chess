@@ -62,3 +62,13 @@ public record RenderMoveEvent : RenderEvent
     this.to = to;
   }
 }
+
+public record RenderSetupBoardEvent : RenderEvent
+{
+  public Vector2I position;
+
+  public RenderSetupBoardEvent(ulong piece, Vector2I position) : base(piece)
+  {
+    this.position = position;
+  }
+}

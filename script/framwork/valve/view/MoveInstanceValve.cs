@@ -5,8 +5,8 @@ public partial class MoveInstanceValve(PieceInstance pieceInstance, RenderMoveEv
 {
   private RenderMoveEvent _moveEvent = moveEvent;
 
-  protected override async Task DoLaunch()
+  protected override void DoLaunch()
   {
-	_pieceInstance.Tween.Chain().TweenProperty(_pieceInstance, "position", new Vector2(_moveEvent.to.X, _moveEvent.to.Y), 1);
+    _pieceInstance.Tween.Chain().TweenProperty(_pieceInstance, "position", new Vector2(_moveEvent.to.X, _moveEvent.to.Y), 1);
   }
 }

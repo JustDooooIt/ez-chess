@@ -6,23 +6,22 @@
 			{
 				"name": "1SS",
 				"type": 0,
-				"faces": [
-					{
+				"faces": {
+					"A": {
 						"image": "res://example/resource/pieces/BR-1SS.png",
 						"property":{
 							"attack": 5,
 							"move": 4
-						},
-						"default": true
+						}
 					},
-					{
+					"B": {
 						"image": "res://example/resource/pieces/BR-1SS-B.png",
 						"property": {
 							"attack": 3,
 							"move": 4
 						}
 					}
-				],
+				},
 				"position": {
 					"x": 0, "y": 0
 				},
@@ -37,24 +36,22 @@
 			{
 				"name": "1SS-1pzg",
 				"type": 0,
-				"faces": [
-					{
+				"faces": {
+					"A": {
 						"image": "res://example/resource/pieces/GE-1SS-1pzg.png",
 						"property": {
 							"attack": 8,
 							"move": 5
-						},
-						"default": true
+						}
 					},
-					{
+					"B": {
 						"image": "res://example/resource/pieces/GE-1SS-1pzg-B.png",
 						"property": {
 							"attack": 5,
 							"move": 5
 						}
 					}
-					
-				],
+				},
 				"position": {
 					"x": 1, "y": 1
 				},
