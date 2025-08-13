@@ -1,15 +1,24 @@
 using System;
 using Godot;
 
-public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider<T>, IInterfaceQueryable
+public abstract class PieceDecorator<T> : IPiece, IPieceProvider<T>, IInterfaceQueryable
 {
 	public event Action<int> ActionCompleted;
 
-	protected IPiece _wrapped = wrapped;
+	protected IPiece _wrapped;
 
-	public GodotObject Origin => GetDeepWrapped<GodotObject>();
+	public PieceDecorator(IPiece wrapped)
+	{
+		_wrapped = wrapped;
+		(this as IPiece)?.SetWrapper(wrapped);
+	}
+
+	public GodotObject Origin { get => GetDeepWrapped<GodotObject>(); }
+	public IInterfaceQueryable Proxy { get => (this as IPiece).GetProxy(); }
+	public IInterfaceQueryable Wrapper { get; set; }
 	public T Wrapped => GetDeepWrapped<T>();
 	public PipelineAdapter PipelineAdapter { get => ((IPiece)Origin).PipelineAdapter; set => ((IPiece)Origin).PipelineAdapter = value; }
+	public PiecesManager PiecesManager { get => ((IPiece)Origin).PiecesManager; set => ((IPiece)Origin).PiecesManager = value; }
 
 	public virtual V As<V>() where V : class
 	{
@@ -48,5 +57,4 @@ public abstract class PieceDecorator<T>(IPiece wrapped) : IPiece, IPieceProvider
 	{
 		return Origin.GetInstanceId();
 	}
-
 }

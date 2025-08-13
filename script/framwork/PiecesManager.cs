@@ -13,6 +13,6 @@ public partial class PiecesManager : Node
 
   public void AddPiece(Vector2I position, PieceAdapter piece)
   {
-	Pieces.Add(position, piece);
+    Pieces.Add(position, piece);
   }
 }

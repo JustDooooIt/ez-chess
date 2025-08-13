@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 
 public interface IPieceFactory
 {
   public const string PIECE_INSTANCE_PATH = "res://scene/piece.tscn";
-  public abstract PieceAdapter Create(int pieceType, params Variant[] args);
+  PieceAdapter Create(int pieceType, string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property);
 }

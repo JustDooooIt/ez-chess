@@ -9,7 +9,7 @@ public partial class HexMap : Sprite2D
 
   public override void _Ready()
   {
-	_baseTerrain = GetNode<TileMapLayer>("BaseTerrain");
+    _baseTerrain = GetNode<TileMapLayer>("BaseTerrain");
   }
 
   public void PlacePiece(PieceAdapter piece, Vector2 vector)
@@ -19,7 +19,7 @@ public partial class HexMap : Sprite2D
 
   public void PlacePiece(PieceAdapter piece, Vector2I iPosition)
   {
-	// var position = _baseTerrain.MapToLocal(iPosition) + _baseTerrain.Position;
-	piece.State.As<ISetupBoard>().SetupBoard(iPosition);
+    // var position = _baseTerrain.MapToLocal(iPosition) + _baseTerrain.Position;
+    piece.State.As<ISetupBoard>().SetupBoard(iPosition);
   }
 }

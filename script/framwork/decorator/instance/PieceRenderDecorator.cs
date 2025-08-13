@@ -5,6 +5,7 @@ public abstract class PieceInstanceDecorator(IPieceInstance wrapped) : PieceDeco
   public Tween Tween => (_wrapped as IPieceInstance).Tween;
 
   public bool Selectable { get => ((IPieceInstance)Origin).Selectable; set => ((IPieceInstance)Origin).Selectable = value; }
+  public PieceAdapter PieceAdapter { get => ((IPieceInstance)Origin).PieceAdapter; set => ((IPieceInstance)Origin).PieceAdapter = value; }
 
   public void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false)
   {

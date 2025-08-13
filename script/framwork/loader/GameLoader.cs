@@ -62,19 +62,19 @@ public partial class GameLoader : Node
 					var size = piece["size"].AsGodotDictionary<string, int>();
 					var sizeVec = new Vector2I(size["x"], size["y"]);
 					Array<Texture2D> faceImage = [];
-					Array<Godot.Collections.Dictionary<string, Variant>> states = [];
+					Array<Godot.Collections.Dictionary<string, Variant>> property = [];
 					foreach (var facev in faces)
 					{
 						var face = facev.AsGodotDictionary<string, Variant>();
 						var imagePath = face["image"].AsString();
 						var image = GD.Load<Texture2D>(imagePath);
-						var property = face["property"].AsGodotDictionary<string, Variant>();
+						var propertyv = face["property"].AsGodotDictionary<string, Variant>();
 						faceImage.Add(image);
-						states.Add(property);
+						property.Add(propertyv);
 					}
 					int defaultFace = faces.Select(e => e.AsGodotDictionary<string, Variant>()).ToList().FindIndex(e => e.ContainsKey("default") && e["default"].AsBool());
 					defaultFace = defaultFace == -1 ? 0 : defaultFace;
-					var pieceAdapter = _pieceFactory.Create(pieceType, pieceName, faceImage, defaultFace, sizeVec, states);
+					var pieceAdapter = _pieceFactory.Create(pieceType, pieceName, faceImage, defaultFace, sizeVec, property);
 					factionNode.AddChild(pieceAdapter);
 					if (!_manager.IsNodeReady())
 						await ToSignal(_manager, "ready");

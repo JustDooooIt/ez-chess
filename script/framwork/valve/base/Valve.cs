@@ -5,7 +5,7 @@ public abstract partial class Valve : RefCounted, IValve
 {
   public ValveStates ValveState { get; protected set; } = ValveStates.IDLED;
 
-  public async Task Launch()
+  public void Launch()
   {
     ValveState = ValveStates.LAUNCHING;
     DoLaunch();

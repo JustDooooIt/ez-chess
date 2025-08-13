@@ -12,9 +12,13 @@ public partial class PieceInstance : Node2D, IPieceInstance
 
 	public Tween Tween => GetTween();
 	public bool Selectable { get; set; } = true;
-	public GodotObject Origin => this;
 	private TileMapLayer HexMap => GetNode<TileMapLayer>("../../../../HexMap/BaseTerrain");
   public PipelineAdapter PipelineAdapter { get; set; }
+  public PiecesManager PiecesManager { get; set; }
+  public PieceAdapter PieceAdapter { get; set; }
+  public IInterfaceQueryable Wrapper { get; set; }
+  public IInterfaceQueryable Proxy => ((IPiece)this).GetProxy();
+	public GodotObject Origin => this;
 
   public override void _Ready()
 	{

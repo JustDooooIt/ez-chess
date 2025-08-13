@@ -3,7 +3,7 @@ using Godot.Collections;
 
 public abstract partial class PieceFactoryBase : RefCounted, IPieceFactory
 {
-  public abstract PieceAdapter Create(int pieceType, params Variant[] args);
+  public abstract PieceAdapter Create(int pieceType, string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property);
 
   protected void PieceAddCover(PieceAdapter piece, Array<Texture2D> images, int defaultFace)
   {

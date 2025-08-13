@@ -11,8 +11,8 @@ public abstract partial class PipelineImpl<T> : Pipeline, ILaunchableProvider<T>
   public Channel<T> LaunchableList { get; } = Channel.CreateUnbounded<T>();
   public States State { get; protected set; } = States.IDLED;
 
-  public override async Task Launch()
-  { 
+  public override async void Launch()
+  {
     if (State == States.LAUNCHING)
       return;
 
@@ -22,17 +22,17 @@ public abstract partial class PipelineImpl<T> : Pipeline, ILaunchableProvider<T>
     {
       if (LaunchableList.Reader.TryRead(out var launchable))
       {
-        await launchable.Launch();
+        launchable.Launch();
       }
     }
     State = States.STOPED;
   }
 
-  public override async Task Stop()
+  public override void Stop()
   {
     if (State != States.LAUNCHING)
       return;
-    await readCts.CancelAsync();
+    readCts.CancelAsync();
     State = States.STOPED;
   }
 

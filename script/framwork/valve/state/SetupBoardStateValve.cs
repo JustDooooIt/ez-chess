@@ -8,6 +8,7 @@ public partial class SetupBoardStateValve(IPieceState pieceState, RenderSetupBoa
   {
     var position = _setupBoardEvent.position;
     _pieceState.As<IReadyPiece>().InitialPosition = position;
+    _pieceState.PiecesManager.AddPiece(position, _pieceState.PieceAdapter);
     PipelineEventBus.Instance.Publish(GetInstanceId(), _setupBoardEvent);
   }
 }
