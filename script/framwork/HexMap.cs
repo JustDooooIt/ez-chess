@@ -18,8 +18,8 @@ public partial class HexMap : Sprite2D
   }
 
   public void PlacePiece(PieceAdapter piece, Vector2I iPosition)
-  {
+  { 
     // var position = _baseTerrain.MapToLocal(iPosition) + _baseTerrain.Position;
-    piece.State.As<ISetupBoard>().SetupBoard(iPosition);
+    piece.State.As<ISetupBoard>()?.SetupBoard(iPosition);
   }
 }

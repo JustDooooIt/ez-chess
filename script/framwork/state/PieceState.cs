@@ -12,9 +12,4 @@ public partial class PieceState : RefCounted, IPieceState
   public PieceAdapter PieceAdapter { get; set; }
   public IInterfaceQueryable Wrapper { get; set; }
 
-  public void SetupBoard(Vector2I position)
-  {
-    // As<IReadyPiece>().InitialPosition = position;
-    // PiecesManager.AddPiece(position, _pieceState.PieceAdapter);
-  }
 }

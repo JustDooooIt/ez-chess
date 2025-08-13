@@ -8,12 +8,12 @@ using Godot;
 public partial class PipelineAdapter : Node
 {
   public bool Operable { get; set; } = false;
-  public Pipeline StatePipeline { get; private set; }
-  public Pipeline RenderPipeline { get; private set; }
+  public StatePipeline StatePipeline { get; private set; }
+  public RenderPipeline RenderPipeline { get; private set; }
 
   public override void _Ready()
   {
-    StatePipeline = GetChild<Pipeline>(0);
-    RenderPipeline = GetChild<Pipeline>(1);
+    StatePipeline = GetChild<StatePipeline>(0);
+    RenderPipeline = GetChild<RenderPipeline>(1);
   }
 }

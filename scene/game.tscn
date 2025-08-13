@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://gjlmm2mdq05j" path="res://script/framwork/GameManager.cs" id="1_p1ry8"]
 [ext_resource type="Script" uid="uid://dws1iy1edrqkw" path="res://script/framwork/loader/GameLoader.cs" id="2_8n2gv"]
+[ext_resource type="Script" uid="uid://c3aob7k8gr52q" path="res://script/framwork/HexMap.cs" id="3_p1ry8"]
 [ext_resource type="Texture2D" uid="uid://cwdl83jcpsqfh" path="res://example/resource/image/hexagon-2.png" id="5_an1xj"]
 [ext_resource type="Texture2D" uid="uid://dpl6sifcpoxwv" path="res://example/resource/image/N44 Map-2015-FINAL-150.jpg" id="5_ksdpg"]
-[ext_resource type="Script" uid="uid://wk1rs8pbe3b6" path="res://script/utils/HexMap.cs" id="6_8n2gv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_an1xj"]
 texture = ExtResource("5_an1xj")
@@ -37,7 +37,7 @@ script = ExtResource("1_p1ry8")
 position = Vector2(0, -0.315002)
 texture = ExtResource("5_ksdpg")
 centered = false
-script = ExtResource("6_8n2gv")
+script = ExtResource("3_p1ry8")
 
 [node name="BaseTerrain" type="TileMapLayer" parent="HexMap"]
 position = Vector2(93, 64.315)

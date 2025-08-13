@@ -3,7 +3,7 @@ using Godot;
 
 public partial class RenderPipeline : PipelineImpl<InstanceValve>
 {
-	public override void RegisterValve<T>(Valve valve)
+	public void RegisterValve<T>(Valve valve)
 	{
 		PipelineEventBus.Instance.Subscribe<T>(valve.GetInstanceId(), HandleEvent);
 	}
