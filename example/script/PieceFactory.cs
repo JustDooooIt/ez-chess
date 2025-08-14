@@ -9,27 +9,28 @@ public partial class PieceFactory : PieceFactoryBase, IPieceFactory
 	{
 		return pieceType switch
 		{
-			0 => CreateInfantry(name, images, defaultFace, areaSize, property),
+			0 => CreateGeneralPiece(name, images, defaultFace, areaSize, property),
 			_ => null,
 		};
 	}
 
-	private PieceAdapter CreateInfantry(string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property)
+	private PieceAdapter CreateGeneralPiece(string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property)
 	{
 		var instance = GD.Load<PackedScene>(IPieceFactory.PIECE_INSTANCE_PATH).Instantiate<PieceInstance>();
-		return CreateInternal(name, images, defaultFace, areaSize, property,
-			(property) =>
-			{
-				var instance = GD.Load<PackedScene>(IPieceFactory.PIECE_INSTANCE_PATH).Instantiate<PieceInstance>();
-				var stateWrapper = new PieceState()
-					.WithSetupBoardState()
-					.WithMovetState([.. property.Select(e => (float)e["move"].AsDouble())])
-					.WithAttackState([.. property.Select(e => (float)e["attack"].AsDouble())]);
-				var instanceWrapper = instance
-					.WithSetupBoardAction()
-					.WithMovetAction()
-					.WithAttackAction();
-				return (stateWrapper, instanceWrapper);
-			});
+		return CreateInternal(name, images, defaultFace, areaSize, property, CreateGeneralPiece);
+	}
+
+	private (IPieceState, IPieceInstance) CreateGeneralPiece(Array<Dictionary<string, Variant>> property)
+	{
+		var instance = GD.Load<PackedScene>(IPieceFactory.PIECE_INSTANCE_PATH).Instantiate<PieceInstance>();
+		var stateWrapper = new PieceState()
+			.WithSetupBoardState()
+			.WithMovetState([.. property.Select(e => (float)e["move"].AsDouble())])
+			.WithAttackState([.. property.Select(e => (float)e["attack"].AsDouble())]);
+		var instanceWrapper = instance
+			.WithSetupBoardAction()
+			.WithMovetAction()
+			.WithAttackAction();
+		return (stateWrapper, instanceWrapper);
 	}
 }

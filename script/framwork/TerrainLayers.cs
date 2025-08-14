@@ -9,13 +9,13 @@ public partial class TerrainLayers : Node2D
 
   public int[] GetTerrainType(Vector2I position)
   {
-	List<int> types = [];
-	foreach (var mapLayer in GetChildren().Cast<TileMapLayer>())
-	{
-	  var tileData = mapLayer.GetCellTileData(position);
-	  if (tileData != null)
-		types.Add(tileData.Terrain);
-	}
-	return [.. types];
+    List<int> types = [];
+    foreach (var mapLayer in GetChildren().Cast<TileMapLayer>())
+    {
+      var tileData = mapLayer.GetCellTileData(position);
+      if (tileData != null)
+        types.Add(tileData.Terrain);
+    }
+    return [.. types];
   }
 }
