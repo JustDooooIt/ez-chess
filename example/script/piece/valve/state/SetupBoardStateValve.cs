@@ -4,11 +4,12 @@ public partial class SetupBoardStateValve(IPieceState pieceState, RenderSetupBoa
 {
   private RenderSetupBoardEvent _setupBoardEvent = setupBoardEvent;
 
-  protected override void DoLaunch()
+  protected override Task DoLaunch()
   {
     var position = _setupBoardEvent.position;
-    _pieceState.As<IReadyPiece>().InitialPosition = position;
+    _pieceState.Proxy.As<IPosition>().Position = position;
     _pieceState.PiecesManager.AddPiece(position, _pieceState.PieceAdapter);
     PipelineEventBus.Instance.Publish(GetInstanceId(), _setupBoardEvent);
+    return Task.CompletedTask;
   }
 }

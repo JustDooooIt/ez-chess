@@ -1,11 +1,11 @@
 using System;
 using Godot;
 
-public abstract class PieceDecorator<T> : IPiece, IPieceProvider<T>, IInterfaceQueryable
+public abstract class PieceDecorator : IPiece, IInterfaceQueryable
 {
 	public event Action<int> ActionCompleted;
 
-	protected IPiece _wrapped;
+	private IPiece _wrapped;
 
 	public PieceDecorator(IPiece wrapped)
 	{
@@ -14,9 +14,9 @@ public abstract class PieceDecorator<T> : IPiece, IPieceProvider<T>, IInterfaceQ
 	}
 
 	public GodotObject Origin { get => GetDeepWrapped<GodotObject>(); }
+	public IPiece Wrapped => _wrapped;
 	public IInterfaceQueryable Proxy { get => (this as IPiece).GetProxy(); }
 	public IInterfaceQueryable Wrapper { get; set; }
-	public T Wrapped => GetDeepWrapped<T>();
 	public PipelineAdapter PipelineAdapter { get => _wrapped.PipelineAdapter; set => _wrapped.PipelineAdapter = value; }
 	public PiecesManager PiecesManager { get => _wrapped.PiecesManager; set => _wrapped.PiecesManager = value; }
 
@@ -34,21 +34,13 @@ public abstract class PieceDecorator<T> : IPiece, IPieceProvider<T>, IInterfaceQ
 
 	private V GetDeepWrapped<V>()
 	{
-		if (_wrapped is PieceDecorator<IPieceState> decorator1)
-		{
-			return decorator1.GetDeepWrapped<V>();
-		}
-		if (_wrapped is PieceDecorator<IPieceInstance> decorator2)
-		{
-			return decorator2.GetDeepWrapped<V>();
-		}
-		if (_wrapped is PieceDecorator<IPiece> decorator3)
-		{
-			return decorator3.GetDeepWrapped<V>();
-		}
-		else if (_wrapped is V w)
+		if (_wrapped is V w)
 		{
 			return w;
+		}
+		else if (_wrapped is PieceDecorator decorator)
+		{
+			return decorator.GetDeepWrapped<V>();
 		}
 		return default;
 	}

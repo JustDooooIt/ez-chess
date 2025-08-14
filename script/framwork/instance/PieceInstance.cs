@@ -6,26 +6,29 @@ public partial class PieceInstance : Node2D, IPieceInstance
 {
 	public event Action<int> ActionCompleted;
 
+	public readonly Color EnemyColor = Colors.Red;
+	public readonly Color FriendliesColor = Colors.Yellow;
+	public readonly Color MyselfColor = Colors.Green;
+
 	private Tween _tween;
 	private Area2D _area;
 	private Shader _outline;
 	private TerrainLayers _terrainLayers;
 
-	public Tween Tween => GetTween();
-	public bool Selectable { get; set; } = true;
-	public TerrainLayers TerrainLayers => _terrainLayers;
-  public PipelineAdapter PipelineAdapter { get; set; }
-  public PiecesManager PiecesManager { get; set; }
-  public PieceAdapter PieceAdapter { get; set; }
-  public IInterfaceQueryable Wrapper { get; set; }
-  public IInterfaceQueryable Proxy => ((IPiece)this).GetProxy();
+	public Tween Tween { get => GetTween(); set => _tween = value; }
+	public bool IsSelected { get; set; } = true;
+	public TerrainLayers TerrainLayers { get => _terrainLayers; set => _terrainLayers = value; }
+	public PipelineAdapter PipelineAdapter { get; set; }
+	public PiecesManager PiecesManager { get; set; }
+	public PieceAdapter PieceAdapter { get; set; }
+	public IInterfaceQueryable Proxy => ((IPiece)this).GetProxy();
+	public IInterfaceQueryable Wrapper { get; set; }
 	public GodotObject Origin => this;
+	public IPiece Wrapped => this;
+	public Area2D Area { get => _area; set => _area = value; }
+	public Godot.Vector2 AreaSize { get => GetAreaSize(); set => SetAreaSize(value); }
 
-  TerrainLayers IPieceInstance.TerrainLayers { get => TerrainLayers; set => throw new NotImplementedException(); }
-  public Godot.Vector2 AreaSize { get => GetAreaSize(); set => SetAreaSize(value); }
-
-
-  public override void _Ready()
+	public override void _Ready()
 	{
 		_area = GetNode<Area2D>("Area2D");
 		_area.MouseEntered += Select;
@@ -48,14 +51,18 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	{
 		if (_tween == null)
 		{
-			return CreateTween();
+			_tween = CreateTween();
+			return _tween;
 		}
 		else
 		{
 			if (_tween.IsValid())
 				return _tween;
 			else
-				return CreateTween();
+			{
+				_tween = CreateTween();
+				return _tween;
+			}
 		}
 	}
 
@@ -82,7 +89,12 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public void SetOutline(bool opened)
 	{
 		var sprite = GetNode<Node2D>("TopSprite").GetChild<Sprite2D>(0);
-		(sprite.Material as ShaderMaterial).SetShaderParameter("enable_outline", opened);
+		var material = (ShaderMaterial)sprite.Material;
+		material.SetShaderParameter("enable_outline", opened);
+		if (PieceAdapter.Faction == GameState.Instance.PlayerFaction)
+			material.SetShaderParameter("outline_color", MyselfColor);
+		else
+			material.SetShaderParameter("outline_color", EnemyColor);
 	}
 
 	public void SetAreaSize(Godot.Vector2 size)

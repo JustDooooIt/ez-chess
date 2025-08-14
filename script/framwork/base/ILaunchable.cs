@@ -3,5 +3,5 @@ using System.Threading.Tasks;
 
 public interface ILaunchable
 {
-  void Launch();
+  Task Launch();
 }

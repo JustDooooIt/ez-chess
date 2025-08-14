@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-public class MoveStateDecorator(IPieceState piece, List<float> movements) : PieceStateDecorator(piece), IMoveable, IPosition, IReversible<IMoveable>
+public class MoveStateDecorator(IPieceState piece, List<float> movements) : PieceStateDecorator(piece), IMoveable, IPosition
 {
   public List<float> Movements { get; set; } = movements;
   public float CurMovement { get; set; } = movements[0];
@@ -24,7 +24,7 @@ public class MoveStateDecorator(IPieceState piece, List<float> movements) : Piec
     return base.As<V>();
   }
 
-  public void Revers(int index)
+  public void Flip(int index)
   {
     CurMovement = Movements[index];
   }

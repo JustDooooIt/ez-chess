@@ -5,14 +5,14 @@ public abstract partial class Valve : RefCounted, IValve
 {
   public ValveStates ValveState { get; protected set; } = ValveStates.IDLED;
 
-  public void Launch()
+  public async Task Launch()
   {
     ValveState = ValveStates.LAUNCHING;
-    DoLaunch();
+    await DoLaunch();
     ValveState = ValveStates.STOPED;
   }
 
-  protected abstract void DoLaunch();
+  protected abstract Task DoLaunch();
 
   public enum ValveStates
   {

@@ -16,11 +16,11 @@ public partial class PieceAdapter : Node
   public IPieceInstance Instance { get; protected set; }
   public PipelineAdapter PipelineAdapter { get; set; }
   public PiecesManager PiecesManager { get => _piecesManager; set => _piecesManager = value; }
-
-
+  public int Faction { get; set; }
 
   public override void _Ready()
   {
+	Faction = GetParent().GetIndex();
 	SetPiecesManager();
 	SetPipelineAdapter();
 	SetPieceAdapter();

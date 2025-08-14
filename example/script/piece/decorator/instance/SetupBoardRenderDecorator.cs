@@ -4,6 +4,6 @@ public class SetupBoardInstanceDecorator(IPieceInstance wrapped) : PieceInstance
 {
   public void SetupBoard(Vector2I position)
   {
-    ((PieceInstance)Origin).Position = wrapped.TerrainLayers.BaseTerrain.MapToLocal(position) + wrapped.TerrainLayers.Position;
+    
   }
 }

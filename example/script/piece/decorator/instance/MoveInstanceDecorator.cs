@@ -4,6 +4,7 @@ public class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecora
 {
   public void Move(Vector2I from, Vector2I to)
   {
-    GD.Print($"Move from {from} to {to}");
+    Valve moveValve = new MoveInstanceValve(this, new(0, from, to));
+    PipelineAdapter.RenderPipeline.AddValve(moveValve);
   }
-} 
+}

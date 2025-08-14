@@ -1,4 +1,4 @@
-public abstract partial class InstanceValve(PieceInstance pieceInstance) : Valve
+public abstract partial class InstanceValve(IPieceInstance pieceInstance) : Valve
 {
-  protected PieceInstance _pieceInstance = pieceInstance;
+  protected IPieceInstance _pieceInstance = pieceInstance;
 }

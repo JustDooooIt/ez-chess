@@ -7,9 +7,6 @@ public partial class GameManager : Node2D
 {
   private Node _players;
 
-  public string PlayerId { get; set; } = "Axis";
-  public string Operator { get; set; } = "Axis";
-
   public override void _Ready()
   {
 	_players ??= GetNode<Node>("Players");

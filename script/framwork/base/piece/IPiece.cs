@@ -4,6 +4,7 @@ using Godot;
 public interface IPiece : IInterfaceQueryable
 {
   GodotObject Origin { get; }
+  IPiece Wrapped { get; }
   IInterfaceQueryable Proxy { get; }
   IInterfaceQueryable Wrapper { get; }
   PipelineAdapter PipelineAdapter { get; set; }
@@ -20,21 +21,21 @@ public interface IPiece : IInterfaceQueryable
     {
       pieceInstance.Wrapper = this;
     }
-    else if (wrapper is PieceDecorator<IPiece> decorator)
+    else if (wrapper is PieceDecorator decorator)
     {
       decorator.Wrapper = this;
     }
   }
-  
+
   public IInterfaceQueryable GetProxy()
-	{
-		var piece = (IPiece)Wrapper;
-		do
-		{
-			if (piece.Wrapper == null)
-				return piece;
-			else
-				piece = (IPiece)piece.Wrapper;
-		} while (true);
-	}
+  {
+    var piece = (IPiece)Wrapper;
+    do
+    {
+      if (piece.Wrapper == null)
+        return piece;
+      else
+        piece = (IPiece)piece.Wrapper;
+    } while (true);
+  }
 }

@@ -43,6 +43,7 @@ public partial class GameLoader : Node
 	private async void InitFirstFounded(IDictionary<string, Variant> config)
 	{
 		var factionNames = config["factions"].AsGodotArray<string>();
+		GameState.Instance.Factions = [.. factionNames];
 		foreach (var factionName in factionNames)
 		{
 			AddPlayer(factionName);
