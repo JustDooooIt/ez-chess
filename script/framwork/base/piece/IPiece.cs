@@ -10,17 +10,17 @@ public interface IPiece : IInterfaceQueryable
   PiecesManager PiecesManager { get; set; }
   ulong GetInstanceId();
 
-  public void SetWrapper(IPiece wrapped)
+  public void SetWrapper(IPiece wrapper)
   {
-    if (wrapped is PieceState pieceState)
+    if (wrapper is PieceState pieceState)
     {
       pieceState.Wrapper = this;
     }
-    else if (wrapped is PieceInstance pieceInstance)
+    else if (wrapper is PieceInstance pieceInstance)
     {
       pieceInstance.Wrapper = this;
     }
-    else if (wrapped is PieceDecorator<IPiece> decorator)
+    else if (wrapper is PieceDecorator<IPiece> decorator)
     {
       decorator.Wrapper = this;
     }

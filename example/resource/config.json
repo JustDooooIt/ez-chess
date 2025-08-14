@@ -4,30 +4,60 @@
 	"Allies": {
 		"pieces": [
 			{
-				"name": "1SS",
+				"name": "e1sa1",
 				"type": 0,
 				"faces": [
 					{
-						"image": "res://example/resource/pieces/BR-1SS.png",
+						"image": "res://example/resource/pieces/e1sa1.jpg",
 						"property":{
-							"attack": 5,
-							"move": 4
-						},
-						"default": true
-					},
-					{
-						"image": "res://example/resource/pieces/BR-1SS-B.png",
-						"property": {
-							"attack": 3,
+							"attack": 1,
 							"move": 4
 						}
 					}
 				],
 				"position": {
-					"x": 0, "y": 0
+					"x": 5, "y": 5
 				},
 				"size": {
-					"x": 84, "y": 84
+					"x": 65, "y": 63
+				}
+			},
+			{
+				"name": "e1sa2",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://example/resource/pieces/e1sa2.jpg",
+						"property":{
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 5, "y": 7
+				},
+				"size": {
+					"x": 65, "y": 63
+				}
+			},
+			{
+				"name": "e1sa3",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://example/resource/pieces/e1sa3.jpg",
+						"property":{
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 4, "y": 4
+				},
+				"size": {
+					"x": 65, "y": 63
 				}
 			}
 		]
@@ -35,28 +65,19 @@
 	"Axis": {
 		"pieces": [
 			{
-				"name": "1SS-1pzg",
+				"name": "g15pd8rgt",
 				"type": 0,
 				"faces": [
 					{
-						"image": "res://example/resource/pieces/GE-1SS-1pzg.png",
+						"image": "res://example/resource/pieces/g15pd8rgt.jpg",
 						"property": {
-							"attack": 8,
-							"move": 5
-						},
-						"default": true
-					},
-					{
-						"image": "res://example/resource/pieces/GE-1SS-1pzg-B.png",
-						"property": {
-							"attack": 5,
-							"move": 5
+							"attack": 6,
+							"move": 10
 						}
 					}
-					
 				],
 				"position": {
-					"x": 1, "y": 1
+					"x": 1, "y": 18
 				},
 				"size": {
 					"x": 84, "y": 84

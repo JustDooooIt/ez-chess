@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Numerics;
 using Godot;
 
 public partial class PieceInstance : Node2D, IPieceInstance
@@ -9,10 +9,11 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	private Tween _tween;
 	private Area2D _area;
 	private Shader _outline;
+	private TerrainLayers _terrainLayers;
 
 	public Tween Tween => GetTween();
 	public bool Selectable { get; set; } = true;
-	private TileMapLayer HexMap => GetNode<TileMapLayer>("../../../../HexMap/BaseTerrain");
+	public TerrainLayers TerrainLayers => _terrainLayers;
   public PipelineAdapter PipelineAdapter { get; set; }
   public PiecesManager PiecesManager { get; set; }
   public PieceAdapter PieceAdapter { get; set; }
@@ -20,11 +21,16 @@ public partial class PieceInstance : Node2D, IPieceInstance
   public IInterfaceQueryable Proxy => ((IPiece)this).GetProxy();
 	public GodotObject Origin => this;
 
+  TerrainLayers IPieceInstance.TerrainLayers { get => TerrainLayers; set => throw new NotImplementedException(); }
+  public Godot.Vector2 AreaSize { get => GetAreaSize(); set => SetAreaSize(value); }
+
+
   public override void _Ready()
 	{
 		_area = GetNode<Area2D>("Area2D");
 		_area.MouseEntered += Select;
 		_area.MouseExited += CancelSelect;
+		_terrainLayers = GetNode<TerrainLayers>("../../../../HexMap/TerrainLayers");
 		_outline ??= GD.Load<Shader>("res://shader/outline.gdshader");
 	}
 
@@ -79,7 +85,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 		(sprite.Material as ShaderMaterial).SetShaderParameter("enable_outline", opened);
 	}
 
-	public void SetAreaSize(Vector2 size)
+	public void SetAreaSize(Godot.Vector2 size)
 	{
 		var area = GetNode<Area2D>("Area2D");
 		var shape = area.GetNode<CollisionShape2D>("CollisionShape2D");
@@ -89,8 +95,19 @@ public partial class PieceInstance : Node2D, IPieceInstance
 		}
 	}
 
+	public Godot.Vector2 GetAreaSize()
+	{
+		var area = GetNode<Area2D>("Area2D");
+		var shape = area.GetNode<CollisionShape2D>("CollisionShape2D");
+		if (shape.Shape is RectangleShape2D rectangle)
+		{
+			return rectangle.Size;
+		}
+		return default;
+	}
+
 	public void SetPosition(Vector2I position)
 	{
-		Position = HexMap.MapToLocal(position) + HexMap.Position;
+		Position = TerrainLayers.BaseTerrain.MapToLocal(position) + TerrainLayers.Position;
 	}
 }

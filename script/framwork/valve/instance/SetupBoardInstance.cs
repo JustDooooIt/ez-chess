@@ -6,6 +6,6 @@ public partial class SetupBoardInstanceValve(PieceInstance pieceInstance, Render
 
   protected override void DoLaunch()
   {
-    _pieceInstance.SetPosition(_setupBoardEvent.position);
+    _pieceInstance.Wrapper.As<ISetupBoard>().SetupBoard(_setupBoardEvent.position);
   }
 }

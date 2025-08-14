@@ -9,7 +9,8 @@ public interface IPieceInstance : IPiece
   public Tween Tween { get; }
 
   bool Selectable { get; set; }
-  public PieceAdapter PieceAdapter{ get; set; }
+  public PieceAdapter PieceAdapter { get; set; }
+  public TerrainLayers TerrainLayers { get; set; }
+  public Vector2 AreaSize { get; set; }
   void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false);
-  void SetAreaSize(Vector2 size);
 }

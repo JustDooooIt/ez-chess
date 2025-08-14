@@ -25,9 +25,9 @@ void fragment() {
     vec2 center = vec2(aspect * 0.5, 0.5);
     vec2 size = vec2(aspect * 0.5, 0.5);
     vec2 p = st - center;
-    
+
     // --- 2. 安全性检查与开关逻辑 (核心改动) ---
-    
+
     // a) 根据开关决定有效的描边厚度
     // float(true) -> 1.0, float(false) -> 0.0
     float effective_outline = outline_thickness * float(enable_outline);

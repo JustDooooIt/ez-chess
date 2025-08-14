@@ -4,4 +4,4 @@
 .vscode
 **.uid
 .config
-.tmp
+*.tmp

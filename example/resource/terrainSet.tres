@@ -1,0 +1,58 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b020rno8ejnf0"]
+
+[ext_resource type="Texture2D" uid="uid://cwdl83jcpsqfh" path="res://example/resource/image/hexagon-2.png" id="1_mmad2"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ksdpg"]
+texture = ExtResource("1_mmad2")
+texture_region_size = Vector2i(90, 104)
+0:0/next_alternative_id = 8
+0:0/0 = 0
+0:0/1 = 1
+0:0/1/modulate = Color(0.494583, 0.5, 0.175, 0.588235)
+0:0/1/terrain_set = 0
+0:0/1/terrain = 0
+0:0/2 = 2
+0:0/2/modulate = Color(0.5, 0.4375, 0.25, 0.588235)
+0:0/2/terrain_set = 0
+0:0/2/terrain = 1
+0:0/3 = 3
+0:0/3/modulate = Color(0.188567, 0.2, 0.102, 0.588235)
+0:0/3/terrain_set = 0
+0:0/3/terrain = 2
+0:0/4 = 4
+0:0/4/modulate = Color(0.375, 0.5, 0.25, 0.588235)
+0:0/4/terrain_set = 0
+0:0/4/terrain = 3
+0:0/5 = 5
+0:0/5/modulate = Color(0.279167, 0.5, 0.25, 0.588235)
+0:0/5/terrain_set = 0
+0:0/5/terrain = 4
+0:0/6 = 6
+0:0/6/modulate = Color(0.25, 0.5, 0.3125, 0.588235)
+0:0/6/terrain_set = 0
+0:0/6/terrain = 5
+0:0/7 = 7
+0:0/7/modulate = Color(0.25, 0.5, 0.408333, 0.588235)
+0:0/7/terrain_set = 0
+0:0/7/terrain = 6
+
+[resource]
+tile_shape = 3
+tile_layout = 1
+tile_size = Vector2i(90, 104)
+terrain_set_0/mode = 2
+terrain_set_0/terrain_0/name = "Desert"
+terrain_set_0/terrain_0/color = Color(0.494583, 0.5, 0.175, 1)
+terrain_set_0/terrain_1/name = "Upland"
+terrain_set_0/terrain_1/color = Color(0.5, 0.4375, 0.25, 1)
+terrain_set_0/terrain_2/name = "City"
+terrain_set_0/terrain_2/color = Color(0.186667, 0.2, 0.1, 1)
+terrain_set_0/terrain_3/name = "Front"
+terrain_set_0/terrain_3/color = Color(0.375, 0.5, 0.25, 1)
+terrain_set_0/terrain_4/name = "Sea"
+terrain_set_0/terrain_4/color = Color(0.28125, 0.5, 0.25, 1)
+terrain_set_0/terrain_5/name = "Beach"
+terrain_set_0/terrain_5/color = Color(0.25, 0.5, 0.3125, 1)
+terrain_set_0/terrain_6/name = "Road"
+terrain_set_0/terrain_6/color = Color(0.25, 0.5, 0.40625, 1)
+sources/0 = SubResource("TileSetAtlasSource_ksdpg")

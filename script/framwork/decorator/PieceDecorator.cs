@@ -17,8 +17,8 @@ public abstract class PieceDecorator<T> : IPiece, IPieceProvider<T>, IInterfaceQ
 	public IInterfaceQueryable Proxy { get => (this as IPiece).GetProxy(); }
 	public IInterfaceQueryable Wrapper { get; set; }
 	public T Wrapped => GetDeepWrapped<T>();
-	public PipelineAdapter PipelineAdapter { get => ((IPiece)Origin).PipelineAdapter; set => ((IPiece)Origin).PipelineAdapter = value; }
-	public PiecesManager PiecesManager { get => ((IPiece)Origin).PiecesManager; set => ((IPiece)Origin).PiecesManager = value; }
+	public PipelineAdapter PipelineAdapter { get => _wrapped.PipelineAdapter; set => _wrapped.PipelineAdapter = value; }
+	public PiecesManager PiecesManager { get => _wrapped.PiecesManager; set => _wrapped.PiecesManager = value; }
 
 	public virtual V As<V>() where V : class
 	{
@@ -56,5 +56,10 @@ public abstract class PieceDecorator<T> : IPiece, IPieceProvider<T>, IInterfaceQ
 	public ulong GetInstanceId()
 	{
 		return Origin.GetInstanceId();
+	}
+
+	public void RemoveSelf()
+	{
+		_wrapped.SetWrapper((IPiece)Wrapper);
 	}
 }
