@@ -6,7 +6,7 @@ using Godot;
 /// </summary>
 public interface IPieceInstance : IPiece
 {
-  public Tween Tween { get; set; }
+  // public Tween Tween { get; set; }
   public PieceAdapter PieceAdapter { get; set; }
   public TerrainLayers TerrainLayers { get; set; }
   public Vector2 AreaSize { get; set; }

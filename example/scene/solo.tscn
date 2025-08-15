@@ -18,6 +18,7 @@ position = Vector2(0, 0)
 texture = ExtResource("3_3mrvy")
 
 [node name="TerrainLayers" parent="HexMap" index="0"]
+visible = false
 position = Vector2(452, 13)
 script = ExtResource("4_lxi6y")
 

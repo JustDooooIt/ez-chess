@@ -11,11 +11,11 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public readonly Color MyselfColor = Colors.Green;
 
 	private Tween _tween;
-	private Area2D _area;
+	private Area2D _area; 
 	private Shader _outline;
 	private TerrainLayers _terrainLayers;
 
-	public Tween Tween { get => GetTween(); set => _tween = value; }
+	// public Tween Tween { get => GetTween(); set => _tween = value; }
 	public bool IsSelected { get; set; } = true;
 	public TerrainLayers TerrainLayers { get => _terrainLayers; set => _terrainLayers = value; }
 	public PipelineAdapter PipelineAdapter { get; set; }
@@ -47,24 +47,24 @@ public partial class PieceInstance : Node2D, IPieceInstance
 		SetOutline(false);
 	}
 
-	private Tween GetTween()
-	{
-		if (_tween == null)
-		{
-			_tween = CreateTween();
-			return _tween;
-		}
-		else
-		{
-			if (_tween.IsValid())
-				return _tween;
-			else
-			{
-				_tween = CreateTween();
-				return _tween;
-			}
-		}
-	}
+	// private Tween GetTween()
+	// {
+	// 	if (_tween == null)
+	// 	{
+	// 		_tween = CreateTween();
+	// 		return _tween;
+	// 	}
+	// 	else
+	// 	{
+	// 		if (_tween.IsValid())
+	// 			return _tween;
+	// 		else
+	// 		{
+	// 			_tween = CreateTween();
+	// 			return _tween;
+	// 		}
+	// 	}
+	// }
 
 	public void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false)
 	{

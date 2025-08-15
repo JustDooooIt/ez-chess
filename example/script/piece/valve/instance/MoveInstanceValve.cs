@@ -9,9 +9,8 @@ public partial class MoveInstanceValve(IPieceInstance pieceInstance, RenderMoveE
   {
     var instance = (PieceInstance)_pieceInstance;
     var position = instance.TerrainLayers.ToLocalPosition(_moveEvent.to);
-    _pieceInstance.Tween.TweenProperty(instance, "position", position, 1);
-    await ToSignal(instance.Tween, "finished");
-    _pieceInstance.Tween.Kill();
-    _pieceInstance.Tween = null;
+    var tween = instance.CreateTween();
+    tween.TweenProperty(instance, "position", position, 1);
+    await ToSignal(tween, "finished");
   }
 }
