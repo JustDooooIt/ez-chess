@@ -10,7 +10,7 @@ public partial class Camera : Camera2D
 	[Export] public bool ScrollZoomEnabled { get; set; } = true;
 
 	[ExportGroup("Pan Settings")]
-	[Export] public MouseButton PanButton { get; set; } = MouseButton.Left;
+	[Export] public MouseButton PanButton { get; set; } = MouseButton.Middle;
 	[Export(PropertyHint.Range, "0.1, 5.0")] public float DragSpeed { get; set; } = 1.0f;
 
 	[ExportGroup("Zoom Settings")]
@@ -47,11 +47,7 @@ public partial class Camera : Camera2D
 
 		if (@event is InputEventMouseMotion mouseMotionEvent && isDragging)
 		{
-			// ===================================================================
-			// THE FIX IS HERE: Changed from multiplication (*) to division (/)
-			// This correctly scales the screen-space mouse motion to world-space camera motion.
 			Position -= mouseMotionEvent.Relative * DragSpeed / Zoom;
-			// ===================================================================
 		}
 	}
 

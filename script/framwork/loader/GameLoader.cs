@@ -16,11 +16,14 @@ public partial class GameLoader : Node
 	private Node _piecesContainer;
 	private IPieceFactory _pieceFactory;
 	private PackedScene _piecesManagerScene;
+	private BaseRenderEventHandler _renderEventHandler;
 
 	[Export]
 	public string ConfigPath { get; set; }
 	[Export]
 	public CSharpScript PieceFactoryScript { get; set; }
+	[Export]
+	public CSharpScript RenderEventHandlerScript { get; set; }
 
 	public override void _Ready()
 	{
@@ -30,13 +33,14 @@ public partial class GameLoader : Node
 		_piecesManagerScene = GD.Load<PackedScene>("res://scene/pieces_manager.tscn");
 		_config = LoadConfig();
 		_pieceFactory = (IPieceFactory)PieceFactoryScript.New().AsGodotObject();
+		_renderEventHandler = (BaseRenderEventHandler)RenderEventHandlerScript.New().AsGodotObject();
 		InitFirstFounded(_config);
 		StartPipeline();
 	}
 
 	private IDictionary<string, Variant> LoadConfig()
 	{
-		var file = FileAccess.Open("res://example/resource/config.json", FileAccess.ModeFlags.Read);
+		var file = FileAccess.Open(ConfigPath, FileAccess.ModeFlags.Read);
 		return Json.ParseString(file.GetAsText()).AsGodotDictionary<string, Variant>();
 	}
 
@@ -85,12 +89,15 @@ public partial class GameLoader : Node
 		}
 	}
 
-	private void AddPlayer(string name)
+	private async void AddPlayer(string name)
 	{
 		var pipelineScene = GD.Load<PackedScene>("res://scene/player.tscn");
 		var pipeline = pipelineScene.Instantiate<PipelineAdapter>();
 		pipeline.Name = name;
 		_manager.AddPlayer(pipeline);
+		await ToSignal(pipeline, "ready");
+		_renderEventHandler.Pipeline = pipeline.RenderPipeline;
+		pipeline.RenderPipeline.RenderEventHandler = _renderEventHandler;
 	}
 
 	private Node CreateFactionNode(string name)

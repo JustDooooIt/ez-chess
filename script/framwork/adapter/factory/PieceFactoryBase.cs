@@ -17,12 +17,13 @@ public abstract partial class PieceFactoryBase : RefCounted, IPieceFactory
 		}
 	}
 
-	protected PieceAdapter Create<T>(string name,
-	Array<Texture2D> images,
-	int defaultFace,
-	Vector2 areaSize,
-	Array<Dictionary<string, Variant>> property,
-	Func<Array<Dictionary<string, Variant>>, (IPieceState state, IPieceInstance instance)> createAction) where T : PieceAdapter, new()
+	protected PieceAdapter Create<T>(
+		string name,
+		Array<Texture2D> images,
+		int defaultFace,
+		Vector2 areaSize,
+		Array<Dictionary<string, Variant>> property,
+		Func<Array<Dictionary<string, Variant>>, (IPieceState state, IPieceInstance instance)> createAction) where T : PieceAdapter, new()
 	{
 		var piece = new T { Name = name };
 		(var stateWrapper, var instanceWrapper) = createAction.Invoke(property);

@@ -19,7 +19,4 @@ public partial class TerrainLayers : Node2D
 		return [.. types];
 	}
 
-	public Vector2I ToMapPosition(Vector2 pos) { return BaseTerrain.LocalToMap(pos); }
-
-	public Vector2 ToLocalPosition(Vector2I pos) {return BaseTerrain.MapToLocal(pos) + Position; }
 }

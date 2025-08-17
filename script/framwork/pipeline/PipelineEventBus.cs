@@ -10,7 +10,7 @@ public partial class PipelineEventBus
 
   public static PipelineEventBus Instance => instance.Value;
 
-  public void Subscribe<T>(ulong valveId, Action<T> listener)
+  public void Subscribe<T>(ulong valveId, Action<T> listener) where T : Event
   {
     var key = (typeof(T), valveId);
 
@@ -23,7 +23,7 @@ public partial class PipelineEventBus
     value.Add(listener);
   }
 
-  public void Publish<T>(ulong valveId, T eventData)
+  public void Publish<T>(ulong valveId, T eventData) where T : Event
   {
     var key = (typeof(T), valveId);
     if (eventListeners.TryGetValue(key, out List<Delegate> listeners))
@@ -38,12 +38,11 @@ public partial class PipelineEventBus
 
 public abstract record Event
 {
+  public ulong pieceId;
   public Event(ulong pieceId)
   {
     this.pieceId = pieceId;
   }
-
-  public ulong pieceId;
 }
 
 public record RenderEvent : Event

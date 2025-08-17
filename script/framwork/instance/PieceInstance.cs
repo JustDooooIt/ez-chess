@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Godot;
 
@@ -11,12 +12,13 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public readonly Color MyselfColor = Colors.Green;
 
 	private Tween _tween;
-	private Area2D _area; 
+	private Area2D _area;
 	private Shader _outline;
 	private TerrainLayers _terrainLayers;
 
 	// public Tween Tween { get => GetTween(); set => _tween = value; }
-	public bool IsSelected { get; set; } = true;
+	public bool IsSelected { get; set; } = false;
+	public HexMap HexMap { get; set; }
 	public TerrainLayers TerrainLayers { get => _terrainLayers; set => _terrainLayers = value; }
 	public PipelineAdapter PipelineAdapter { get; set; }
 	public PiecesManager PiecesManager { get; set; }
@@ -27,43 +29,89 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public IPiece Wrapped => this;
 	public Area2D Area { get => _area; set => _area = value; }
 	public Godot.Vector2 AreaSize { get => GetAreaSize(); set => SetAreaSize(value); }
+	public bool Selectable { get; set; } = true;
+	public bool IsHover { get; set; } = false;
 
 	public override void _Ready()
 	{
 		_area = GetNode<Area2D>("Area2D");
-		_area.MouseEntered += Select;
-		_area.MouseExited += CancelSelect;
+		_area.MouseEntered += Hover;
+		_area.MouseExited += UnHover;
+		_area.InputEvent += OnInputEvent;
 		_terrainLayers = GetNode<TerrainLayers>("../../../../HexMap/TerrainLayers");
 		_outline ??= GD.Load<Shader>("res://shader/outline.gdshader");
+		HexMap = GetNode<HexMap>("../../../../HexMap");
 	}
 
-	private void Select()
+	private void Hover()
 	{
-		SetOutline(true);
+		IsHover = true;
+		if (!IsSelected)
+		{
+			SetOutline(true);
+		}
 	}
 
-	private void CancelSelect()
+	private void UnHover()
 	{
-		SetOutline(false);
+		IsHover = false;
+		if (!IsSelected)
+		{
+			SetOutline(false);
+		}
 	}
+
+	private void OnInputEvent(Node viewport, InputEvent @event, long shapeIndex)
+	{
+		if (@event is InputEventMouseButton mouseButton)
+		{
+			if (mouseButton.ButtonMask == MouseButtonMask.Left)
+			{
+				IsSelected = Selectable;
+				if (Selectable)
+					_OnPieceLeftClicked(mouseButton);
+			}
+		}
+	}
+
+	protected virtual void _OnPieceLeftClicked(InputEventMouseButton @event)
+	{
+		SetOutline(IsSelected);
+	}
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (@event is InputEventMouseButton mouseButton)
+		{
+			if (mouseButton.ButtonMask == MouseButtonMask.Left)
+			{
+				if (!IsHover)
+				{
+					IsSelected = false;
+					SetOutline(false);
+				}
+			}
+		}
+	}
+
 
 	// private Tween GetTween()
 	// {
-	// 	if (_tween == null)
+	// if (_tween == null)
+	// {
+	// 	_tween = CreateTween();
+	// 	return _tween;
+	// }
+	// else
+	// {
+	// 	if (_tween.IsValid())
+	// 		return _tween;
+	// 	else
 	// 	{
 	// 		_tween = CreateTween();
 	// 		return _tween;
 	// 	}
-	// 	else
-	// 	{
-	// 		if (_tween.IsValid())
-	// 			return _tween;
-	// 		else
-	// 		{
-	// 			_tween = CreateTween();
-	// 			return _tween;
-	// 		}
-	// 	}
+	// }
 	// }
 
 	public void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false)
@@ -122,4 +170,10 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	{
 		Position = TerrainLayers.BaseTerrain.MapToLocal(position) + TerrainLayers.Position;
 	}
+
+	public IEnumerable<T> QueryAll<T>() where T : class
+	{
+		return [];
+	}
+
 }

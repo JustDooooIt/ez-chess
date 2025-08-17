@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class PieceState : RefCounted, IPieceState
@@ -13,4 +14,8 @@ public partial class PieceState : RefCounted, IPieceState
   public PiecesManager PiecesManager { get; set; }
   public PieceAdapter PieceAdapter { get; set; }
 
+  public IEnumerable<T> QueryAll<T>() where T : class
+  {
+    return [];
+  }
 }

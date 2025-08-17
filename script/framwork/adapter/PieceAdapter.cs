@@ -8,14 +8,12 @@ public partial class PieceAdapter : Node
 
   private readonly static Dictionary<ulong, ulong> _state_node_dict = [];
   private readonly static Dictionary<ulong, ulong> _node_state_dict = [];
-  private PipelineAdapter _pipelineAdapter;
-  private PiecesManager _piecesManager;
   private GodotObject _origin;
 
   public IPieceState State { get; protected set; }
   public IPieceInstance Instance { get; protected set; }
   public PipelineAdapter PipelineAdapter { get; set; }
-  public PiecesManager PiecesManager { get => _piecesManager; set => _piecesManager = value; }
+  public PiecesManager PiecesManager { get; set; }
   public int Faction { get; set; }
 
   public override void _Ready()
@@ -48,7 +46,7 @@ public partial class PieceAdapter : Node
 
   private void SetPipelineAdapter()
   {
-	PipelineAdapter = GetNode<PipelineAdapter>($"../../../Players/{_piecesManager.Name}");
+	PipelineAdapter = GetNode<PipelineAdapter>($"../../../Players/{PiecesManager.Name}");
 	State.PipelineAdapter = PipelineAdapter;
 	Instance.PipelineAdapter = PipelineAdapter;
 	State.PiecesManager = PiecesManager;

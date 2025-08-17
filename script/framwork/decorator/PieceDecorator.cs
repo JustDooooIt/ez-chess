@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
-public abstract class PieceDecorator : IPiece, IInterfaceQueryable
+public abstract partial class PieceDecorator : RefCounted, IPiece
 {
 	public event Action<int> ActionCompleted;
 
@@ -45,13 +46,8 @@ public abstract class PieceDecorator : IPiece, IInterfaceQueryable
 		return default;
 	}
 
-	public ulong GetInstanceId()
+	protected ulong GetPieceInstanceId()
 	{
-		return Origin.GetInstanceId();
-	}
-
-	public void RemoveSelf()
-	{
-		_wrapped.SetWrapper((IPiece)Wrapper);
+		return PieceAdapter.GetInstanceFromState(Wrapped.GetInstanceId());
 	}
 }
