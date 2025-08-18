@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dithybr181361"
-path="res://.godot/imported/hexagon-2.png-6749a55215c42a33aea8c5cb4d0f5b4d.ctex"
+uid="uid://b5q1scny5gte0"
+path="res://.godot/imported/triple_adjacent_2_2_3_4.png-86ee56a475895319c9f58389e5d8d19d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://normandy44/resource/piece/hexagon-2.png"
-dest_files=["res://.godot/imported/hexagon-2.png-6749a55215c42a33aea8c5cb4d0f5b4d.ctex"]
+source_file="res://normandy44/resource/tile/triple_adjacent_2_2_3_4.png"
+dest_files=["res://.godot/imported/triple_adjacent_2_2_3_4.png-86ee56a475895319c9f58389e5d8d19d.ctex"]
 
 [params]
 

@@ -28,7 +28,6 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public GodotObject Origin => this;
 	public IPiece Wrapped => this;
 	public Area2D Area { get => _area; set => _area = value; }
-	public Godot.Vector2 AreaSize { get => GetAreaSize(); set => SetAreaSize(value); }
 	public bool Selectable { get; set; } = true;
 	public bool IsHover { get; set; } = false;
 

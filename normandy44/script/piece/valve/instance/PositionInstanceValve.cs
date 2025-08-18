@@ -4,7 +4,7 @@ public partial class PositionInstanceValve(IPieceInstance pieceInstance, RenderP
 {
   protected override Task DoLaunch()
   {
-    _pieceInstance.As<IPositionable>().MapPosition = @event.position;
+    _pieceInstance.Proxy.As<IPositionable>().MapPosition = @event.position;
     return Task.CompletedTask;
   }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class AttackStateDecorator(IPieceState wrapped, List<float> attackPoints) : PieceStateDecorator(wrapped), IAttackable, IAttackEventSender, IFlipable
+public partial class AttackStateDecorator(IPieceState wrapped, List<float> attackPoints) : PieceStateDecorator(wrapped), IAttackable, IFlipable, IAttackEventSender
 {
   private int _stateIndex;
   private List<float> AttackPoints { get; set; } = attackPoints;
@@ -22,5 +22,10 @@ public partial class AttackStateDecorator(IPieceState wrapped, List<float> attac
   public void SendAttackEvent(Vector2I from, Vector2I to)
   {
 
+  }
+
+  public void SendFlipEvent()
+  {
+    
   }
 }

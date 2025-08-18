@@ -28,8 +28,8 @@ public partial class PieceAdapter : Node
   {
 	State = state;
 	Instance = instance;
-	_state_node_dict[state.GetInstanceId()] = instance.GetInstanceId();
-	_node_state_dict[instance.GetInstanceId()] = state.GetInstanceId();
+	_state_node_dict[state.Origin.GetInstanceId()] = instance.Origin.GetInstanceId();
+	_node_state_dict[instance.Origin.GetInstanceId()] = state.Origin.GetInstanceId();
 	if (Instance is PieceInstanceDecorator decorator)
 	{
 	  AddChild((Node)decorator.Origin);

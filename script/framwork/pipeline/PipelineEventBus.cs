@@ -44,30 +44,3 @@ public abstract record Event
     this.pieceId = pieceId;
   }
 }
-
-public record RenderEvent : Event
-{
-  public RenderEvent(ulong piece) : base(piece) { }
-}
-
-public record RenderMoveEvent : RenderEvent
-{
-  public Vector2I from;
-  public Vector2I to;
-
-  public RenderMoveEvent(ulong piece, Vector2I from, Vector2I to) : base(piece)
-  {
-    this.from = from;
-    this.to = to;
-  }
-}
-
-public record RenderSetupBoardEvent : RenderEvent
-{
-  public Vector2I position;
-
-  public RenderSetupBoardEvent(ulong piece, Vector2I position) : base(piece)
-  {
-    this.position = position;
-  }
-}

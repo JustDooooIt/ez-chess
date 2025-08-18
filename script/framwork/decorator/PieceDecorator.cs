@@ -14,7 +14,7 @@ public abstract partial class PieceDecorator : RefCounted, IPiece
 		(this as IPiece)?.SetWrapper(wrapped);
 	}
 
-	public GodotObject Origin { get => GetDeepWrapped<GodotObject>(); }
+	public GodotObject Origin { get => _wrapped.Origin; }
 	public IPiece Wrapped => _wrapped;
 	public IInterfaceQueryable Proxy { get => (this as IPiece).GetProxy(); }
 	public IInterfaceQueryable Wrapper { get; set; }
@@ -48,6 +48,6 @@ public abstract partial class PieceDecorator : RefCounted, IPiece
 
 	protected ulong GetPieceInstanceId()
 	{
-		return PieceAdapter.GetInstanceFromState(Wrapped.GetInstanceId());
+		return PieceAdapter.GetInstanceFromState(Origin.GetInstanceId());
 	}
 }

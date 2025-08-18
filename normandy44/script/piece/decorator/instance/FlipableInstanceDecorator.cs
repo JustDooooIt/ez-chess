@@ -5,8 +5,4 @@ public partial class FlipableInstanceDecorator(IPieceInstance wrapped) : PieceIn
     throw new System.NotImplementedException();
   }
 
-  public void SendFlipEvent()
-  {
-    throw new System.NotImplementedException();
-  }
 }

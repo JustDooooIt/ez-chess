@@ -83,7 +83,7 @@ public partial class GameLoader : Node
 					factionNode.AddChild(pieceAdapter);
 					if (!_manager.IsNodeReady())
 						await ToSignal(_manager, "ready");
-					_map.PlacePiece(pieceAdapter, positionVec);
+					pieceAdapter.State.As<IPositionEventSender>().SendPositionEvent(positionVec);
 				}
 			}
 		}
@@ -95,7 +95,8 @@ public partial class GameLoader : Node
 		var pipeline = pipelineScene.Instantiate<PipelineAdapter>();
 		pipeline.Name = name;
 		_manager.AddPlayer(pipeline);
-		await ToSignal(pipeline, "ready");
+		if (!pipeline.IsNodeReady())
+			await ToSignal(pipeline, "ready");
 		_renderEventHandler.Pipeline = pipeline.RenderPipeline;
 		pipeline.RenderPipeline.RenderEventHandler = _renderEventHandler;
 	}

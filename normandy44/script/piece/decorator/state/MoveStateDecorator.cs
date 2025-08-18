@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Godot;
 
 public partial class MoveStateDecorator(IPieceState piece, List<float> movements) :
-  PieceStateDecorator(piece), IMoveable, IMoveEventSender, IFlipable
+  PieceStateDecorator(piece), IMoveable, IFlipable,IMoveEventSender, IFlipEventSender
 {
   private int _stateIndex = movements.Count;
   public List<float> Movements { get; set; } = movements;
@@ -11,15 +11,20 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
 
   public void Move(Vector2I from, Vector2I to)
   {
-    Wrapped.As<IPositionable>().MapPosition = to;
+    As<IPositionable>().MapPosition = to;
   }
 
   public void SendMoveEvent(Vector2I from, Vector2I to)
   {
-    ulong instance = GetPieceInstanceId();
-    Valve moveValve = new MoveStateValve(this, new(instance, from, to));
-    PipelineAdapter.StatePipeline.AddValve(moveValve);
-    PipelineAdapter.RenderPipeline.RegisterValve<RenderMoveEvent>(moveValve);
+    ulong instanceId = GetPieceInstanceId();
+    var instance = InstanceFromId(instanceId) as PieceInstance;
+    var path = instance.HexMap.FindPath(from, to, ResidualMovement);
+    if (path.Length > 0)
+    {
+      Valve valve = new MoveStateValve(this, new(instanceId, from, to, path));
+      PipelineAdapter.StatePipeline.AddValve(valve);
+      PipelineAdapter.RenderPipeline.RegisterValve<RenderMoveEvent>(valve);
+    }
   }
 
   public override V As<V>() where V : class

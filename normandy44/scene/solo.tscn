@@ -1,33 +1,33 @@
-[gd_scene load_steps=8 format=3 uid="uid://b2wg64swiprok"]
+[gd_scene load_steps=6 format=4 uid="uid://b2wg64swiprok"]
 
 [ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://scene/game.tscn" id="1_fq5sj"]
 [ext_resource type="Texture2D" uid="uid://bqr2fvxl15dbl" path="res://normandy44/resource/image/N44 Map-2015-FINAL-150.jpg" id="2_exlpm"]
 [ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://normandy44/script/piece/factory/PieceFactory.cs" id="3_0eo4n"]
-[ext_resource type="Texture2D" uid="uid://dithybr181361" path="res://normandy44/resource/piece/hexagon-2.png" id="3_qj2sb"]
+[ext_resource type="TileSet" uid="uid://jc85wbccl3ta" path="res://normandy44/resource/solo.tres" id="3_qj2sb"]
 [ext_resource type="Script" uid="uid://de0c5xemwqod0" path="res://normandy44/script/piece/event/handler/RenderEventHandler.cs" id="4_gqyvd"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1iv42"]
-texture = ExtResource("3_qj2sb")
-texture_region_size = Vector2i(122, 141)
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_exlpm"]
-tile_shape = 3
-tile_size = Vector2i(122, 141)
-sources/4 = SubResource("TileSetAtlasSource_1iv42")
 
 [node name="Game" instance=ExtResource("1_fq5sj")]
 
-[node name="HexMap" parent="." index="0"]
+[node name="HexMap" parent="." index="1" node_paths=PackedStringArray("RiverLayer")]
 texture = ExtResource("2_exlpm")
+RiverLayer = NodePath("TerrainLayers/River")
 
 [node name="TerrainLayers" parent="HexMap" index="0"]
 position = Vector2(93, 68)
 
 [node name="BaseTerrain" parent="HexMap/TerrainLayers" index="0"]
-tile_set = SubResource("TileSet_exlpm")
+tile_map_data = PackedByteArray("AAAAAAAABAAAAAAABQABAAAABAAAAAAABQABAAEABAAAAAAABQAAAAEABAAAAAAABQABAAIABAAAAAAABQACAAIABAAAAAAABQADAAIABAAAAAAABQADAAMABAAAAAAABQACAAMABAAAAAAABQACAAQABAAAAAAABQABAAUABAAAAAAABQACAAUABAAAAAAABQADAAUABAAAAAAABQAEAAQABAAAAAAABQAFAAQABAAAAAAABQAEAAUABAAAAAAABQAFAAUABAAAAAAABQAGAAQABAAAAAAABQAGAAUABAAAAAAABQAHAAUABAAAAAAABQAHAAQABAAAAAAABQAIAAQABAAAAAAABQAHAAMABAAAAAAABQAGAAMABAAAAAAABQADAAQABAAAAAAABQABAAQABAAAAAAABgABAAMABAAAAAAABgAAAAUABAAAAAAABgAEAAIABAAAAAAABgADAAEABAAAAAAABgAFAAMABAAAAAAABgAFAAIABAAAAAAABgAEAAMABAAAAAAABgAGAAIABAAAAAAABgAHAAIABAAAAAAABgAIAAIABAAAAAAABgACAAEABAAAAAAABQAEAAEABAAAAAAABgAAAAIABAAAAAAACQAAAAMABAAAAAAACQAAAAQABAAAAAAACQACAAAABAAAAAAACQADAAAABAAAAAAACQAEAAAABAAAAAAACQAFAAAABAAAAAAACQAGAAAABAAAAAAACQAHAAAABAAAAAAACQAIAAAABAAAAAAACQAHAAEABAAAAAAACQAGAAEABAAAAAAACQAFAAEABAAAAAAACQA=")
+tile_set = ExtResource("3_qj2sb")
 
-[node name="GameLoader" parent="." index="1"]
+[node name="Building" type="TileMapLayer" parent="HexMap/TerrainLayers" index="1"]
+tile_map_data = PackedByteArray("AAAFAAIABAAAAAAAAwAGAAIABAAAAAAAAwAFAAMABAAAAAAAAwAEAAMABAAAAAAABAAEAAIABAAAAAAABAABAAEABAAAAAAABAAAAAAABAAAAAAABAAHAAIABAAAAAAABAA=")
+tile_set = ExtResource("3_qj2sb")
+
+[node name="River" type="TileMapLayer" parent="HexMap/TerrainLayers" index="2"]
+tile_map_data = PackedByteArray("AAABAAMADAAAAAAAAAABAAUADwAAAAAAAAAAAAUAGQAAAAAAAAADAAUABgAAAAAAAAAEAAQADgAAAAAAAAAFAAQABgAAAAAAAAAFAAMAFQAAAAAAAAADAAQAGAAAAAAAAAAEAAMAEQAAAAAAAAAFAAIACQAAAAAAAAADAAMACQAAAAAAAAAAAAEACQAAAAAAAAABAAIADAAAAAAAAAACAAQABgAAAAAAAAABAAQAJgAAAAAAAAA=")
+tile_set = ExtResource("3_qj2sb")
+
+[node name="GameLoader" parent="." index="2"]
 ConfigPath = "res://normandy44/resource/config.json"
 PieceFactoryScript = ExtResource("3_0eo4n")
 RenderEventHandlerScript = ExtResource("4_gqyvd")

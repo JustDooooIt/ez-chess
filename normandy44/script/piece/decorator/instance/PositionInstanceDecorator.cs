@@ -10,17 +10,10 @@ public partial class PositionInstanceDecorator(IPieceInstance wrapped) : PieceIn
   {
     _mapPosition = position;
     HexMap.PlacePiece(PieceAdapter, position);
-
   }
 
   private Vector2I GetMapPosition()
   {
     return _mapPosition;
-  }
-
-  public void SendMoveEvent(Vector2I position)
-  {
-    var valve = new PositionInstanceValve(this, new(Wrapped.GetInstanceId(), position));
-    PipelineAdapter.RenderPipeline.AddValve(valve);
   }
 }

@@ -10,6 +10,7 @@
 script = ExtResource("1_p1ry8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
 script = ExtResource("2_p1ry8")
 
 [node name="HexMap" type="Sprite2D" parent="."]

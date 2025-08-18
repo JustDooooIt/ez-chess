@@ -28,8 +28,18 @@ public abstract partial class PieceFactoryBase : RefCounted, IPieceFactory
 		var piece = new T { Name = name };
 		(var stateWrapper, var instanceWrapper) = createAction.Invoke(property);
 		piece.Init(stateWrapper, instanceWrapper);
-		piece.Instance.AreaSize = areaSize;
+		SetAreaSize(piece, areaSize);
 		PieceAddCover(piece, images, defaultFace);
 		return piece;
+	}
+
+	private void SetAreaSize(PieceAdapter piece, Vector2 areaSize)
+	{
+		var area = ((Node)piece.Instance.Origin).GetNode<Area2D>("Area2D");
+		var shape = area.GetNode<CollisionShape2D>("CollisionShape2D");
+		if (shape.Shape is RectangleShape2D rectangle)
+		{
+			rectangle.Size = areaSize;
+		}
 	}
 }
