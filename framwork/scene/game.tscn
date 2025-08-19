@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://cuavd51riac8e"]
 
-[ext_resource type="Script" uid="uid://gjlmm2mdq05j" path="res://script/framwork/GameManager.cs" id="1_p1ry8"]
-[ext_resource type="Script" uid="uid://dws1iy1edrqkw" path="res://script/framwork/loader/GameLoader.cs" id="2_8n2gv"]
-[ext_resource type="Script" uid="uid://dll0ckqjkkfix" path="res://script/framwork/Camera.cs" id="2_p1ry8"]
-[ext_resource type="Script" uid="uid://c3aob7k8gr52q" path="res://script/framwork/HexMap.cs" id="3_p1ry8"]
-[ext_resource type="Script" uid="uid://b1m8iit6ahf6g" path="res://script/framwork/TerrainLayers.cs" id="3_xwcet"]
+[ext_resource type="Script" uid="uid://gjlmm2mdq05j" path="res://framwork/script/GameManager.cs" id="1_p1ry8"]
+[ext_resource type="Script" uid="uid://dws1iy1edrqkw" path="res://framwork/script/loader/GameLoader.cs" id="2_8n2gv"]
+[ext_resource type="Script" uid="uid://dll0ckqjkkfix" path="res://framwork/script/Camera.cs" id="2_p1ry8"]
+[ext_resource type="Script" uid="uid://c3aob7k8gr52q" path="res://framwork/script/HexMap.cs" id="3_p1ry8"]
+[ext_resource type="Script" uid="uid://b1m8iit6ahf6g" path="res://framwork/script/TerrainLayers.cs" id="3_xwcet"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_p1ry8")

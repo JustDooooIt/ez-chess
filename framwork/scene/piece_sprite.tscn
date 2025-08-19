@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://0pd2rj1wae3i"]
+
+[ext_resource type="Shader" uid="uid://b0jericqd0afd" path="res://framwork/shader/outline.gdshader" id="1_b3f0k"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uqwud"]
+shader = ExtResource("1_b3f0k")
+shader_parameter/enable_outline = false
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/outline_thickness = 0.05
+shader_parameter/radius = 0.15
+shader_parameter/feather = 0.005
+
+[node name="PieceSprite" type="Sprite2D"]
+material = SubResource("ShaderMaterial_uqwud")

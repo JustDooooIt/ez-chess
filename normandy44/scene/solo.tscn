@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=4 uid="uid://b2wg64swiprok"]
 
-[ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://scene/game.tscn" id="1_fq5sj"]
+[ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framwork/scene/game.tscn" id="1_fq5sj"]
 [ext_resource type="Texture2D" uid="uid://bqr2fvxl15dbl" path="res://normandy44/resource/image/N44 Map-2015-FINAL-150.jpg" id="2_exlpm"]
 [ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://normandy44/script/piece/factory/PieceFactory.cs" id="3_0eo4n"]
 [ext_resource type="Script" uid="uid://cb5chxi0uvldp" path="res://normandy44/script/map/EnhancedMap.cs" id="3_1iv42"]

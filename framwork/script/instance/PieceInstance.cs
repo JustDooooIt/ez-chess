@@ -118,7 +118,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 
 	public void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false)
 	{
-		_outline ??= GD.Load<Shader>("res://shader/outline.gdshader");
+		_outline ??= GD.Load<Shader>("res://framwork/shader/outline.gdshader");
 		var sprites = GetNode<Node2D>("Sprites");
 		var topSprite = GetNode<Node2D>("TopSprite");
 		var sprite = new Sprite2D { Texture = texture };
