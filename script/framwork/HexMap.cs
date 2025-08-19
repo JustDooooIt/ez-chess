@@ -12,28 +12,31 @@ public partial class HexMap : Sprite2D
 	private Dictionary<Vector2I, long> _coordToId = [];
 	private Rect2I _mapBounds;
 
-	[Export]
-	public TileMapLayer RiverLayer { get; set; }
 	public TerrainLayers TerrainLayers { get => _layers; }
+	public Rect2I MapBounds => _mapBounds;
 
-	private Dictionary<int, float> cost = [];
+	protected Dictionary<int, float> _terrainCost = [];
+
+	protected virtual AStar CreateAStar()
+	{
+		return new AStar()
+		{
+			GridWidth = _mapBounds.Size.X,
+			MapOrigin = _mapBounds.Position
+		};
+	}
+
+	protected virtual void InitTerrainCost(ref Dictionary<int, float> cost)
+	{
+		GD.PrintErr("Terrain movement cost not initialized");
+	}
 
 	public override void _Ready()
 	{
 		_layers = GetNode<TerrainLayers>("TerrainLayers");
 		_baseTerrain = GetNode<TileMapLayer>("TerrainLayers/BaseTerrain");
 		_pathfindingLayers = [.. _layers.GetChildren().Cast<TileMapLayer>()];
-		cost[0] = 1;
-		cost[1] = 1;
-		cost[2] = 1;
-		cost[3] = 1;
-		cost[4] = 1;
-		cost[5] = 1;
-		cost[6] = 1;
-		cost[7] = 1;
-		cost[8] = 1;
-		cost[9] = 1;
-		cost[10] = 1;
+		InitTerrainCost(ref _terrainCost);
 		BuildAStarFromTileMap();
 	}
 
@@ -76,12 +79,7 @@ public partial class HexMap : Sprite2D
 			return;
 		}
 
-		_astar = new AStar
-		{
-			GridWidth = _mapBounds.Size.X,
-			MapOrigin = _mapBounds.Position,
-			RiverLayer = RiverLayer
-		};
+		_astar = CreateAStar();
 
 		// --- 2. 为每个唯一坐标计算综合成本并添加点 ---
 		foreach (Vector2I cellCoord in allUsedCells)
@@ -94,7 +92,7 @@ public partial class HexMap : Sprite2D
 				TileData tileData = layer.GetCellTileData(cellCoord);
 				if (tileData == null) continue;
 
-				float layerCost = cost[tileData.Terrain];
+				float layerCost = _terrainCost[tileData.Terrain];
 				// float layerCost = tileData.GetCustomData("cost").AsSingle();
 
 				if (layerCost < 0)

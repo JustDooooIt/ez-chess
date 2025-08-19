@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Godot;
 
 public partial class MoveStateDecorator(IPieceState piece, List<float> movements) :
-  PieceStateDecorator(piece), IMoveable, IFlipable,IMoveEventSender, IFlipEventSender
+  PieceStateDecorator(piece), IMoveable, IFlipable, IMoveEventSender, IFlipEventSender
 {
   private int _stateIndex = movements.Count;
   public List<float> Movements { get; set; } = movements;

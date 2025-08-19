@@ -1,9 +1,13 @@
+using System;
 using System.Threading.Tasks;
 using Godot;
 
-public abstract partial class Valve : RefCounted, IValve
+public abstract partial class Valve(IPiece piece) : RefCounted, IValve, IActionEvent
 {
-  public ValveStates ValveState { get; protected set; } = ValveStates.IDLED;
+  private IPiece _piece = piece;
+  private ValveStates _valveState = ValveStates.IDLED;
+  public ValveStates ValveState { get => _valveState; protected set=>SetVlaveState(value); }
+  public event Action<ValveStates> StateChanged;
 
   public async Task Launch()
   {
@@ -13,6 +17,12 @@ public abstract partial class Valve : RefCounted, IValve
   }
 
   protected abstract Task DoLaunch();
+
+  private void SetVlaveState(ValveStates state)
+  {
+    _valveState = state;
+    StateChanged?.Invoke(state);
+  }
 
   public enum ValveStates
   {

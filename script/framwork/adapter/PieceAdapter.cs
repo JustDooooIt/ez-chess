@@ -15,10 +15,10 @@ public partial class PieceAdapter : Node
   public PipelineAdapter PipelineAdapter { get; set; }
   public PiecesManager PiecesManager { get; set; }
   public int Faction { get; set; }
+  public int PieceType { get; set; }
 
   public override void _Ready()
   {
-	Faction = GetParent().GetIndex();
 	SetPiecesManager();
 	SetPipelineAdapter();
 	SetPieceAdapter();
@@ -64,4 +64,5 @@ public partial class PieceAdapter : Node
 	State.PieceAdapter = this;
 	Instance.PieceAdapter = this;
   }
+
 }

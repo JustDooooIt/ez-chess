@@ -13,6 +13,8 @@ public partial class PieceState : RefCounted, IPieceState
   public PipelineAdapter PipelineAdapter { get; set; }
   public PiecesManager PiecesManager { get; set; }
   public PieceAdapter PieceAdapter { get; set; }
+  public int Faction { get; set; }
+  public int PieceType { get; set; }
 
   public IEnumerable<T> QueryAll<T>() where T : class
   {

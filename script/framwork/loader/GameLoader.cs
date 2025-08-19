@@ -48,6 +48,7 @@ public partial class GameLoader : Node
 	{
 		var factionNames = config["factions"].AsGodotArray<string>();
 		GameState.Instance.Factions = [.. factionNames];
+		int factionId = 0;
 		foreach (var factionName in factionNames)
 		{
 			AddPlayer(factionName);
@@ -79,13 +80,15 @@ public partial class GameLoader : Node
 					}
 					int defaultFace = faces.Select(e => e.AsGodotDictionary<string, Variant>()).ToList().FindIndex(e => e.ContainsKey("default") && e["default"].AsBool());
 					defaultFace = defaultFace == -1 ? 0 : defaultFace;
-					var pieceAdapter = _pieceFactory.Create(pieceType, pieceName, faceImage, defaultFace, sizeVec, property);
+					var pieceAdapter = _pieceFactory.Create(pieceType, factionId, pieceName, faceImage, defaultFace, sizeVec, property);
 					factionNode.AddChild(pieceAdapter);
 					if (!_manager.IsNodeReady())
 						await ToSignal(_manager, "ready");
 					pieceAdapter.State.As<IPositionEventSender>().SendPositionEvent(positionVec);
+					factionNode.AddPiece(positionVec, pieceAdapter);
 				}
 			}
+			factionId++;
 		}
 	}
 
@@ -101,7 +104,7 @@ public partial class GameLoader : Node
 		pipeline.RenderPipeline.RenderEventHandler = _renderEventHandler;
 	}
 
-	private Node CreateFactionNode(string name)
+	private PiecesManager CreateFactionNode(string name)
 	{
 		var factionNode = _piecesManagerScene.Instantiate<PiecesManager>();
 		factionNode.Name = name;

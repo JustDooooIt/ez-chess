@@ -20,8 +20,11 @@ public abstract partial class PieceDecorator : RefCounted, IPiece
 	public IInterfaceQueryable Wrapper { get; set; }
 	public PipelineAdapter PipelineAdapter { get => _wrapped.PipelineAdapter; set => _wrapped.PipelineAdapter = value; }
 	public PiecesManager PiecesManager { get => _wrapped.PiecesManager; set => _wrapped.PiecesManager = value; }
+  public int Faction { get =>_wrapped.Faction; set=>_wrapped.Faction = value; }
+  public int PieceType { get => _wrapped.PieceType; set => _wrapped.PieceType = value; }
 
-	public virtual V As<V>() where V : class
+
+  public virtual V As<V>() where V : class
 	{
 		if (this is V selfImpl) return selfImpl;
 

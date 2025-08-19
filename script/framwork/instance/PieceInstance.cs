@@ -30,6 +30,8 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public Area2D Area { get => _area; set => _area = value; }
 	public bool Selectable { get; set; } = true;
 	public bool IsHover { get; set; } = false;
+	public int Faction { get; set; }
+	public int PieceType { get; set; }
 
 	public override void _Ready()
 	{
@@ -68,14 +70,15 @@ public partial class PieceInstance : Node2D, IPieceInstance
 			{
 				IsSelected = Selectable;
 				if (Selectable)
-					_OnPieceLeftClicked(mouseButton);
+					OnPieceLeftClicked(mouseButton);
 			}
 		}
 	}
 
-	protected virtual void _OnPieceLeftClicked(InputEventMouseButton @event)
+	private void OnPieceLeftClicked(InputEventMouseButton @event)
 	{
 		SetOutline(IsSelected);
+		GameState.Instance.RunningPiece = PieceAdapter;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
