@@ -90,7 +90,7 @@ public partial class HexMap : Sprite2D
 			foreach (TileMapLayer layer in _pathfindingLayers)
 			{
 				TileData tileData = layer.GetCellTileData(cellCoord);
-				if (tileData == null) continue;
+				if (tileData == null || tileData.Terrain == -1) continue;
 
 				float layerCost = _terrainCost[tileData.Terrain];
 				// float layerCost = tileData.GetCustomData("cost").AsSingle();
