@@ -7,7 +7,7 @@ public abstract partial class Pipeline : Node, ILaunchable, IStopable
 {
   public event Action<Valve> ValveAdded;
  
-  public abstract Task Launch();
+  public abstract void Launch();
   public abstract void Stop();
   public abstract void AddValve(Valve launchable);
   protected void OnValveAdded(Valve valve)

@@ -6,17 +6,17 @@ public abstract partial class Valve(IPiece piece) : RefCounted, IValve, IActionE
 {
   private IPiece _piece = piece;
   private ValveStates _valveState = ValveStates.IDLED;
-  public ValveStates ValveState { get => _valveState; protected set=>SetVlaveState(value); }
+  public ValveStates ValveState { get => _valveState; protected set => SetVlaveState(value); }
   public event Action<ValveStates> StateChanged;
 
-  public async Task Launch()
+  public async void Launch()
   {
     ValveState = ValveStates.LAUNCHING;
-    await DoLaunch();
+    DoLaunch();
     ValveState = ValveStates.STOPED;
   }
 
-  protected abstract Task DoLaunch();
+  protected abstract void DoLaunch();
 
   private void SetVlaveState(ValveStates state)
   {
