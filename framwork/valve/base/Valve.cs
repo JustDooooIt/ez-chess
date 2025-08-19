@@ -9,7 +9,7 @@ public abstract partial class Valve(IPiece piece) : RefCounted, IValve, IActionE
   public ValveStates ValveState { get => _valveState; protected set => SetVlaveState(value); }
   public event Action<ValveStates> StateChanged;
 
-  public async void Launch()
+  public void Launch()
   {
     ValveState = ValveStates.LAUNCHING;
     DoLaunch();
