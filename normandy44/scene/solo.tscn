@@ -1,11 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://b2wg64swiprok"]
+[gd_scene load_steps=5 format=4 uid="uid://b2wg64swiprok"]
 
-[ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framwork/scene/game.tscn" id="1_fq5sj"]
+[ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framework/scene/game.tscn" id="1_fq5sj"]
 [ext_resource type="Texture2D" uid="uid://bqr2fvxl15dbl" path="res://normandy44/resource/image/N44 Map-2015-FINAL-150.jpg" id="2_exlpm"]
-[ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://normandy44/script/piece/factory/PieceFactory.cs" id="3_0eo4n"]
 [ext_resource type="Script" uid="uid://cb5chxi0uvldp" path="res://normandy44/script/map/EnhancedMap.cs" id="3_1iv42"]
 [ext_resource type="TileSet" uid="uid://jc85wbccl3ta" path="res://normandy44/resource/solo.tres" id="3_qj2sb"]
-[ext_resource type="Script" uid="uid://de0c5xemwqod0" path="res://normandy44/script/piece/event/handler/RenderEventHandler.cs" id="4_gqyvd"]
 
 [node name="Game" instance=ExtResource("1_fq5sj")]
 
@@ -33,8 +31,3 @@ tile_set = ExtResource("3_qj2sb")
 [node name="River" type="TileMapLayer" parent="HexMap/TerrainLayers" index="3"]
 tile_map_data = PackedByteArray("AAAAAAEAAQAEAAAAAAABAAIAAQAEAAQAAAABAAMAAQAEAAUAAAADAAQAAQAGAAAAAAAEAAMAAQAGAAEAAAADAAMAAQAEAAAAAAADAAUAAQAAAAQAAAAEAAQAAQABAAYAAAAFAAQAAQAAAAQAAAAFAAMAAQAAAAYAAAAFAAIAAQAGAAAAAAAGAAIAAQAAAAIAAAA=")
 tile_set = ExtResource("3_qj2sb")
-
-[node name="GameLoader" parent="." index="2"]
-ConfigPath = "res://normandy44/resource/config.json"
-PieceFactoryScript = ExtResource("3_0eo4n")
-RenderEventHandlerScript = ExtResource("4_gqyvd")

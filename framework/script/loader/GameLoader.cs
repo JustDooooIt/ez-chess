@@ -30,7 +30,7 @@ public partial class GameLoader : Node
 		_manager = GetNode<GameManager>("..");
 		_map = GetNode<HexMap>("../HexMap");
 		_piecesContainer = GetNode<Node>("../Pieces");
-		_piecesManagerScene = GD.Load<PackedScene>("res://framwork/scene/pieces_manager.tscn");
+		_piecesManagerScene = GD.Load<PackedScene>("res://framework/scene/pieces_manager.tscn");
 		_config = LoadConfig();
 		_pieceFactory = (IPieceFactory)PieceFactoryScript.New().AsGodotObject();
 		_renderEventHandler = (BaseRenderEventHandler)RenderEventHandlerScript.New().AsGodotObject();
@@ -94,7 +94,7 @@ public partial class GameLoader : Node
 
 	private async void AddPlayer(string name)
 	{
-		var pipelineScene = GD.Load<PackedScene>("res://framwork/scene/player.tscn");
+		var pipelineScene = GD.Load<PackedScene>("res://framework/scene/player.tscn");
 		var pipeline = pipelineScene.Instantiate<PipelineAdapter>();
 		pipeline.Name = name;
 		_manager.AddPlayer(pipeline);
