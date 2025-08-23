@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Godot;
 
 public partial class MoveStateDecorator(IPieceState piece, List<float> movements) :
@@ -9,7 +10,7 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
   public float CurMovement { get; set; } = movements[0];
   public float ResidualMovement { get; set; } = movements[0];
 
-  public void Move(Vector2I from, Vector2I to)
+  public void Move(Vector2I from, Vector2I to, Vector2I[] path)
   {
     As<IPositionable>().MapPosition = to;
   }

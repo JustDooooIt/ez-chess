@@ -1,11 +1,11 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator(wrapped), IMoveable
 {
-  public void Move(Vector2I from, Vector2I to)
+  public void Move(Vector2I from, Vector2I to, Vector2I[] path)
   {
     var instance = (IPieceInstance)Origin;
-    var path = instance.HexMap.FindPath(from, to);
     instance.Selectable = false;
     var tween = ((Node)instance.Origin).CreateTween();
     foreach (var point in path)

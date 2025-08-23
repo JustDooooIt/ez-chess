@@ -9,8 +9,9 @@ public partial class MPGameManager : GameManager
 {
   private Crypto _crypto = new();
   private string _username;
-  private GithubUtils.RoomMetaData _roomMetaData;
-  private Dictionary<string, GithubUtils.UserData> _players = [];
+  private RoomMetaData _roomMetaData;
+  private CommentNode _handshake;
+  private Dictionary<string, UserData> _players = [];
   private CancellationToken _waiterToken;
 
   public override void _Ready()
@@ -22,6 +23,7 @@ public partial class MPGameManager : GameManager
     loginBtn.Pressed += Login;
     createBtn.Pressed += CreateRoom;
     enterBtn.Pressed += EnterRoom;
+    TreeExiting += OnTreeExisting;
   }
 
   private async void EnterRoom()
@@ -29,7 +31,7 @@ public partial class MPGameManager : GameManager
     var roomNumber = GetNode<LineEdit>("CanvasLayer/Control/EnterRoom/RoomId");
     _roomMetaData = await GithubUtils.EnterRoom(roomNumber.Text.ToInt());
     GD.Print("Enter room");
-    await GameReady(_roomMetaData.Id, _username, GameState.Instance.PlayerFaction);
+    _handshake = await GithubUtils.GameReady(_roomMetaData.Id, _roomMetaData.Number, _username, GameState.Instance.PlayerFaction);
     GD.Print("Player ready");
     GD.Print("Waiting for other players");
     _players = await GithubUtils.WaitOthers(_roomMetaData.Number, GameState.Instance.PlayerCount);
@@ -39,11 +41,10 @@ public partial class MPGameManager : GameManager
   private async void CreateRoom()
   {
     _roomMetaData = await GithubUtils.CreateGameRoom("normandy44");
+    InitCypto();
     GD.Print("Create room success");
-    if (await GameReady(_roomMetaData.Id, _username, GameState.Instance.PlayerFaction))
-    {
-      GD.Print("Game ready");
-    }
+    _handshake = await GithubUtils.GameReady(_roomMetaData.Id, _roomMetaData.Number, _username, GameState.Instance.PlayerFaction);
+    GD.Print("Game ready");
     GD.Print("Waiting for other players");
     var state = GetNode<Label>("CanvasLayer/Control/State/Label");
     state.Text = "Waiting";
@@ -52,13 +53,6 @@ public partial class MPGameManager : GameManager
     state.Text = "Started";
     GD.Print("All players ready");
   }
-
-  private async Task<bool> GameReady(string roomId, string username, int faction)
-  {
-    InitCypto();
-    return await GithubUtils.GameReady(roomId, username, faction);
-  }
-
 
   private void InitCypto()
   {
@@ -101,4 +95,11 @@ public partial class MPGameManager : GameManager
     return input.Text;
   }
 
+  private async void OnTreeExisting()
+  {
+    if (_handshake != null)
+    {
+      await GithubUtils.DeleteComment(_handshake.Id);
+    }
+  }
 }

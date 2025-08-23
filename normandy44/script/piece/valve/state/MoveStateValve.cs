@@ -6,7 +6,7 @@ public partial class MoveStateValve(IPieceState pieceState, RenderMoveEvent move
 
   protected override void DoLaunch()
   {
-    _pieceState.As<IMoveable>().Move(moveEvent.from, moveEvent.to);
+    _pieceState.As<IMoveable>().Move(moveEvent.from, moveEvent.to, moveEvent.path);
     PipelineEventBus.Instance.Publish(GetInstanceId(), moveEvent);
   }
 }
