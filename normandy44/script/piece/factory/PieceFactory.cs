@@ -4,11 +4,11 @@ using Godot.Collections;
 
 public partial class PieceFactory : PieceFactoryBase, IPieceFactory
 {
-	public override PieceAdapter Create(int pieceType, int faction, string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property)
+	public override PieceAdapter Create(int pieceType, int group, int faction, string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property)
 	{
 		return pieceType switch
 		{
-			0 => Create<Infantry>(pieceType, name, faction, images, defaultFace, areaSize, property, CreateInfantry),
+			0 => Create<Infantry>(pieceType, group, faction, name, images, defaultFace, areaSize, property, CreateInfantry),
 			_ => default,
 		};
 	}

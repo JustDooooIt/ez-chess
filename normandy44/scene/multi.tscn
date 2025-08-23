@@ -1,0 +1,143 @@
+[gd_scene load_steps=7 format=4 uid="uid://ccmsadmdtosnm"]
+
+[ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framework/scene/game.tscn" id="1_3huoh"]
+[ext_resource type="Script" uid="uid://dpqs571vpupq3" path="res://framework/script/game/MPGameManager.cs" id="2_er3e1"]
+[ext_resource type="Texture2D" uid="uid://bqr2fvxl15dbl" path="res://normandy44/resource/image/N44 Map-2015-FINAL-150.jpg" id="2_ye5cw"]
+[ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://normandy44/script/piece/factory/PieceFactory.cs" id="3_22nru"]
+[ext_resource type="TileSet" uid="uid://jc85wbccl3ta" path="res://normandy44/resource/terrain.tres" id="3_mbs8q"]
+[ext_resource type="Script" uid="uid://de0c5xemwqod0" path="res://normandy44/script/piece/event/handler/RenderEventHandler.cs" id="4_mbs8q"]
+
+[node name="Game" instance=ExtResource("1_3huoh")]
+script = ExtResource("2_er3e1")
+
+[node name="HexMap" parent="." index="1"]
+position = Vector2(0, 0)
+texture = ExtResource("2_ye5cw")
+_terrainCost = Dictionary[int, float]({
+0: 1.0,
+1: 1.0,
+2: 1.0,
+3: 1.0,
+4: 1.0,
+5: 1.0,
+6: 1.0,
+7: 1.0,
+8: 1.0,
+9: 1.0,
+10: 1.0
+})
+
+[node name="TerrainLayers" parent="HexMap" index="0"]
+visible = false
+position = Vector2(93, 68)
+
+[node name="BaseTerrain" parent="HexMap/TerrainLayers" index="0"]
+tile_map_data = PackedByteArray("AAABAAAABAAAAAAAAgAAAAAABAAAAAAAAgAAAAEABAAAAAAAAgABAAEABAAAAAAAAgACAAIABAAAAAAAAgACAAMABAAAAAAAAgADAAIABAAAAAAAAgADAAMABAAAAAAAAgACAAQABAAAAAAAAgADAAQABAAAAAAAAgAEAAQABAAAAAAAAgABAAUABAAAAAAAAgACAAUABAAAAAAAAgADAAUABAAAAAAAAgAEAAUABAAAAAAAAgAFAAUABAAAAAAAAgAGAAUABAAAAAAAAgAHAAUABAAAAAAAAgAIAAIABAAAAAAAAgAHAAMABAAAAAAAAgAIAAQABAAAAAAAAgAGAAMABAAAAAAAAgAHAAQABAAAAAAAAgAGAAQABAAAAAAAAgAFAAQABAAAAAAAAgAAAAIABAAAAAAACQAAAAMABAAAAAAACQAAAAQABAAAAAAACQABAAMABAAAAAAABgABAAIABAAAAAAABgABAAQABAAAAAAABgAEAAMABAAAAAAABgAEAAIABAAAAAAABgADAAEABAAAAAAABgACAAEABAAAAAAAAgAFAAMABAAAAAAABgAFAAIABAAAAAAABgAGAAIABAAAAAAABgAHAAIABAAAAAAABgAEAAEABAAAAAAABgACAAAABAAAAAAABgAAAP//BAAAAAAACQABAP//BAAAAAAACQACAP//BAAAAAAACQADAAAABAAAAAAACQADAP//BAAAAAAACQAEAAAABAAAAAAACQAEAP//BAAAAAAACQAFAP//BAAAAAAACQAFAAAABAAAAAAACQAGAAAABAAAAAAACQAGAP//BAAAAAAACQAHAAAABAAAAAAACQAHAP//BAAAAAAACQAIAAAABAAAAAAACQAHAAEABAAAAAAACQAGAAEABAAAAAAACQAFAAEABAAAAAAACQAAAAUABAAAAAAABgA=")
+tile_set = ExtResource("3_mbs8q")
+
+[node name="GameLoader" parent="." index="2"]
+ConfigPath = "res://normandy44/resource/multi/1v1-config.json"
+PieceFactoryScript = ExtResource("3_22nru")
+RenderEventHandlerScript = ExtResource("4_mbs8q")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." index="5"]
+
+[node name="Control" type="Control" parent="CanvasLayer" index="0"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Login" type="Control" parent="CanvasLayer/Control" index="0"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 23.0
+offset_right = 480.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GithubTokenInput" type="LineEdit" parent="CanvasLayer/Control/Login" index="0"]
+layout_mode = 0
+offset_right = 232.0
+offset_bottom = 31.0
+placeholder_text = "github token"
+
+[node name="Login" type="Button" parent="CanvasLayer/Control/Login" index="1"]
+layout_mode = 0
+offset_left = 376.0
+offset_right = 440.0
+offset_bottom = 31.0
+text = "Login"
+
+[node name="Faction" type="OptionButton" parent="CanvasLayer/Control/Login" index="2"]
+layout_mode = 0
+offset_left = 256.0
+offset_right = 351.0
+offset_bottom = 31.0
+selected = 0
+item_count = 2
+popup/item_0/text = "Axis"
+popup/item_0/id = 2
+popup/item_1/text = "Allies"
+popup/item_1/id = 0
+
+[node name="Tip" type="Popup" parent="CanvasLayer/Control/Login" index="3"]
+initial_position = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/Login/Tip" index="0"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="EnterRoom" type="Control" parent="CanvasLayer/Control" index="1"]
+anchors_preset = 0
+offset_left = 24.0
+offset_top = 64.0
+offset_right = 258.0
+offset_bottom = 95.0
+
+[node name="RoomId" type="LineEdit" parent="CanvasLayer/Control/EnterRoom" index="0"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.103
+anchor_top = -2.075
+anchor_bottom = -2.065
+offset_left = 24.102
+offset_top = 64.325
+offset_right = 104.0
+offset_bottom = 95.015
+
+[node name="Enter" type="Button" parent="CanvasLayer/Control/EnterRoom" index="1"]
+layout_mode = 0
+offset_left = 120.0
+offset_right = 170.0
+offset_bottom = 31.0
+text = "Enter
+"
+
+[node name="CreateRoom" type="Button" parent="CanvasLayer/Control" index="2"]
+layout_mode = 0
+offset_left = 480.0
+offset_top = 24.0
+offset_right = 589.0
+offset_bottom = 55.0
+text = "Create Room"
+
+[node name="State" type="Panel" parent="CanvasLayer/Control" index="3"]
+layout_mode = 0
+offset_left = 206.0
+offset_top = 64.0
+offset_right = 256.0
+offset_bottom = 95.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/State" index="0"]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 50.0
+offset_bottom = 28.0
+text = "none"
+horizontal_alignment = 1

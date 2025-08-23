@@ -4,7 +4,7 @@ using Godot.Collections;
 
 public abstract partial class PieceFactoryBase : RefCounted, IPieceFactory
 {
-	public abstract PieceAdapter Create(int pieceType, int faction, string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property);
+	public abstract PieceAdapter Create(int pieceType, int group, int faction, string name, Array<Texture2D> images, int defaultFace, Vector2 areaSize, Array<Dictionary<string, Variant>> property);
 
 	protected void PieceAddCover(PieceAdapter piece, Array<Texture2D> images, int defaultFace)
 	{
@@ -19,8 +19,9 @@ public abstract partial class PieceFactoryBase : RefCounted, IPieceFactory
 
 	protected PieceAdapter Create<T>(
 		int pieceType,
-		string name,
+		int group,
 		int faction,
+		string name,
 		Array<Texture2D> images,
 		int defaultFace,
 		Vector2 areaSize,
@@ -35,6 +36,7 @@ public abstract partial class PieceFactoryBase : RefCounted, IPieceFactory
 		instanceWrapper.PieceType = pieceType;
 		piece.Faction = faction;
 		piece.PieceType = pieceType;
+		piece.Group = group;
 		piece.Init(stateWrapper, instanceWrapper);
 		SetAreaSize(piece, areaSize);
 		PieceAddCover(piece, images, defaultFace);

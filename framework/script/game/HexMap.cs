@@ -15,7 +15,8 @@ public partial class HexMap : Sprite2D
 	public TerrainLayers TerrainLayers { get => _layers; }
 	public Rect2I MapBounds => _mapBounds;
 
-	protected Dictionary<int, float> _terrainCost = [];
+  [Export]
+	protected Godot.Collections.Dictionary<int, float> _terrainCost = [];
 
 	protected virtual AStar CreateAStar()
 	{
@@ -26,17 +27,11 @@ public partial class HexMap : Sprite2D
 		};
 	}
 
-	protected virtual void InitTerrainCost(ref Dictionary<int, float> cost)
-	{
-		GD.PrintErr("Terrain movement cost not initialized");
-	}
-
 	public override void _Ready()
 	{
 		_layers = GetNode<TerrainLayers>("TerrainLayers");
 		_baseTerrain = GetNode<TileMapLayer>("TerrainLayers/BaseTerrain");
 		_pathfindingLayers = [.. _layers.GetChildren().Cast<TileMapLayer>()];
-		InitTerrainCost(ref _terrainCost);
 		BuildAStarFromTileMap();
 	}
 

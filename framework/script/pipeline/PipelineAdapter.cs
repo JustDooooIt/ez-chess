@@ -7,7 +7,7 @@ using Godot;
 /// </summary>
 public partial class PipelineAdapter : Node
 {
-  public bool Operable { get; set; } = false;
+  public int Group { get; set; }
   public StatePipeline StatePipeline { get; private set; }
   public RenderPipeline RenderPipeline { get; private set; }
 

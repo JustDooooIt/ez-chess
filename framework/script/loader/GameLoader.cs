@@ -56,6 +56,7 @@ public partial class GameLoader : Node
 			if (config.TryGetValue(factionName, out var vfaction))
 			{
 				var faction = vfaction.AsGodotDictionary<string, Variant>();
+				var group = faction["group"].AsInt32();
 				var pieces = faction["pieces"].AsGodotArray();
 				foreach (var piecev in pieces)
 				{
@@ -80,7 +81,7 @@ public partial class GameLoader : Node
 					}
 					int defaultFace = faces.Select(e => e.AsGodotDictionary<string, Variant>()).ToList().FindIndex(e => e.ContainsKey("default") && e["default"].AsBool());
 					defaultFace = defaultFace == -1 ? 0 : defaultFace;
-					var pieceAdapter = _pieceFactory.Create(pieceType, factionId, pieceName, faceImage, defaultFace, sizeVec, property);
+					var pieceAdapter = _pieceFactory.Create(pieceType, group, factionId, pieceName, faceImage, defaultFace, sizeVec, property);
 					factionNode.AddChild(pieceAdapter);
 					if (!_manager.IsNodeReady())
 						await ToSignal(_manager, "ready");
@@ -98,6 +99,7 @@ public partial class GameLoader : Node
 		var pipeline = pipelineScene.Instantiate<PipelineAdapter>();
 		pipeline.Name = name;
 		_manager.AddPlayer(pipeline);
+		GameState.Instance.PlayerCount++;
 		if (!pipeline.IsNodeReady())
 			await ToSignal(pipeline, "ready");
 		_renderEventHandler.Pipeline = pipeline.RenderPipeline;

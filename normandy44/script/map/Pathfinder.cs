@@ -24,7 +24,7 @@ public partial class Pathfinder : AStar
 		{
 			if (GameState.Instance.CurOperatorFaction == 0)
 			{
-				var pieceType = GameState.Instance.RunningPiece.PieceType;
+				var pieceType = GameState.Instance.SelectedPiece.PieceType;
 				if (pieceType == 0)
 				{
 					finalCost = 0.5f;

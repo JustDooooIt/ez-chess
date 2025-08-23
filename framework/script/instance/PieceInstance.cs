@@ -78,7 +78,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	private void OnPieceLeftClicked(InputEventMouseButton @event)
 	{
 		SetOutline(IsSelected);
-		GameState.Instance.RunningPiece = PieceAdapter;
+		GameState.Instance.SelectedPiece = PieceAdapter;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)

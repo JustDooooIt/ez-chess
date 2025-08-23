@@ -23,21 +23,4 @@ public partial class EnhancedMap : HexMap
 	  RoadLayer = RoadLayer,
 	};
   }
-
-  protected override void InitTerrainCost(ref Dictionary<int, float> cost)
-  {
-	cost[0] = 1;
-	cost[1] = 1;
-	cost[2] = 1;
-	cost[3] = 1;
-	cost[4] = 1;
-	cost[5] = 1;
-	cost[6] = 1;
-	cost[7] = 1;
-	cost[8] = 1;
-	cost[9] = 1;
-	cost[10] = 1;
-	cost[11] = 1;
-	cost[12] = 1;
-  }
 }
