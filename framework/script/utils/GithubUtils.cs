@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -9,6 +10,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Godot;
 
 public class GithubUtils
 {
@@ -19,10 +21,17 @@ public class GithubUtils
   private static readonly JsonSerializerOptions options = new()
   {
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-    PropertyNameCaseInsensitive = true
+    PropertyNameCaseInsensitive = true,
   };
   private static readonly string REPOSITORY_ID = "R_kgDOPatLkw";
   private static readonly string GAME_DISCUSSION_CATEGORY_ID = "DIC_kwDOPatLk84CueXj";
+  private static readonly string OWNER = "JustDooooIt";
+  private static readonly string REPO = "ez-chess";
+
+  static GithubUtils()
+  {
+    options.Converters.Add(new Vector2IConverter());
+  }
 
   private static readonly string CREATE_DISCUSSION_QUERY = $@"
 	mutation($repo: ID!, $title: String!, $body: String!, $cat: ID!) {{
@@ -31,14 +40,14 @@ public class GithubUtils
 		title: $title,
 		body: $body,
 		categoryId: $cat
-    }}) {{
-      discussion {{
-        id,
-        number,
-        title,
-        createdAt,
-      }}
-    }}
+	}}) {{
+	  discussion {{
+		id,
+		number,
+		title,
+		createdAt,
+	  }}
+	}}
   }}";
   private static readonly string ADD_COMMMENT_QUERY = $@"
   mutation($id: ID!, $body: String!) {{
@@ -51,77 +60,77 @@ public class GithubUtils
 				createdAt
 					author {{
 						login
-		    }}
+			  }}
 		  }}
 	  }}
 	}}";
   private static readonly string GET_COMMMENTS_QUERY = $@"
   query($number: Int!, $last: Int!, $before: String) {{
-    repository(owner: ""JustDooooIt"", name: ""ez-chess""){{
-      discussion(number: $number) {{
-      comments(last: $last, before: $before) {{
-        pageInfo {{
-          hasPreviousPage,
-          hasNextPage,
-          startCursor,
-          endCursor
-        }}
-        nodes {{
-          id,
-        author{{
-          login
-        }},
-        body,
-        createdAt
-        }}
-      }}
-      }}
-    }}
+	repository(owner: ""{OWNER}"", name: ""{REPO}""){{
+	  discussion(number: $number) {{
+		comments(last: $last, before: $before) {{
+		  pageInfo {{
+			hasPreviousPage,
+			hasNextPage,
+			startCursor,
+			endCursor
+		  }}
+		  nodes {{
+			id,
+		  author{{
+			login
+		  }},
+		  body,
+		  createdAt
+		  }}
+		}}
+	  }}
+	}}
   }}";
   private static readonly string GET_DISCUSSION_QUERY = $@"
   query($number: Int!) {{
-    repository(owner: ""JustDooooIt"", name: ""ez-chess""){{
-      discussion(number: $number){{
-      id,
-      number,
-      title,
-      createdAt
-      }}
-    }}
+	repository(owner: ""{OWNER}"", name: ""{REPO}""){{
+	  discussion(number: $number){{
+	  id,
+	  number,
+	  title,
+	  createdAt
+	  }}
+	}}
   }}";
   private static readonly string DELETE_COMMENT_QUERY = $@"
   mutation($commentId: ID!){{
-    deleteDiscussionComment(input: {{id: $commentId}}){{
-      comment {{
-        id
-        body
-        createdAt
-        author {{
-          login
-        }}
-      }}
-    }}
+	deleteDiscussionComment(input: {{id: $commentId}}){{
+	  comment {{
+		id
+		body
+		createdAt
+		author {{
+		  login
+		}}
+	  }}
+	}}
   }}";
 
-  public static async Task<string> Login(string token)
+  public static async Task<(string, string)> Login(string token)
   {
     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("ez-chess/v1.0.0");
     return await CheckLogin();
   }
 
-  private static async Task<string> CheckLogin()
+  private static async Task<(string, string)> CheckLogin()
   {
-    var query = new QueryBody() { Query = "query { viewer { login }}" };
+    var query = new QueryBody() { Query = "query { viewer { id,login } }" };
     var res = await httpClient.PostAsJsonAsync(BASE_URL, query, options);
     if (res.IsSuccessStatusCode)
     {
-      var data = await res.Content.ReadFromJsonAsync<JsonObject>();
-      return (string)data["data"]["viewer"]["login"];
+      var data = await res.Content.ReadFromJsonAsync<JsonObject>(options);
+      return (data["data"]["viewer"]["id"].GetValue<string>(), data["data"]["viewer"]["login"].GetValue<string>());
     }
     else
     {
-      return "";
+      return ("", "");
     }
   }
 
@@ -129,22 +138,22 @@ public class GithubUtils
   {
     var variables = new { repo = REPOSITORY_ID, title = $"{gameName}-{DateTime.Now}", body = gameName, cat = GAME_DISCUSSION_CATEGORY_ID };
     var request = new { query = CREATE_DISCUSSION_QUERY, variables };
-    var json = JsonSerializer.Serialize(request);
+    var json = JsonSerializer.Serialize(request, options);
     var content = new StringContent(json);
     var res = await httpClient.PostAsync(BASE_URL, content);
     var result = await res.Content.ReadFromJsonAsync<JsonObject>(options);
-    return result["data"]["createDiscussion"]["discussion"].Deserialize<RoomMetaData>();
+    return result["data"]["createDiscussion"]["discussion"].Deserialize<RoomMetaData>(options);
   }
 
   public static async Task<Comments> GetComments(int number, string before = "")
   {
     var variables = new { number, last = PAGE_SIZE, before };
     var request = new { query = GET_COMMMENTS_QUERY, variables };
-    var json = JsonSerializer.Serialize(request);
+    var json = JsonSerializer.Serialize(request, options);
     var content = new StringContent(json);
     var res = await httpClient.PostAsync(BASE_URL, content);
     var result = await res.Content.ReadFromJsonAsync<JsonObject>(options);
-    return result["data"]["repository"]["discussion"]["comments"].Deserialize<Comments>();
+    return result["data"]["repository"]["discussion"]["comments"].Deserialize<Comments>(options);
   }
 
   public static async Task ProcessComments(int discussionNumber, Func<CommentNode, bool> commentProcessor)
@@ -166,89 +175,109 @@ public class GithubUtils
     } while (true);
   }
 
-  public static async Task<CommentNode> GameReady(string discussionId, int discussionNum, string username, int faction)
+  public static async Task<UserData> EnterRoom(string discussionId, int faction, PlayerType playerType)
   {
-    bool isExist = false;
-    CommentNode handshake = null;
-    await ProcessComments(discussionNum, (comment) =>
-    {
-      var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body.Replace("\n", "\\n").Replace("\r", "\\r"));
-      isExist = jsonObject["commentType"].GetValue<int>() == USER_DATA && jsonObject["username"].GetValue<string>() == username;
-      if (isExist)
-        handshake = comment;
-      return isExist;
-    });
-    if (isExist)
-      return handshake;
-    var pub = Godot.FileAccess.Open($"user://{username}.pub", Godot.FileAccess.ModeFlags.Read);
-    var body = $"{{ \"commentType\": 0, \"username\": \"{username}\", \"faction\": {faction}, \"pub\": \"{pub.GetAsText()}\" }}";
-    return await AddComment(discussionId, body);
+    var body = new { commentType = 0, faction, state = (int)PlayerState.ENTERED, playerType };
+    var comment = await AddComment(discussionId, JsonSerializer.Serialize(body));
+    return JsonSerializer.Deserialize<UserData>(comment.Body);
   }
 
-  public static async Task<CommentNode> SubmitOperation(string discussionId, Operation operation)
+  public static async Task<Dictionary<string, UserData>> WaitForOthers(int discussionNum, int playerCount, string curPlayer)
   {
-    string body = JsonSerializer.Serialize(operation);
-    // CryptoUtils.EncryptFor(body, );
-    return await AddComment(discussionId, body);
-  }
-
-  public static async Task<Dictionary<string, UserData>> WaitOthers(int discussionNumber, int playerCount, CancellationToken cancelToken = default)
-  {
-    while (true)
+    int _playerCount = 0;
+    HashSet<string> leavedPlayer = [];
+    Dictionary<string, UserData> users = [];
+    while (_playerCount < playerCount - 1)
     {
-      string before = "";
-      int _playerCount = 0;
-      HashSet<string> names = [];
-      Dictionary<string, UserData> users = [];
-      cancelToken.ThrowIfCancellationRequested();
-      await Task.Delay(1000, CancellationToken.None);
-      do
+      _playerCount = 0;
+      users.Clear();
+      await ProcessComments(discussionNum, (comment) =>
       {
-        var comments = await GetComments(discussionNumber, before);
-        foreach (var comment in comments.Nodes)
+        var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
+        if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.PLAYER_STATE &&
+      jsonObject.ContainsKey("playerType") && jsonObject["playerType"].GetValue<int>() == (int)PlayerType.PLAYER)
         {
-          if (!names.Contains(comment.Author.Login))
+          if (jsonObject.ContainsKey("state"))
           {
-            names.Add(comment.Author.Login);
-            var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body.Replace("\n", "\\n").Replace("\r", "\\r"));
-            if (jsonObject["commentType"].GetValue<int>() == 0)
+            if (jsonObject["state"].GetValue<int>() == (int)PlayerState.LEAVED)
             {
-              if (_playerCount++ < playerCount)
-              {
-                users[comment.Author.Login] = jsonObject.Deserialize<UserData>();
-                if (_playerCount >= playerCount)
-                  return users;
-              }
+              leavedPlayer.Add(comment.Id);
+            }
+            else if (jsonObject["state"].GetValue<int>() == (int)PlayerState.ENTERED && !leavedPlayer.Contains(comment.Id) && comment.Author.Login != curPlayer)
+            {
+              _playerCount++;
+              users[comment.Id] = JsonSerializer.Deserialize<UserData>(comment.Body);
             }
           }
         }
-        if (!comments.PageInfo.HasPreviousPage)
-          break;
-        before = comments.PageInfo.StartCursor;
-      } while (true);
+        return _playerCount >= playerCount - 1;
+      });
+      await Task.Delay(2500);
     }
+    return users;
   }
 
-  public static async Task<RoomMetaData> EnterRoom(int number)
+  // public static async Task<Dictionary<string, UserData>> WaitOthers(int discussionNumber, int playerCount, CancellationToken cancelToken = default)
+  // {
+  //   while (true)
+  //   {
+  //     string before = "";
+  //     int _playerCount = 0;
+  //     HashSet<string> names = [];
+  //     Dictionary<string, UserData> users = [];
+  //     cancelToken.ThrowIfCancellationRequested();
+  //     do
+  //     {
+  //       var comments = await GetComments(discussionNumber, before);
+  //       foreach (var comment in comments.Nodes)
+  //       {
+  //         if (!names.Contains(comment.Author.Login))
+  //         {
+  //           names.Add(comment.Author.Login);
+  //           var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body.Replace("\n", "\\n").Replace("\r", "\\r"), options);
+  //           if (jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAMME_READY)
+  //           {
+  //             if (_playerCount++ < playerCount)
+  //             {
+  //               users[comment.Author.Login] = jsonObject.Deserialize<UserData>(options);
+  //               if (_playerCount >= playerCount)
+  //                 return users;
+  //             }
+  //           }
+  //         }
+  //       }
+  //       if (!comments.PageInfo.HasPreviousPage)
+  //         break;
+  //       before = comments.PageInfo.StartCursor;
+  //     } while (true);
+  //     await Task.Delay(1000, CancellationToken.None);
+  //   }
+  // }
+
+  public static async Task<RoomMetaData> GetRoomInfo(int number)
   {
     var variables = new { number };
     var request = new { query = GET_DISCUSSION_QUERY, variables };
-    var json = JsonSerializer.Serialize(request);
+    var json = JsonSerializer.Serialize(request, options);
     var content = new StringContent(json);
     var res = await httpClient.PostAsync(BASE_URL, content);
     var result = await res.Content.ReadFromJsonAsync<JsonObject>(options);
-    return result["data"]["repository"]["discussion"].Deserialize<RoomMetaData>();
+    return result["data"]["repository"]["discussion"].Deserialize<RoomMetaData>(options);
+  }
+
+  public static async Task<UserData> LeaveRoom(string discussionId, int faction, PlayerType playerType)
+  {
+    var body = new { commentType = 0, faction, state = (int)PlayerState.LEAVED, playerType };
+    var comment = await AddComment(discussionId, JsonSerializer.Serialize(body));
+    return JsonSerializer.Deserialize<UserData>(comment.Body);
   }
 
   public static async Task<CommentNode> AddComment(string id, string body)
   {
     var variables = new { id, body };
     var request = new { query = ADD_COMMMENT_QUERY, variables };
-    var json = JsonSerializer.Serialize(request);
-    var content = new StringContent(json);
-    var res = await httpClient.PostAsync(BASE_URL, content);
-    var result = await res.Content.ReadFromJsonAsync<JsonObject>();
-    return result["data"]["addDiscussionComment"]["comment"].Deserialize<CommentNode>();
+    var result = await DoPost(request);
+    return result["data"]["addDiscussionComment"]["comment"].Deserialize<CommentNode>(options);
   }
 
   public static async Task<CommentNode> DeleteComment(string commentId)
@@ -261,27 +290,43 @@ public class GithubUtils
 
   private static async Task<JsonObject> DoPost(object request)
   {
-    var json = JsonSerializer.Serialize(request);
+    var json = JsonSerializer.Serialize(request, options);
     var content = new StringContent(json);
     var res = await httpClient.PostAsync(BASE_URL, content);
     return await res.Content.ReadFromJsonAsync<JsonObject>();
   }
 
-  public static async Task<CommentNode> PostOperation<T>(PieceAdapter piece, string discussionId, T operation) where T : Operation
+  public static async Task<CommentNode> SubmitOperation<T>(PieceAdapter piece, string discussionId, T operation) where T : Operation
   {
     int pieceType = piece.PieceType;
     string pieceName = piece.Name;
     int faction = piece.Faction;
-    long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     var gameData = new GameData<T>()
     {
+      CommentType = CommentType.GAME_DATA,
       PieceType = pieceType,
       PieceName = pieceName,
-      Timestamp = timestamp,
       Faction = faction,
       Operation = operation
     };
-    string json = JsonSerializer.Serialize(gameData);
+    string json = JsonSerializer.Serialize(gameData, options);
+    return await AddComment(discussionId, json);
+  }
+
+  public static async Task<CommentNode> SaveGameData(string discussionId, int faction, List<PieceAdapter> pieces, Func<PieceAdapter, PieceData> pieceProcessor)
+  {
+    Environment env = new()
+    {
+      Faction = faction,
+      CommentType = CommentType.ENVIRONMENT_DATA
+    };
+    List<PieceData> pieceDatas = [];
+    foreach (var piece in pieces)
+    {
+      pieceDatas.Add(pieceProcessor.Invoke(piece));
+    }
+    env.PieceDatas = [.. pieceDatas];
+    var json = JsonSerializer.Serialize(env);
     return await AddComment(discussionId, json);
   }
 }
@@ -289,50 +334,48 @@ public class GithubUtils
 
 public record RoomMetaData
 {
-  [JsonPropertyName("id")]
   public string Id { get; set; }
-  [JsonPropertyName("number")]
   public int Number { get; set; }
-  [JsonPropertyName("title")]
   public string Title { get; set; }
-  [JsonPropertyName("createdAt")]
   public DateTime CreatedAt { get; set; }
+}
+
+public record Environment : BaseData
+{
+  public int Faction { get; set; }
+  public PieceData[] PieceDatas { get; set; }
+}
+
+public record PieceData
+{
+  public Vector2I Position { get; set; }
+  public int Face { get; set; }
+  public Dictionary<int, object> Data { get; set; } = [];
 }
 
 public record Operation
 {
-  [JsonPropertyName("type")]
   public int Type { get; set; }
 }
 
 public record BaseData
 {
-  [JsonPropertyName("commentType")]
   public CommentType CommentType { get; set; }
 }
 
 public record UserData : BaseData
 {
-  [JsonPropertyName("username")]
-  public string Username { get; set; }
-  [JsonPropertyName("faction")]
   public int Faction { get; set; }
-  [JsonPropertyName("pub")]
   public string Pub { get; set; }
 }
 
 public record GameData<T> : BaseData where T : Operation
 {
-  [JsonPropertyName("pieceName")]
   public string PieceName { get; set; }
-  [JsonPropertyName("pieceType")]
   public int PieceType { get; set; }
-  [JsonPropertyName("operation")]
+  public int OperationType { get; set; }
   public T Operation { get; set; }
-  [JsonPropertyName("faction")]
   public int Faction { get; set; }
-  [JsonPropertyName("timestamp")]
-  public long Timestamp { get; set; }
 }
 
 public record QueryBody
@@ -348,43 +391,43 @@ public record Result<T>
 
 public record Comments
 {
-  [JsonPropertyName("pageInfo")]
   public PageInfo PageInfo { get; set; }
-  [JsonPropertyName("nodes")]
   public List<CommentNode> Nodes { get; set; }
 }
 
 public record CommentNode
 {
-  [JsonPropertyName("id")]
   public string Id { get; set; }
-  [JsonPropertyName("author")]
   public Author Author { get; set; }
-  [JsonPropertyName("body")]
   public string Body { get; set; }
-  [JsonPropertyName("createdAt")]
   public DateTime CreatedAt { get; set; }
 }
 
 public record Author
 {
-  [JsonPropertyName("login")]
+  // public string Id { get; set; }
   public string Login { get; set; }
 }
 
 public record PageInfo
 {
-  [JsonPropertyName("hasPreviousPage")]
   public bool HasPreviousPage { get; set; }
-  [JsonPropertyName("hasNextPage")]
   public bool HasNextPage { get; set; }
-  [JsonPropertyName("startCursor")]
   public string StartCursor { get; set; }
-  [JsonPropertyName("endCursor")]
   public string EndCursor { get; set; }
 }
 
 public enum CommentType
 {
-  READY, GAME
+  PLAYER_STATE, GAMME_READY, GAME_DATA, ENVIRONMENT_DATA
+}
+
+public enum PlayerState
+{
+  ENTERED, LEAVED
+}
+
+public enum PlayerType
+{
+  PLAYER, OBSERVER
 }

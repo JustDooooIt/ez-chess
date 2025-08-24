@@ -12,7 +12,10 @@ public partial class Infantry : PieceAdapter
   {
     if (@event is InputEventMouseButton mouseButton)
     {
-      if (Instance.IsSelected && !Instance.IsHover && mouseButton.ButtonMask == MouseButtonMask.Right)
+      if (Instance.IsSelected &&
+          !Instance.IsHover &&
+          Faction == GameState.Instance.PlayerFaction &&
+          mouseButton.ButtonMask == MouseButtonMask.Right)
       {
         var from = (Instance.Origin as PieceInstance).Position;
         var to = (Instance.Origin as PieceInstance).GetGlobalMousePosition();

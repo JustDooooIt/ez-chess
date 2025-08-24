@@ -4,7 +4,6 @@ using Godot;
 
 public partial class PieceAdapter : Node
 {
-  public event Action<int> ActionCompleted;
 
   private readonly static Dictionary<ulong, ulong> _state_node_dict = [];
   private readonly static Dictionary<ulong, ulong> _node_state_dict = [];

@@ -10,5 +10,7 @@ public partial class GameState : RefCounted
   public int CurOperatorFaction { get; set; }
   public string[] Factions { get; set; } = [];
   public int PlayerCount { get; set; } = 0;
+  public bool IsSolo { get; set; }
+  public string DiscussionId{ get; set; }
   public PieceAdapter SelectedPiece { get; set; }
 }

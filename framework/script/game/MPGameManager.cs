@@ -9,9 +9,11 @@ public partial class MPGameManager : GameManager
 {
   private Crypto _crypto = new();
   private string _username;
+  private string _userId;
   private RoomMetaData _roomMetaData;
   private CommentNode _handshake;
-  private Dictionary<string, UserData> _players = [];
+  private UserData _player;
+  private Dictionary<string, UserData> _others = [];
   private CancellationToken _waiterToken;
 
   public override void _Ready()
@@ -24,18 +26,20 @@ public partial class MPGameManager : GameManager
     createBtn.Pressed += CreateRoom;
     enterBtn.Pressed += EnterRoom;
     TreeExiting += OnTreeExisting;
+    GameState.Instance.IsSolo = false;
   }
 
   private async void EnterRoom()
   {
     var roomNumber = GetNode<LineEdit>("CanvasLayer/Control/EnterRoom/RoomId");
-    _roomMetaData = await GithubUtils.EnterRoom(roomNumber.Text.ToInt());
+    _roomMetaData = await GithubUtils.GetRoomInfo(roomNumber.Text.ToInt());
     GD.Print("Enter room");
-    _handshake = await GithubUtils.GameReady(_roomMetaData.Id, _roomMetaData.Number, _username, GameState.Instance.PlayerFaction);
+    _player = await GithubUtils.EnterRoom(_roomMetaData.Id, GameState.Instance.PlayerFaction, PlayerType.PLAYER);
     GD.Print("Player ready");
     GD.Print("Waiting for other players");
-    _players = await GithubUtils.WaitOthers(_roomMetaData.Number, GameState.Instance.PlayerCount);
+    _others = await GithubUtils.WaitForOthers(_roomMetaData.Number, GameState.Instance.PlayerCount, _username);
     GD.Print("All players ready");
+    GameState.Instance.DiscussionId = _roomMetaData.Id;
   }
 
   private async void CreateRoom()
@@ -43,15 +47,16 @@ public partial class MPGameManager : GameManager
     _roomMetaData = await GithubUtils.CreateGameRoom("normandy44");
     InitCypto();
     GD.Print("Create room success");
-    _handshake = await GithubUtils.GameReady(_roomMetaData.Id, _roomMetaData.Number, _username, GameState.Instance.PlayerFaction);
+    _player = await GithubUtils.EnterRoom(_roomMetaData.Id, GameState.Instance.PlayerFaction, PlayerType.PLAYER);
     GD.Print("Game ready");
     GD.Print("Waiting for other players");
     var state = GetNode<Label>("CanvasLayer/Control/State/Label");
     state.Text = "Waiting";
     _waiterToken = new();
-    _players = await GithubUtils.WaitOthers(_roomMetaData.Number, GameState.Instance.PlayerCount, _waiterToken);
+    _others = await GithubUtils.WaitForOthers(_roomMetaData.Number, GameState.Instance.PlayerCount, _username);
     state.Text = "Started";
     GD.Print("All players ready");
+    GameState.Instance.DiscussionId = _roomMetaData.Id;
   }
 
   private void InitCypto()
@@ -70,11 +75,11 @@ public partial class MPGameManager : GameManager
   private async void Login()
   {
     string token = GetGithubToken();
-    _username = await GithubUtils.Login(token);
+    (_userId, _username) = await GithubUtils.Login(token);
     var popup = GetNode<Popup>("CanvasLayer/Control/Login/Tip");
     popup.Popup();
     var label = popup.GetNode<Label>("Label");
-    if (_username != "")
+    if (_userId != "")
     {
       label.Text = "success";
       var tokenInput = GetNode<LineEdit>("CanvasLayer/Control/Login/GithubTokenInput");
@@ -97,9 +102,7 @@ public partial class MPGameManager : GameManager
 
   private async void OnTreeExisting()
   {
-    if (_handshake != null)
-    {
-      await GithubUtils.DeleteComment(_handshake.Id);
-    }
-  }
+    if (_player != null)
+      await GithubUtils.LeaveRoom(_roomMetaData.Id, GameState.Instance.PlayerFaction, PlayerType.PLAYER);
+  } 
 }

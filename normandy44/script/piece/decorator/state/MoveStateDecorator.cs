@@ -10,9 +10,19 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
   public float CurMovement { get; set; } = movements[0];
   public float ResidualMovement { get; set; } = movements[0];
 
-  public void Move(Vector2I from, Vector2I to, Vector2I[] path)
+  public async void Move(Vector2I from, Vector2I to, Vector2I[] path)
   {
     As<IPositionable>().MapPosition = to;
+    if (!GameState.Instance.IsSolo)
+    {
+      var op = new MoveOperation()
+      {
+        From = from,
+        To = to,
+        Path = path
+      };
+      await GithubUtils.SubmitOperation(PieceAdapter, GameState.Instance.DiscussionId, op);
+    }
   }
 
   public void SendMoveEvent(Vector2I from, Vector2I to)

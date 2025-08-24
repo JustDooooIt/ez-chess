@@ -13,7 +13,7 @@ public partial class PipelineAdapter : Node
 
   public override void _Ready()
   {
-    StatePipeline = GetChild<StatePipeline>(0);
-    RenderPipeline = GetChild<RenderPipeline>(1);
+	StatePipeline = GetChild<StatePipeline>(0);
+	RenderPipeline = GetChild<RenderPipeline>(1);
   }
 }
