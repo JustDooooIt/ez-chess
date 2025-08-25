@@ -11,7 +11,8 @@ public partial class PieceAdapter : Node
 
   public IPieceState State { get; protected set; }
   public IPieceInstance Instance { get; protected set; }
-  public PipelineAdapter PipelineAdapter { get; set; }
+  public PlayerPipeline PipelineAdapter { get; set; }
+  public GameManager GameManager { get; set; }
   public PiecesManager PiecesManager { get; set; }
   public int Faction { get; set; }
   public int PieceType { get; set; }
@@ -19,25 +20,25 @@ public partial class PieceAdapter : Node
 
   public override void _Ready()
   {
-    SetPiecesManager();
-    SetPipelineAdapter();
-    SetPieceAdapter();
+	SetPiecesManager();
+	SetPipelineAdapter();
+	SetPieceAdapter();
   }
 
   public void Init(IPieceState state, IPieceInstance instance)
   {
-    State = state;
-    Instance = instance;
-    _state_node_dict[state.Origin.GetInstanceId()] = instance.Origin.GetInstanceId();
-    _node_state_dict[instance.Origin.GetInstanceId()] = state.Origin.GetInstanceId();
-    if (Instance is PieceInstanceDecorator decorator)
-    {
-      AddChild((Node)decorator.Origin);
-    }
-    else
-    {
-      AddChild(Instance as Node);
-    }
+	State = state;
+	Instance = instance;
+	_state_node_dict[state.Origin.GetInstanceId()] = instance.Origin.GetInstanceId();
+	_node_state_dict[instance.Origin.GetInstanceId()] = state.Origin.GetInstanceId();
+	if (Instance is PieceInstanceDecorator decorator)
+	{
+	  AddChild((Node)decorator.Origin);
+	}
+	else
+	{
+	  AddChild(Instance as Node);
+	}
   }
 
   public static ulong GetStateFromInstance(ulong id) { return _node_state_dict[id]; }
@@ -46,23 +47,23 @@ public partial class PieceAdapter : Node
 
   private void SetPipelineAdapter()
   {
-    PipelineAdapter = GetNode<PipelineAdapter>($"../../../Players/{PiecesManager.Name}");
-    State.PipelineAdapter = PipelineAdapter;
-    Instance.PipelineAdapter = PipelineAdapter;
-    State.PiecesManager = PiecesManager;
-    Instance.PiecesManager = PiecesManager;
+	PipelineAdapter = GetNode<PlayerPipeline>($"../../../Players/{PiecesManager.Name}");
+	State.PipelineAdapter = PipelineAdapter;
+	Instance.PipelineAdapter = PipelineAdapter;
+	State.PiecesManager = PiecesManager;
+	Instance.PiecesManager = PiecesManager;
   }
 
   private void SetPiecesManager()
   {
-    PiecesManager = GetNode<PiecesManager>("..");
-    State.PiecesManager = PiecesManager;
-    Instance.PiecesManager = PiecesManager;
+	PiecesManager = GetNode<PiecesManager>("..");
+	State.PiecesManager = PiecesManager;
+	Instance.PiecesManager = PiecesManager;
   }
 
   private void SetPieceAdapter()
   {
-    State.PieceAdapter = this;
-    Instance.PieceAdapter = this;
+	State.PieceAdapter = this;
+	Instance.PieceAdapter = this;
   }
 }

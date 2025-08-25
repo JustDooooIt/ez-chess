@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="ez-chess"
-run/main_scene="uid://ccmsadmdtosnm"
+run/main_scene="uid://bwcgwpn25wptn"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://framework/script/game/Global.cs"
 
 [dotnet]
 

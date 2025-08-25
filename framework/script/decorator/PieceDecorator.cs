@@ -18,7 +18,7 @@ public abstract partial class PieceDecorator : RefCounted, IPiece
 	public IPiece Wrapped => _wrapped;
 	public IInterfaceQueryable Proxy { get => (this as IPiece).GetProxy(); }
 	public IInterfaceQueryable Wrapper { get; set; }
-	public PipelineAdapter PipelineAdapter { get => _wrapped.PipelineAdapter; set => _wrapped.PipelineAdapter = value; }
+	public PlayerPipeline PipelineAdapter { get => _wrapped.PipelineAdapter; set => _wrapped.PipelineAdapter = value; }
 	public PiecesManager PiecesManager { get => _wrapped.PiecesManager; set => _wrapped.PiecesManager = value; }
   public int Faction { get =>_wrapped.Faction; set=>_wrapped.Faction = value; }
   public int PieceType { get => _wrapped.PieceType; set => _wrapped.PieceType = value; }

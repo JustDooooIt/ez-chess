@@ -20,7 +20,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public bool IsSelected { get; set; } = false;
 	public HexMap HexMap { get; set; }
 	public TerrainLayers TerrainLayers { get => _terrainLayers; set => _terrainLayers = value; }
-	public PipelineAdapter PipelineAdapter { get; set; }
+	public PlayerPipeline PipelineAdapter { get; set; }
 	public PiecesManager PiecesManager { get; set; }
 	public PieceAdapter PieceAdapter { get; set; }
 	public IInterfaceQueryable Proxy => ((IPiece)this).GetProxy();

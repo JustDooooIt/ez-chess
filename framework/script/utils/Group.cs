@@ -5,6 +5,8 @@ public class Group<K, V>
 {
   private readonly Dictionary<K, List<V>> _dict = [];
 
+  public Dictionary<K, List<V>> Wrapped => _dict;
+
   public void Add(K key, V value)
   {
     if (_dict.TryGetValue(key, out var values))

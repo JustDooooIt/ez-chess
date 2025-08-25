@@ -10,7 +10,7 @@ public partial class PieceState : RefCounted, IPieceState
   public IPiece Wrapped => this;
   public IInterfaceQueryable Wrapper { get; set; }
   public IInterfaceQueryable Proxy => ((IPiece)this).GetProxy();
-  public PipelineAdapter PipelineAdapter { get; set; }
+  public PlayerPipeline PipelineAdapter { get; set; }
   public PiecesManager PiecesManager { get; set; }
   public PieceAdapter PieceAdapter { get; set; }
   public int Faction { get; set; }

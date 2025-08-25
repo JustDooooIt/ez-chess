@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://ccmsadmdtosnm"]
+[gd_scene load_steps=6 format=4 uid="uid://ccmsadmdtosnm"]
 
 [ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framework/scene/game.tscn" id="1_3huoh"]
 [ext_resource type="Script" uid="uid://dpqs571vpupq3" path="res://framework/script/game/MPGameManager.cs" id="2_er3e1"]
 [ext_resource type="Texture2D" uid="uid://bqr2fvxl15dbl" path="res://normandy44/resource/image/N44 Map-2015-FINAL-150.jpg" id="2_ye5cw"]
-[ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://normandy44/script/piece/factory/PieceFactory.cs" id="3_22nru"]
 [ext_resource type="TileSet" uid="uid://jc85wbccl3ta" path="res://normandy44/resource/terrain.tres" id="3_mbs8q"]
-[ext_resource type="Script" uid="uid://de0c5xemwqod0" path="res://normandy44/script/piece/event/handler/RenderEventHandler.cs" id="4_mbs8q"]
+[ext_resource type="Script" uid="uid://b8kdci0e21sil" path="res://normandy44/script/operation/OperationRunner.cs" id="5_mbs8q"]
 
 [node name="Game" instance=ExtResource("1_3huoh")]
 script = ExtResource("2_er3e1")
@@ -36,9 +35,7 @@ tile_map_data = PackedByteArray("AAABAAAABAAAAAAAAgAAAAAABAAAAAAAAgAAAAEABAAAAAA
 tile_set = ExtResource("3_mbs8q")
 
 [node name="GameLoader" parent="." index="2"]
-ConfigPath = "res://normandy44/resource/multi/1v1-config.json"
-PieceFactoryScript = ExtResource("3_22nru")
-RenderEventHandlerScript = ExtResource("4_mbs8q")
+OperationRunner = ExtResource("5_mbs8q")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." index="5"]
 
@@ -69,24 +66,13 @@ placeholder_text = "github token"
 
 [node name="Login" type="Button" parent="CanvasLayer/Control/Login" index="1"]
 layout_mode = 0
-offset_left = 376.0
-offset_right = 440.0
-offset_bottom = 31.0
+offset_left = 256.0
+offset_top = 1.0
+offset_right = 320.0
+offset_bottom = 32.0
 text = "Login"
 
-[node name="Faction" type="OptionButton" parent="CanvasLayer/Control/Login" index="2"]
-layout_mode = 0
-offset_left = 256.0
-offset_right = 351.0
-offset_bottom = 31.0
-selected = 0
-item_count = 2
-popup/item_0/text = "Axis"
-popup/item_0/id = 2
-popup/item_1/text = "Allies"
-popup/item_1/id = 0
-
-[node name="Tip" type="Popup" parent="CanvasLayer/Control/Login" index="3"]
+[node name="Tip" type="Popup" parent="CanvasLayer/Control/Login" index="2"]
 initial_position = 1
 
 [node name="Label" type="Label" parent="CanvasLayer/Control/Login/Tip" index="0"]
@@ -121,10 +107,10 @@ text = "Enter
 
 [node name="CreateRoom" type="Button" parent="CanvasLayer/Control" index="2"]
 layout_mode = 0
-offset_left = 480.0
-offset_top = 24.0
-offset_right = 589.0
-offset_bottom = 55.0
+offset_left = 360.0
+offset_top = 25.0
+offset_right = 469.0
+offset_bottom = 56.0
 text = "Create Room"
 
 [node name="State" type="Panel" parent="CanvasLayer/Control" index="3"]

@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwcgwpn25wptn"]
+
+[ext_resource type="Script" uid="uid://c1fy2sp3gv7p8" path="res://framework/script/game/GameConfig.cs" id="1_iph5o"]
+
+[node name="GameConfig" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iph5o")
+ScenePath = "res://normandy44/scene/multi.tscn"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Axis"
+popup/item_0/id = 0
+popup/item_1/text = "Allies"
+popup/item_1/id = 1
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "finish"

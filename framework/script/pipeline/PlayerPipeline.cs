@@ -5,9 +5,9 @@ using Godot;
 /// <summary>
 /// 相当于player
 /// </summary>
-public partial class PipelineAdapter : Node
+public partial class PlayerPipeline : Node
 {
-  public int Group { get; set; }
+  public GameManager GameManager { get; set; }
   public StatePipeline StatePipeline { get; private set; }
   public RenderPipeline RenderPipeline { get; private set; }
 
@@ -15,5 +15,6 @@ public partial class PipelineAdapter : Node
   {
 	StatePipeline = GetChild<StatePipeline>(0);
 	RenderPipeline = GetChild<RenderPipeline>(1);
+	GameManager = GetNode<GameManager>("/root/Game");
   }
 }

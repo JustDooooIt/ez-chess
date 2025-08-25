@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://cuavd51riac8e"]
+[gd_scene load_steps=8 format=3 uid="uid://cuavd51riac8e"]
 
 [ext_resource type="Script" uid="uid://m1f87c27dmw3" path="res://framework/script/game/GameManager.cs" id="1_p1ry8"]
 [ext_resource type="Script" uid="uid://dimmhwo2hwabl" path="res://framework/script/loader/GameLoader.cs" id="2_8n2gv"]
 [ext_resource type="Script" uid="uid://b0gx7ypr7ce75" path="res://framework/script/game/Camera.cs" id="2_p1ry8"]
 [ext_resource type="Script" uid="uid://b8fa2jwwe1pkh" path="res://framework/script/game/HexMap.cs" id="3_p1ry8"]
 [ext_resource type="Script" uid="uid://dtgrlxssnrxf3" path="res://framework/script/game/TerrainLayers.cs" id="3_xwcet"]
+[ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://normandy44/script/piece/factory/PieceFactory.cs" id="6_7nu7x"]
+[ext_resource type="Script" uid="uid://de0c5xemwqod0" path="res://normandy44/script/piece/event/handler/RenderEventHandler.cs" id="7_tdyqg"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_p1ry8")
@@ -25,6 +27,9 @@ script = ExtResource("3_xwcet")
 
 [node name="GameLoader" type="Node" parent="."]
 script = ExtResource("2_8n2gv")
+ConfigPath = "res://normandy44/resource/multi/1v1-config.json"
+PieceFactoryScript = ExtResource("6_7nu7x")
+RenderEventHandlerScript = ExtResource("7_tdyqg")
 
 [node name="Players" type="Node" parent="."]
 

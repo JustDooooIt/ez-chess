@@ -1,23 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 
 public class GithubUtils
 {
-  private const int USER_DATA = 0;
-  private const int PAGE_SIZE = 10;
+  private const int PAGE_SIZE = 20;
   private static readonly string BASE_URL = "https://api.github.com/graphql";
-  private static System.Net.Http.HttpClient httpClient = new();
+  private static readonly System.Net.Http.HttpClient httpClient = new();
   private static readonly JsonSerializerOptions options = new()
   {
     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -27,6 +22,8 @@ public class GithubUtils
   private static readonly string GAME_DISCUSSION_CATEGORY_ID = "DIC_kwDOPatLk84CueXj";
   private static readonly string OWNER = "JustDooooIt";
   private static readonly string REPO = "ez-chess";
+  private static readonly HashingContext hashingContext = new();
+  private static DateTime TimeLine { get; set; } = DateTime.MinValue;
 
   static GithubUtils()
   {
@@ -66,26 +63,26 @@ public class GithubUtils
 	}}";
   private static readonly string GET_COMMMENTS_QUERY = $@"
   query($number: Int!, $last: Int!, $before: String) {{
-	repository(owner: ""{OWNER}"", name: ""{REPO}""){{
-	  discussion(number: $number) {{
-		comments(last: $last, before: $before) {{
-		  pageInfo {{
-			hasPreviousPage,
-			hasNextPage,
-			startCursor,
-			endCursor
-		  }}
-		  nodes {{
-			id,
-		  author{{
-			login
-		  }},
-		  body,
-		  createdAt
-		  }}
-		}}
-	  }}
-	}}
+    repository(owner: ""{OWNER}"", name: ""{REPO}""){{
+      discussion(number: $number) {{
+        comments(last: $last, before: $before) {{
+          pageInfo {{
+            hasPreviousPage,
+            hasNextPage,
+            startCursor,
+            endCursor
+          }}
+          nodes {{
+            id,
+            author{{
+              login
+            }},
+            body,
+            createdAt
+          }}
+        }}
+      }}
+    }}
   }}";
   private static readonly string GET_DISCUSSION_QUERY = $@"
   query($number: Int!) {{
@@ -110,6 +107,17 @@ public class GithubUtils
 		}}
 	  }}
 	}}
+  }}";
+  private static readonly string MARK_DISCUSSION_ROCKET_QUERY = $@"
+  mutation AddReadyReaction($subjectId: ID!) {{
+	addReaction(input: {{subjectId: $subjectId, content: ROCKET}}) {{
+	  reaction {{
+		content
+	  }}
+	  subject {{
+		id
+	  }}
+	  }}
   }}";
 
   public static async Task<(string, string)> Login(string token)
@@ -156,15 +164,15 @@ public class GithubUtils
     return result["data"]["repository"]["discussion"]["comments"].Deserialize<Comments>(options);
   }
 
-  public static async Task ProcessComments(int discussionNumber, Func<CommentNode, bool> commentProcessor)
+  public static async Task ProcessComments(int discussionNum, Func<CommentNode, bool> commentProcessor)
   {
     string before = "";
     do
     {
-      var comments = await GetComments(discussionNumber, before);
-      foreach (var comment in comments.Nodes)
+      var comments = await GetComments(discussionNum, before);
+      for (int i = comments.Nodes.Count - 1; i >= 0; i--)
       {
-        if (commentProcessor.Invoke(comment))
+        if (commentProcessor.Invoke(comments.Nodes[i]))
         {
           return;
         }
@@ -195,15 +203,15 @@ public class GithubUtils
       {
         var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
         if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.PLAYER_STATE &&
-      jsonObject.ContainsKey("playerType") && jsonObject["playerType"].GetValue<int>() == (int)PlayerType.PLAYER)
+            jsonObject.ContainsKey("playerType") && jsonObject["playerType"].GetValue<int>() == (int)PlayerType.PLAYER)
         {
           if (jsonObject.ContainsKey("state"))
           {
             if (jsonObject["state"].GetValue<int>() == (int)PlayerState.LEAVED)
             {
-              leavedPlayer.Add(comment.Id);
+              leavedPlayer.Add(comment.Author.Login);
             }
-            else if (jsonObject["state"].GetValue<int>() == (int)PlayerState.ENTERED && !leavedPlayer.Contains(comment.Id) && comment.Author.Login != curPlayer)
+            else if (jsonObject["state"].GetValue<int>() == (int)PlayerState.ENTERED && !leavedPlayer.Contains(comment.Author.Login) && comment.Author.Login != curPlayer)
             {
               _playerCount++;
               users[comment.Id] = JsonSerializer.Deserialize<UserData>(comment.Body);
@@ -216,43 +224,6 @@ public class GithubUtils
     }
     return users;
   }
-
-  // public static async Task<Dictionary<string, UserData>> WaitOthers(int discussionNumber, int playerCount, CancellationToken cancelToken = default)
-  // {
-  //   while (true)
-  //   {
-  //     string before = "";
-  //     int _playerCount = 0;
-  //     HashSet<string> names = [];
-  //     Dictionary<string, UserData> users = [];
-  //     cancelToken.ThrowIfCancellationRequested();
-  //     do
-  //     {
-  //       var comments = await GetComments(discussionNumber, before);
-  //       foreach (var comment in comments.Nodes)
-  //       {
-  //         if (!names.Contains(comment.Author.Login))
-  //         {
-  //           names.Add(comment.Author.Login);
-  //           var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body.Replace("\n", "\\n").Replace("\r", "\\r"), options);
-  //           if (jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAMME_READY)
-  //           {
-  //             if (_playerCount++ < playerCount)
-  //             {
-  //               users[comment.Author.Login] = jsonObject.Deserialize<UserData>(options);
-  //               if (_playerCount >= playerCount)
-  //                 return users;
-  //             }
-  //           }
-  //         }
-  //       }
-  //       if (!comments.PageInfo.HasPreviousPage)
-  //         break;
-  //       before = comments.PageInfo.StartCursor;
-  //     } while (true);
-  //     await Task.Delay(1000, CancellationToken.None);
-  //   }
-  // }
 
   public static async Task<RoomMetaData> GetRoomInfo(int number)
   {
@@ -288,6 +259,13 @@ public class GithubUtils
     return result["data"]["deleteDiscussionComment"]["comment"].Deserialize<CommentNode>();
   }
 
+  public static async Task MarkDiscussion(string discussionId)
+  {
+    var variables = new { subjectId = discussionId };
+    var request = new { query = MARK_DISCUSSION_ROCKET_QUERY, variables };
+    _ = await DoPost(request);
+  }
+
   private static async Task<JsonObject> DoPost(object request)
   {
     var json = JsonSerializer.Serialize(request, options);
@@ -296,7 +274,7 @@ public class GithubUtils
     return await res.Content.ReadFromJsonAsync<JsonObject>();
   }
 
-  public static async Task<CommentNode> SubmitOperation<T>(PieceAdapter piece, string discussionId, T operation) where T : Operation
+  public static async Task<CommentNode> SubmitOperation<T>(string discussionId, PieceAdapter piece, T operation, string preStateHash) where T : Operation
   {
     int pieceType = piece.PieceType;
     string pieceName = piece.Name;
@@ -307,10 +285,42 @@ public class GithubUtils
       PieceType = pieceType,
       PieceName = pieceName,
       Faction = faction,
-      Operation = operation
+      Operation = operation,
+      PreStateHash = preStateHash
     };
     string json = JsonSerializer.Serialize(gameData, options);
-    return await AddComment(discussionId, json);
+    var comment = await AddComment(discussionId, json);
+    TimeLine = comment.CreatedAt;
+    return comment;
+  }
+
+  public static async Task ApplyOperation(int discussionNum, int faction, string curStateHash, Action<JsonObject> operationProcessor)
+  {
+    DateTime? newTimeLine = null;
+    List<CommentNode> comments = [];
+    await ProcessComments(discussionNum, (comment) =>
+    {
+      if (comment.CreatedAt <= TimeLine)
+        return true;
+      var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body);
+      if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAME_DATA &&
+          jsonObject.ContainsKey("faction") && jsonObject["faction"].GetValue<int>() == faction)
+      {
+        comments.Add(comment);
+        newTimeLine = comment.CreatedAt;
+      }
+      return false;
+    });
+    TimeLine = newTimeLine == null ? TimeLine : newTimeLine.Value;
+    comments.Sort((e1, e2) => e1.CreatedAt.CompareTo(e2));
+    foreach (var comment in comments)
+    {
+      var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
+      if (jsonObject.ContainsKey("preStateHash") && jsonObject["preStateHash"].GetValue<string>() == curStateHash)
+      {
+        operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(comment.Body, options));
+      }
+    }
   }
 
   public static async Task<CommentNode> SaveGameData(string discussionId, int faction, List<PieceAdapter> pieces, Func<PieceAdapter, PieceData> pieceProcessor)
@@ -328,6 +338,29 @@ public class GithubUtils
     env.PieceDatas = [.. pieceDatas];
     var json = JsonSerializer.Serialize(env);
     return await AddComment(discussionId, json);
+  }
+
+  public static string HashState(string state)
+  {
+    var err = hashingContext.Start(HashingContext.HashType.Sha256);
+    if (err != Error.Ok)
+    {
+      return "";
+    }
+    var dataByte = state.ToUtf8Buffer();
+    err = hashingContext.Update(dataByte);
+    if (err != Error.Ok)
+    {
+      return "";
+    }
+    var hashByte = hashingContext.Finish();
+    var hexString = hashByte.HexEncode();
+    return hexString;
+  }
+
+  public static T Deserialize<T>(JsonObject jsonObject)
+  {
+    return jsonObject.Deserialize<T>(options);
   }
 }
 
@@ -376,6 +409,7 @@ public record GameData<T> : BaseData where T : Operation
   public int OperationType { get; set; }
   public T Operation { get; set; }
   public int Faction { get; set; }
+  public string PreStateHash { get; set; }
 }
 
 public record QueryBody
@@ -405,7 +439,6 @@ public record CommentNode
 
 public record Author
 {
-  // public string Id { get; set; }
   public string Login { get; set; }
 }
 

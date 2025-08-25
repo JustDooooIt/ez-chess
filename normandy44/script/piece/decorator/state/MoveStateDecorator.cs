@@ -12,8 +12,9 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
 
   public async void Move(Vector2I from, Vector2I to, Vector2I[] path)
   {
+    var hash = PieceAdapter.GameManager.HashState();
     As<IPositionable>().MapPosition = to;
-    if (!GameState.Instance.IsSolo)
+    if (!GameState.Instance.IsSolo && PipelineAdapter is not OtherPipeline)
     {
       var op = new MoveOperation()
       {
@@ -21,7 +22,7 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
         To = to,
         Path = path
       };
-      await GithubUtils.SubmitOperation(PieceAdapter, GameState.Instance.DiscussionId, op);
+      await GithubUtils.SubmitOperation(GameState.Instance.Room.Id, PieceAdapter, op, hash);
     }
   }
 
