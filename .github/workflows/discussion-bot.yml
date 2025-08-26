@@ -1,15 +1,15 @@
 name: discussion-bot
 on:
-  push:            # 提交代码时运行
-    branches: [ main ]
-  workflow_dispatch:   # 手动触发
-
+  discussion_comment:
+    types: [created]
+    
+permissions:
+  contents: read
+  discussions: read 
+  
 jobs:
   run:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write   # 如果你需要写入仓库（创建commit、release等），否则用 read
-      discussions: write
     defaults:
       run:
         working-directory: script   # ← 如果你的脚本在 script/ 目录，按需修改
