@@ -5,3 +5,4 @@
 **.uid
 .config
 *.tmp
+node_modules

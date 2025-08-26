@@ -1,72 +1,75 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 
 public partial class GameManager : Node2D
 {
-  private Node _players;
-  private Dictionary<string, Group<Vector2I, PieceAdapter>> _pieces = [];
+	private Node _players;
+	private Dictionary<string, Group<Vector2I, PieceAdapter>> _pieces = [];
 
-  public override void _Ready()
-  {
-	_players ??= GetNode<Node>("Players");
-	GameState.Instance.IsSolo = true;
-	InitPieces();
-  }
+	public string GameName { get; set; } = "";
+	public Dictionary<string, bool> Seats { get; set; } = [];
 
-  public void AddPlayer(PlayerPipeline pipeline)
-  {
-	_players ??= GetNode<Node>("Players");
-	_players.AddChild(pipeline);
-  }
-
-  public List<PlayerPipeline> GetPipelines()
-  {
-	_players ??= GetNode<Node>("Players");
-	return [.. _players.GetChildren().Cast<PlayerPipeline>()];
-  }
-
-  public void StartPipelines()
-  {
-	foreach (var adapter in GetPipelines())
+	public override void _Ready()
 	{
-	  adapter.StatePipeline.Launch();
-	  adapter.RenderPipeline.Launch();
+		_players ??= GetNode<Node>("Players");
+		GameState.Instance.IsSolo = true;
 	}
-  }
 
-  private void InitPieces()
-  {
-	var piecesRootNode = GetNode<Node>("Pieces");
-	var pieces = piecesRootNode.GetChildren().Cast<PiecesManager>().ToList();
-	foreach (var piecesManager in pieces)
+	public void AddPlayer(PlayerPipeline pipeline)
 	{
-	  _pieces[piecesManager.Name] = piecesManager.Pieces;
+		_players ??= GetNode<Node>("Players");
+		_players.AddChild(pipeline);
 	}
-  }
 
-  public string HashState()
-  {
-	Dictionary<string, List<Dictionary<string, object>>> state = [];
-	foreach (var faction in _pieces)
+	public List<PlayerPipeline> GetPipelines()
 	{
-	  state[faction.Key] = [];
-	  foreach (var pieces in faction.Value.Wrapped)
-	  {
-		foreach (var piece in pieces.Value)
+		_players ??= GetNode<Node>("Players");
+		return [.. _players.GetChildren().Cast<PlayerPipeline>()];
+	}
+
+	public void StartPipelines()
+	{
+		foreach (var adapter in GetPipelines())
 		{
-		  Dictionary<string, object> pieceState = [];
-		  pieceState["position"] = piece.State.As<IPositionable>().MapPosition;
-		  pieceState["name"] = piece.Name;
-		  pieceState["pieceType"] = piece.PieceType;
-		  pieceState["faction"] = piece.Faction;
-		  state[faction.Key].Add(pieceState);
+			adapter.StatePipeline.Launch();
+			adapter.RenderPipeline.Launch();
 		}
-	  }
 	}
-	var json = JsonSerializer.Serialize(state);
-	return GithubUtils.HashState(json);
-  }
+
+	public void InitPieces()
+	{
+		var piecesRootNode = GetNode<Node>("Pieces");
+		var pieces = piecesRootNode.GetChildren().Cast<PiecesManager>().ToList();
+		foreach (var piecesManager in pieces)
+		{
+			_pieces[piecesManager.Name] = piecesManager.Pieces;
+		}
+	}
+
+	public string HashState()
+	{
+		Dictionary<string, List<Dictionary<string, object>>> state = [];
+		foreach (var faction in _pieces)
+		{
+			state[faction.Key] = [];
+			foreach (var pieces in faction.Value.Wrapped)
+			{
+				foreach (var piece in pieces.Value)
+				{
+					Dictionary<string, object> pieceState = [];
+					pieceState["position"] = piece.State.As<IPositionable>().MapPosition;
+					pieceState["name"] = piece.Name;
+					pieceState["pieceType"] = piece.PieceType;
+					pieceState["faction"] = piece.Faction;
+					state[faction.Key].Add(pieceState);
+				}
+			}
+		}
+		var json = GithubUtils.Serialize(state);
+		return GithubUtils.HashState(json);
+	}
 }

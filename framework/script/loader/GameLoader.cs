@@ -53,6 +53,11 @@ public partial class GameLoader : Node
 		var factionNames = config["factions"].AsGodotArray<string>();
 		GameState.Instance.Factions = [.. factionNames];
 		int factionId = 0;
+		GameState.Instance.RoomState = new()
+		{
+			GameName = config["name"].AsString(),
+			Seats = [.. factionNames.Select(e=>"")],
+		};
 		foreach (var factionName in factionNames)
 		{
 			AddPlayer(factionName);
@@ -96,12 +101,12 @@ public partial class GameLoader : Node
 			}
 			factionId++;
 		}
+		_manager.InitPieces();
 	}
 
 	private async void AddPlayer(string name)
 	{
 		PackedScene pipelineScene;
-
 		if (GameState.Instance.PlayerFactionName == name)
 		{
 			pipelineScene = GD.Load<PackedScene>("res://framework/scene/player.tscn");

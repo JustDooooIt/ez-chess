@@ -36,7 +36,6 @@ public abstract partial class PipelineImpl<T> : Pipeline, ILaunchableProvider<T>
     State = States.STOPED;
   }
 
-
   public override void AddValve(Valve valve)
   {
     LaunchableList.Writer.WriteAsync(valve as T).AsTask().Wait();

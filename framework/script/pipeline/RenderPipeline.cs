@@ -14,11 +14,11 @@ public partial class RenderPipeline : PipelineImpl<InstanceValve>
 
 public abstract partial class BaseRenderEventHandler : RefCounted
 {
-	public RenderPipeline Pipeline{ get; set; }
+	public RenderPipeline Pipeline { get; set; }
 
-  public void HandleEvent<T>(T @event) where T : Event
+	public void HandleEvent<T>(T @event) where T : Event
 	{
-		InstanceValve valve = CreateValve<T>(@event);
+		InstanceValve valve = CreateValve(@event);
 		Pipeline.LaunchableList.Writer.WriteAsync(valve).AsTask().Wait();
 	}
 

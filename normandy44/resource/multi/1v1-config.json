@@ -1,4 +1,5 @@
 {
+	"name": "normandy44",
 	"basePiece": "res://scene/piece_adapter.tscn",
 	"factions": ["Axis", "Allies"],
 	"Allies": {

@@ -22,7 +22,7 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
         To = to,
         Path = path
       };
-      await GithubUtils.SubmitOperation(GameState.Instance.Room.Id, PieceAdapter, op, hash);
+      await GithubUtils.SubmitOperation(GameState.Instance.RoomMetaData.Id, PieceAdapter, op, hash);
     }
   }
 

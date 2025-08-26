@@ -10,7 +10,6 @@ public partial class PlayerPipeline : Node
   public GameManager GameManager { get; set; }
   public StatePipeline StatePipeline { get; private set; }
   public RenderPipeline RenderPipeline { get; private set; }
-
   public override void _Ready()
   {
 	StatePipeline = GetChild<StatePipeline>(0);
