@@ -73,7 +73,7 @@ async function run() {
     }
     const number = payload.discussion.number;
     await consumeComments(number, (comment) => {
-      core.info(comment);
+      core.info(comment?.author?.login);
       return false;
     });
   }
