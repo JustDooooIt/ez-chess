@@ -41,9 +41,7 @@ async function consumeComments(number, consumer) {
   let before = null;
   do {
     let comments = await getComments(number, before);
-    core.info(comments);
-    if (consumer(comments["data"]["repository"]["discussion"]["comments"]))
-      return;
+    if (consumer(comments["repository"]["discussion"]["comments"])) return;
     before = comments["pageInfo"]["startCursor"];
   } while (comments["pageInfo"]["hasPreviousPage"]);
 }
