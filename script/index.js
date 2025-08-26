@@ -55,7 +55,7 @@ async function getComments(number, before, last = 20) {
     last,
     before,
   };
-  await octokit.graphql(GET_COMMENTS_QUERY, variables);
+  return await octokit.graphql(GET_COMMENTS_QUERY, variables);
 }
 
 async function run() {
