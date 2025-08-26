@@ -22,4 +22,5 @@ jobs:
       - name: discussion-bot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node ./script/index.js
+        run: node index.js
+        working-directory: scripts
