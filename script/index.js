@@ -39,11 +39,14 @@ function isBotSender(payload) {
 
 async function consumeComments(number, consumer) {
   let before = null;
+  let comments = null;
   do {
-    let comments = await getComments(number, before);
-    if (consumer(comments?.repository?.discussion?.comments)) return;
+    comments = await getComments(number, before);
+    let commentNodes = comments?.repository?.discussion?.comments?.nodes;
+    for (let i = 0; i < commentNodes.length; i++) {
+      if (consumer(commentNodes)) return;
+    }
     before = comments?.repository?.discussion?.comments?.pageInfo?.startCursor;
-    core.info(before);
   } while (
     comments?.repository?.discussion?.comments?.pageInfo?.hasPreviousPage
   );
