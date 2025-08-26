@@ -6,7 +6,8 @@ const { repo: repoInfo, payload, eventName } = context;
 const owner = repoInfo.owner;
 const repo = repoInfo.repo;
 const BOT_LOGIN = "github-actions[bot]";
-const octokit = github.getOctokit();
+const token = process.env.GITHUB_TOKEN;
+const octokit = github.getOctokit(token);
 
 const GET_COMMENTS_QUERY = `
   query ($owner: String!, $repo: String!, $number: Int!, $last: Int!, $before: String) {
@@ -65,7 +66,7 @@ async function run() {
     }
     const number = payload.discussion.number;
     await consumeComments(number, (comment) => {
-      core.info(comment)
+      core.info(comment);
       return false;
     });
   }
