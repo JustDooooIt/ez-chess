@@ -58,6 +58,7 @@ async function getComments(number, before, last = 20) {
 }
 
 async function run() {
+  core.info("started......");
   if (eventName == "discussion_comment") {
     if (payload.action !== "created") return;
     if (isBotSender(payload)) {
