@@ -5,7 +5,7 @@ on:
     
 permissions:
   contents: read
-  discussions: read 
+  discussions: write
   
 jobs:
   run:
