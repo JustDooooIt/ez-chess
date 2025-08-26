@@ -69,7 +69,7 @@ async function run() {
   }
   if (eventName == "discussion_comment") {
     if (payload.action !== "created") return;
-    core.info(payload.discussion);
+    core.info(payload.discussion?.body);
     if (payload.comment?.body === "/enter") {
     }
     // if (isBotSender(payload)) {
