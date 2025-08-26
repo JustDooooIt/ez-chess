@@ -5,22 +5,24 @@ on:
   workflow_dispatch:   # 手动触发
 
 jobs:
-  my-job:
+  run:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # 如果你需要写入仓库（创建commit、release等），否则用 read
+    defaults:
+      run:
+        working-directory: script   # ← 如果你的脚本在 script/ 目录，按需修改
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20          # 建议用 LTS；你现在是 v22，也可以，但保持一致更稳
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
-        working-directory: script
 
-      - name: discussion-bot
+      - name: Run script
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # ← 传递内置 token
         run: node index.js
-        working-directory: script
