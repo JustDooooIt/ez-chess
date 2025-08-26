@@ -69,7 +69,9 @@ async function run() {
   }
   if (eventName == "discussion_comment") {
     if (payload.action !== "created") return;
-    core.info(payload.comment?.body);
+    core.info(payload.discussion);
+    if (payload.comment?.body === "/enter") {
+    }
     // if (isBotSender(payload)) {
     //   core.info("来自 bot 的评论事件，忽略");
     //   return;
