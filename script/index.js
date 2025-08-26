@@ -44,7 +44,7 @@ async function consumeComments(number, consumer) {
     comments = await getComments(number, before);
     let commentNodes = comments?.repository?.discussion?.comments?.nodes;
     for (let i = 0; i < commentNodes.length; i++) {
-      if (consumer(commentNodes)) return;
+      if (consumer(commentNodes[i])) return;
     }
     before = comments?.repository?.discussion?.comments?.pageInfo?.startCursor;
   } while (
