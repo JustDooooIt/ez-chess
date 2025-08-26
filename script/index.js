@@ -5,8 +5,8 @@ const { context } = github;
 const { repo: repoInfo, payload, eventName } = context;
 const owner = repoInfo.owner;
 const repo = repoInfo.repo;
-const BOT_LOGIN = "github-actions[bot]";
 const token = process.env.GITHUB_TOKEN;
+const BOT_LOGIN = "github-actions[bot]";
 const octokit = github.getOctokit(token);
 
 const GET_COMMENTS_QUERY = `
@@ -64,18 +64,20 @@ async function getComments(number, before, last = 20) {
 }
 
 async function run() {
-  core.info("started......");
+  if (eventName == "discussion") {
+    if (payload.action !== "created") return;
+  }
   if (eventName == "discussion_comment") {
     if (payload.action !== "created") return;
-    if (isBotSender(payload)) {
-      core.info("来自 bot 的评论事件，忽略");
-      return;
-    }
-    const number = payload.discussion.number;
-    await consumeComments(number, (comment) => {
-      core.info(comment?.author?.login);
-      return false;
-    });
+    core.info(payload.comment?.body);
+    // if (isBotSender(payload)) {
+    //   core.info("来自 bot 的评论事件，忽略");
+    //   return;
+    // }
+    // const number = payload.discussion.number;
+    // await consumeComments(number, (comment) => {
+    //   return false;
+    // });
   }
 }
 
