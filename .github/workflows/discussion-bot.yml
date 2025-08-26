@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write   # 如果你需要写入仓库（创建commit、release等），否则用 read
+      discussions: write
     defaults:
       run:
         working-directory: script   # ← 如果你的脚本在 script/ 目录，按需修改
