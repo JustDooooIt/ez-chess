@@ -97,7 +97,9 @@ async function OnEnterRoom() {
 
 async function OnSelectFaction(faction) {
   let jsonObject = JSON.parse(payload.discussion.body);
-  jsonObject.observers.delete(payload.sender.login);
+  let observers = new Set(jsonObject.observers);
+  observers.delete(payload.sender.login);
+  jsonObject.observers = Array.from(observers);
   jsonObject.seats[faction] = payload.sender.login;
   let json = JSON.stringify(jsonObject);
   await updateDiscussion(payload.discussion.node_id, json);
