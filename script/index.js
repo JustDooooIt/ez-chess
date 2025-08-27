@@ -100,6 +100,7 @@ async function run() {
       observers.add(payload.sender.login);
       jsonObject.observers = [...observers];
       let json = JSON.stringify(jsonObject);
+      core.info(json);
       updateDiscussion(payload.discussion.node_id, json);
     }
     // if (isBotSender(payload)) {
