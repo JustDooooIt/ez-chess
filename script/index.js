@@ -98,7 +98,7 @@ async function run() {
       let jsonObject = JSON.parse(body);
       let observers = new Set(jsonObject.observer);
       observers.add(payload.sender.login);
-      jsonObject.observers = observers.values();
+      jsonObject.observers = [...observers];
       let json = JSON.stringify(jsonObject);
       updateDiscussion(payload.discussion.node_id, json);
     }
