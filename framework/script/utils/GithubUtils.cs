@@ -166,7 +166,7 @@ public class GithubUtils
 		{
 			repo = REPOSITORY_ID,
 			title = $"{gameName}-{DateTime.Now}",
-			body = JsonSerializer.Serialize(new { gameName, seats }),
+			body = JsonSerializer.Serialize(new { gameName, seats, observers = Array.Empty<string>() }),
 			cat = GAME_DISCUSSION_CATEGORY_ID
 		};
 		var request = new { query = CREATE_DISCUSSION_QUERY, variables };
@@ -223,7 +223,7 @@ public class GithubUtils
 		await AddComment(discussionId, "/enter");
 	}
 
-	public static async Task ChooseFaction(string discussionId, int discussionNum, int faction)
+	public static async Task ChooseFaction(string discussionId, int faction)
 	{
 		await AddComment(discussionId, $"/choose/faction/{faction}");
 	}
@@ -247,7 +247,15 @@ public class GithubUtils
 			users.Clear();
 			await ProcessComments(discussionNum, (comment) =>
 			{
-				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
+				JsonObject jsonObject;
+				try
+				{
+					jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
+				}
+				catch (System.Exception)
+				{
+					return false;
+				}
 				if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.PLAYER_STATE &&
 						jsonObject.ContainsKey("playerType") && jsonObject["playerType"].GetValue<int>() == (int)UserType.PLAYER)
 				{

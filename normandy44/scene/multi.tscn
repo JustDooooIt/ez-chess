@@ -8,6 +8,7 @@
 
 [node name="Game" instance=ExtResource("1_3huoh")]
 script = ExtResource("2_er3e1")
+GameName = "normandy44"
 
 [node name="HexMap" parent="." index="1"]
 position = Vector2(0, 0)

@@ -69,9 +69,8 @@ public partial class MPGameManager : GameManager
 		ListenRoomState();
 		GD.Print("Create room success");
 		await GithubUtils.EnterRoom(_roomMetaData.Id);
+		await GithubUtils.ChooseFaction(_roomMetaData.Id, GameState.Instance.PlayerFaction);
 		_roomState = await GithubUtils.GetRoomState(_roomMetaData.Number);
-		_roomState.Seats[GameState.Instance.PlayerFaction] = _username;
-		_roomState = await GithubUtils.UpdateRoomState(_roomMetaData.Id, _roomState);
 		GD.Print("Game ready");
 		GD.Print("Waiting for other players");
 		var state = GetNode<Label>("CanvasLayer/Control/State/Label");

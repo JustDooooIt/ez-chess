@@ -10,8 +10,8 @@ public partial class GameManager : Node2D
 	private Node _players;
 	private Dictionary<string, Group<Vector2I, PieceAdapter>> _pieces = [];
 
+  [Export]
 	public string GameName { get; set; } = "";
-	public Dictionary<string, bool> Seats { get; set; } = [];
 
 	public override void _Ready()
 	{
