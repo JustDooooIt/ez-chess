@@ -162,7 +162,13 @@ public class GithubUtils
 
 	public static async Task<RoomMetaData> CreateRoom(string gameName, string[] seats)
 	{
-		var variables = new { repo = REPOSITORY_ID, title = $"{gameName}-{DateTime.Now}", body = JsonSerializer.Serialize(new { gameName, seats }), cat = GAME_DISCUSSION_CATEGORY_ID };
+		var variables = new
+		{
+			repo = REPOSITORY_ID,
+			title = $"{gameName}-{DateTime.Now}",
+			body = JsonSerializer.Serialize(new { gameName, seats }),
+			cat = GAME_DISCUSSION_CATEGORY_ID
+		};
 		var request = new { query = CREATE_DISCUSSION_QUERY, variables };
 		var json = JsonSerializer.Serialize(request, options);
 		var content = new StringContent(json);
@@ -190,7 +196,7 @@ public class GithubUtils
 		return result["data"]["repository"]["discussion"]["comments"].Deserialize<Comments>(options);
 	}
 
-	public static async Task ProcessComments(int discussionNum, Func<CommentNode, bool> commentProcessor)
+	public static async Task ProcessComments(int discussionNum, Func<Comment, bool> commentProcessor)
 	{
 		string before = "";
 		do
@@ -209,11 +215,24 @@ public class GithubUtils
 		} while (true);
 	}
 
-	public static async Task<UserData> EnterRoom(string discussionId, int faction, UserType playerType)
+	public static async Task EnterRoom(string discussionId)
 	{
-		var body = new { commentType = 0, faction, state = (int)UserState.ENTERED, playerType };
-		var comment = await AddComment(discussionId, JsonSerializer.Serialize(body));
-		return JsonSerializer.Deserialize<UserData>(comment.Body);
+		// var body = new { commentType = 0, faction, state = (int)UserState.ENTERED, playerType };
+		// var comment = await AddComment(discussionId, JsonSerializer.Serialize(body));
+		// return JsonSerializer.Deserialize<UserData>(comment.Body);
+		await AddComment(discussionId, "/enter");
+	}
+
+	public static async Task ChooseFaction(string discussionId, int discussionNum, int faction)
+	{
+		await AddComment(discussionId, $"/choose/faction/{faction}");
+	}
+
+	public static async Task<JsonObject> GetDiscussion(int discussionNum)
+	{
+		var variables = new { number = discussionNum };
+		var request = new { query = GET_DISCUSSION_QUERY, variables };
+		return await DoPost(request);
 	}
 
 	public static async Task<Dictionary<string, UserData>> WaitForOthers(int discussionNum, int playerCount, string curPlayer)
@@ -270,20 +289,20 @@ public class GithubUtils
 		return JsonSerializer.Deserialize<UserData>(comment.Body);
 	}
 
-	public static async Task<CommentNode> AddComment(string id, string body)
+	public static async Task<Comment> AddComment(string id, string body)
 	{
 		var variables = new { id, body };
 		var request = new { query = ADD_COMMMENT_QUERY, variables };
 		var result = await DoPost(request);
-		return result["data"]["addDiscussionComment"]["comment"].Deserialize<CommentNode>(options);
+		return result["data"]["addDiscussionComment"]["comment"].Deserialize<Comment>(options);
 	}
 
-	public static async Task<CommentNode> DeleteComment(string commentId)
+	public static async Task<Comment> DeleteComment(string commentId)
 	{
 		var variables = new { commentId };
 		var request = new { query = DELETE_COMMENT_QUERY, variables };
 		var result = await DoPost(request);
-		return result["data"]["deleteDiscussionComment"]["comment"].Deserialize<CommentNode>(options);
+		return result["data"]["deleteDiscussionComment"]["comment"].Deserialize<Comment>(options);
 	}
 
 	public static async Task<Discussion> UpdateDiscussion(string discussionId, string body)
@@ -321,7 +340,7 @@ public class GithubUtils
 		return await res.Content.ReadFromJsonAsync<JsonObject>();
 	}
 
-	public static async Task<CommentNode> SubmitOperation<T>(string discussionId, PieceAdapter piece, T operation, string preStateHash) where T : Operation
+	public static async Task<Comment> SubmitOperation<T>(string discussionId, PieceAdapter piece, T operation, string preStateHash) where T : Operation
 	{
 		int pieceType = piece.PieceType;
 		string pieceName = piece.Name;
@@ -343,7 +362,7 @@ public class GithubUtils
 
 	public static async Task ApplyOperation(int discussionNum, int faction, string curStateHash, Action<JsonObject> operationProcessor)
 	{
-		List<CommentNode> comments = [];
+		List<Comment> comments = [];
 		await ProcessComments(discussionNum, (comment) =>
 		{
 			if (comment.CreatedAt <= TimeLine)
@@ -371,7 +390,7 @@ public class GithubUtils
 		}
 	}
 
-	public static async Task<CommentNode> SaveGameData(string discussionId, int faction, List<PieceAdapter> pieces, Func<PieceAdapter, PieceData> pieceProcessor)
+	public static async Task<Comment> SaveGameData(string discussionId, int faction, List<PieceAdapter> pieces, Func<PieceAdapter, PieceData> pieceProcessor)
 	{
 		Environment env = new()
 		{
@@ -508,10 +527,10 @@ public record Result<T>
 public record Comments
 {
 	public PageInfo PageInfo { get; set; }
-	public List<CommentNode> Nodes { get; set; }
+	public List<Comment> Nodes { get; set; }
 }
 
-public record CommentNode
+public record Comment
 {
 	public string Id { get; set; }
 	public Author Author { get; set; }

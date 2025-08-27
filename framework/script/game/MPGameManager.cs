@@ -37,7 +37,7 @@ public partial class MPGameManager : GameManager
 		ListenRoomState();
 		if (_username == _roomState.Seats[GameState.Instance.PlayerFaction] || _roomState.Seats[GameState.Instance.PlayerFaction] == "")
 		{
-			_player = await GithubUtils.EnterRoom(_roomMetaData.Id, GameState.Instance.PlayerFaction, UserType.PLAYER);
+			await GithubUtils.EnterRoom(_roomMetaData.Id);
 			_roomState.Seats[GameState.Instance.PlayerFaction] = _username;
 			_roomState = await GithubUtils.UpdateRoomState(_roomMetaData.Id, _roomState);
 			GD.Print("Enter room");
@@ -68,7 +68,7 @@ public partial class MPGameManager : GameManager
 		_roomMetaData = await GithubUtils.CreateRoom(GameName, GameState.Instance.RoomState.Seats);
 		ListenRoomState();
 		GD.Print("Create room success");
-		_player = await GithubUtils.EnterRoom(_roomMetaData.Id, GameState.Instance.PlayerFaction, UserType.PLAYER);
+		await GithubUtils.EnterRoom(_roomMetaData.Id);
 		_roomState = await GithubUtils.GetRoomState(_roomMetaData.Number);
 		_roomState.Seats[GameState.Instance.PlayerFaction] = _username;
 		_roomState = await GithubUtils.UpdateRoomState(_roomMetaData.Id, _roomState);

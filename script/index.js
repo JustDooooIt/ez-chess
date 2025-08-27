@@ -30,6 +30,21 @@ const GET_COMMENTS_QUERY = `
     }
   }
 `;
+const UPDATE_DISCUSSION_QUERY = `
+mutation($discussionId: ID!, $body: String){
+  updateDiscussion(input: {
+    discussionId: $discussionId,
+    body: $body
+  }){
+    discussion{
+      id,
+      number,
+      title,
+      body,
+      createdAt
+    }
+  }
+}`;
 
 function isBotSender(payload) {
   const login = payload?.sender?.login || "";
@@ -63,14 +78,29 @@ async function getComments(number, before, last = 20) {
   return await octokit.graphql(GET_COMMENTS_QUERY, variables);
 }
 
+async function updateDiscussion(discussionId, body) {
+  const variables = {
+    discussionId,
+    body,
+  };
+  return await octokit.graphql(UPDATE_DISCUSSION_QUERY, variables);
+}
+
 async function run() {
-  if (eventName == "discussion") {
-    if (payload.action !== "created") return;
-  }
   if (eventName == "discussion_comment") {
     if (payload.action !== "created") return;
-    core.info(payload.discussion?.body);
-    if (payload.comment?.body === "/enter") {
+    if (isBotSender(payload)) {
+      core.info("来自 bot 的评论事件，忽略");
+      return;
+    }
+    let body = payload.discussion.body;
+    if (payload.comment?.body.startsWith("/enter")) {
+      let jsonObject = JSON.parse(body);
+      let observers = new Set(jsonObject.observer);
+      observers.add(payload.sender.login);
+      jsonObject.observers = observers;
+      let json = JSON.stringify(jsonObject);
+      updateDiscussion(payload.discussion.id, json);
     }
     // if (isBotSender(payload)) {
     //   core.info("来自 bot 的评论事件，忽略");
