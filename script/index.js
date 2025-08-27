@@ -100,8 +100,7 @@ async function run() {
       observers.add(payload.sender.login);
       jsonObject.observers = observers;
       let json = JSON.stringify(jsonObject);
-      core.info(JSON.stringify(payload.discussion));
-      updateDiscussion(payload.discussion.id, json);
+      updateDiscussion(payload.discussion.node_id, json);
     }
     // if (isBotSender(payload)) {
     //   core.info("来自 bot 的评论事件，忽略");
