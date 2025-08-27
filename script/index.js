@@ -97,6 +97,7 @@ async function run() {
     if (payload.comment?.body.startsWith("/enter")) {
       let jsonObject = JSON.parse(body);
       let observers = new Set(jsonObject.observer);
+      core.info(JSON.stringify(payload.sender));
       observers.add(payload.sender.login);
       jsonObject.observers = observers;
       let json = JSON.stringify(jsonObject);
