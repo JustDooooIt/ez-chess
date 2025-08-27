@@ -111,19 +111,10 @@ async function run() {
     }
     if (payload.comment?.body == "/enter") {
       await OnEnterRoom();
+    } else if (payload.comment?.body.startsWith("/choose/faction")) {
+      let faction = payload.comment?.body.split("/").pop();
+      await OnSelectFaction(faction);
     }
-    // else if (payload.comment?.body.startsWith("/choose/faction")) {
-    //   let faction = payload.comment?.body.split("/").pop();
-    //   await OnSelectFaction(faction);
-    // }
-    // if (isBotSender(payload)) {
-    //   core.info("来自 bot 的评论事件，忽略");
-    //   return;
-    // }
-    // const number = payload.discussion.number;
-    // await consumeComments(number, (comment) => {
-    //   return false;
-    // });
   }
 }
 
