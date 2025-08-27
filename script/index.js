@@ -90,7 +90,7 @@ async function OnEnterRoom() {
   let jsonObject = JSON.parse(payload.discussion.body);
   let observers = new Set(jsonObject.observers);
   observers.add(payload.sender.login);
-  jsonObject.observers = [...observers];
+  jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
   await updateDiscussion(payload.discussion.node_id, json);
 }
