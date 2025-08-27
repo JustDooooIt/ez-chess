@@ -86,6 +86,22 @@ async function updateDiscussion(discussionId, body) {
   return await octokit.graphql(UPDATE_DISCUSSION_QUERY, variables);
 }
 
+async function OnEnterRoom() {
+  let jsonObject = JSON.parse(payload.discussion.body);
+  let observers = new Set(jsonObject.observer);
+  observers.add(payload.sender.login);
+  jsonObject.observers = observers;
+  let json = JSON.stringify(jsonObject);
+  await updateDiscussion(payload.discussion.node_id, json);
+}
+
+async function OnSelectFaction(faction) {
+  let jsonObject = JSON.parse(payload.discussion.body);
+  jsonObject.seats[faction] = payload.sender.login;
+  let json = JSON.stringify(jsonObject);
+  await updateDiscussion(payload.discussion.node_id, json);
+}
+
 async function run() {
   if (eventName == "discussion_comment") {
     if (payload.action !== "created") return;
@@ -93,15 +109,11 @@ async function run() {
       core.info("来自 bot 的评论事件，忽略");
       return;
     }
-    let body = payload.discussion.body;
-    if (payload.comment?.body.startsWith("/enter")) {
-      let jsonObject = JSON.parse(body);
-      let observers = new Set(jsonObject.observer);
-      observers.add(payload.sender.login);
-      jsonObject.observers = [...observers];
-      let json = JSON.stringify(jsonObject);
-      core.info(json);
-      updateDiscussion(payload.discussion.node_id, json);
+    if (payload.comment?.body == "/enter") {
+      await OnEnterRoom(payload.discussion.body);
+    } else if (payload.comment?.body.startWith("/choose/faction")) {
+      let faction = str.split("/").pop();
+      await OnSelectFaction(payload.discussion.body, faction);
     }
     // if (isBotSender(payload)) {
     //   core.info("来自 bot 的评论事件，忽略");
