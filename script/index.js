@@ -110,10 +110,10 @@ async function run() {
       return;
     }
     if (payload.comment?.body == "/enter") {
-      await OnEnterRoom(payload.discussion.body);
+      await OnEnterRoom();
     } else if (payload.comment?.body.startsWith("/choose/faction")) {
-      let faction = str.split("/").pop();
-      await OnSelectFaction(payload.discussion.body, faction);
+      let faction = payload.comment?.body.split("/").pop();
+      await OnSelectFaction(faction);
     }
     // if (isBotSender(payload)) {
     //   core.info("来自 bot 的评论事件，忽略");
