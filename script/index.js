@@ -111,7 +111,7 @@ async function run() {
     }
     if (payload.comment?.body == "/enter") {
       await OnEnterRoom(payload.discussion.body);
-    } else if (payload.comment?.body.startWith("/choose/faction")) {
+    } else if (payload.comment?.body.startsWith("/choose/faction")) {
       let faction = str.split("/").pop();
       await OnSelectFaction(payload.discussion.body, faction);
     }
