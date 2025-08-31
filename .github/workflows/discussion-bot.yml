@@ -2,7 +2,11 @@ name: discussion-bot
 on:
   discussion_comment:
     types: [created]
-    
+
+concurrency:
+  group: discussion-${{ github.event.discussion.id }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
   discussions: write

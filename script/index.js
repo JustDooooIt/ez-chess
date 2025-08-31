@@ -112,6 +112,7 @@ async function run() {
       core.info("来自 bot 的评论事件，忽略");
       return;
     }
+    
     if (payload.comment?.body == "/enter") {
       await OnEnterRoom();
     } else if (payload.comment?.body.startsWith("/choose/faction")) {
