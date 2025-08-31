@@ -1,33 +1,27 @@
-name: discussion-bot
+name: 1. Dispatch Discussion Comment Task
+
 on:
   discussion_comment:
     types: [created]
 
-concurrency:
-  group: ${{ github.event.discussion.id }}
-  cancel-in-progress: false
-
 permissions:
-  contents: read
-  discussions: write
-  
+  issues: write  # 写入任务队列 Issue
+  actions: write # 触发另一个 workflow
+
 jobs:
-  run:
+  dispatch-task:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: script
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: 1. Add task to central queue
+        uses: peter-evans/create-or-update-comment@v4
         with:
-          node-version: 20 
+          issue-number: 93
+          body: |
+            TASK::${{ github.event.discussion.number }}::${{ github.event.comment.html_url }}
 
-      - name: Install deps
-        run: npm ci
-
-      - name: Run script
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node index.js
+      - name: 2. Trigger the processor workflow
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: 2. Process Discussion Task # <-- 要调用的 workflow 的名字或文件名
+          token: ${{ secrets.GITHUB_TOKEN }}
+          inputs: '{ "discussion_number": "${{ github.event.discussion.number }}" }'
