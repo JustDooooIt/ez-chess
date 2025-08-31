@@ -138,35 +138,35 @@ public class GithubUtils
 		}}
 	}}";
 
-	public static async Task<(string, string)> Login(string token)
+	public static async Task<string> Login(string token)
 	{
 		httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 		httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("ez-chess/v1.0.0");
 		return await CheckLogin();
 	}
 
-	private static async Task<(string, string)> CheckLogin()
+	private static async Task<string> CheckLogin()
 	{
 		var query = new QueryBody() { Query = "query { viewer { id,login } }" };
 		var res = await httpClient.PostAsJsonAsync(BASE_URL, query, options);
 		if (res.IsSuccessStatusCode)
 		{
 			var data = await res.Content.ReadFromJsonAsync<JsonObject>(options);
-			return (data["data"]["viewer"]["id"].GetValue<string>(), data["data"]["viewer"]["login"].GetValue<string>());
+			return data["data"]["viewer"]["login"].GetValue<string>();
 		}
 		else
 		{
-			return ("", "");
+			return "";
 		}
 	}
 
-	public static async Task<RoomMetaData> CreateRoom(string gameName, string[] seats)
+	public static async Task<RoomMetaData> CreateRoom(string gameName)
 	{
 		var variables = new
 		{
 			repo = REPOSITORY_ID,
 			title = $"{gameName}-{DateTime.Now}",
-			body = JsonSerializer.Serialize(new { gameName, seats, observers = Array.Empty<string>() }),
+			body = JsonSerializer.Serialize(new { gameName, seats = Array.Empty<string>(), observers = Array.Empty<string>(), host = GameState.Instance.Username }),
 			cat = GAME_DISCUSSION_CATEGORY_ID
 		};
 		var request = new { query = CREATE_DISCUSSION_QUERY, variables };
@@ -217,9 +217,6 @@ public class GithubUtils
 
 	public static async Task EnterRoom(string discussionId)
 	{
-		// var body = new { commentType = 0, faction, state = (int)UserState.ENTERED, playerType };
-		// var comment = await AddComment(discussionId, JsonSerializer.Serialize(body));
-		// return JsonSerializer.Deserialize<UserData>(comment.Body);
 		await AddComment(discussionId, "/enter");
 	}
 
@@ -290,11 +287,9 @@ public class GithubUtils
 		return result["data"]["repository"]["discussion"].Deserialize<RoomMetaData>(options);
 	}
 
-	public static async Task<UserData> LeaveRoom(string discussionId, int faction, UserType playerType)
+	public static async Task ExitRoom(string discussionId)
 	{
-		var body = new { commentType = 0, faction, state = (int)UserState.LEAVED, playerType };
-		var comment = await AddComment(discussionId, JsonSerializer.Serialize(body));
-		return JsonSerializer.Deserialize<UserData>(comment.Body);
+		await AddComment(discussionId, "/exit");
 	}
 
 	public static async Task<Comment> AddComment(string id, string body)
@@ -366,6 +361,11 @@ public class GithubUtils
 		var comment = await AddComment(discussionId, json);
 		TimeLine = comment.CreatedAt;
 		return comment;
+	}
+
+	public static async Task InviteOthers(string discussionId, string player)
+	{
+		await AddComment(discussionId, $"/invite/@{player}");
 	}
 
 	public static async Task ApplyOperation(int discussionNum, int faction, string curStateHash, Action<JsonObject> operationProcessor)
@@ -458,27 +458,17 @@ public class RoomState
 {
 	public string GameName { get; set; }
 	public string[] Seats { get; set; }
+	public string[] Placeholder { get; set; }
+	public string[] Observers { get; set; }
 }
 
 public record RoomMetaData
 {
-	private JsonObject _data;
-	private string _body;
-
 	public string Id { get; set; }
 	public int Number { get; set; }
-	public string Body
-	{
-		get => _body; set
-		{
-			_body = value;
-			_data = JsonSerializer.Deserialize<JsonObject>(Body);
-		}
-	}
+	public string Body { get; set; }
 	public string Title { get; set; }
 	public DateTime CreatedAt { get; set; }
-	public string GameName => _data["gameName"].GetValue<string>();
-	public string[] Seats => _data["seats"].AsObject().Deserialize<string[]>();
 }
 
 public record Environment : BaseData

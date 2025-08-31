@@ -12,18 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: script   # ← 如果你的脚本在 script/ 目录，按需修改
+        working-directory: script
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20          # 建议用 LTS；你现在是 v22，也可以，但保持一致更稳
+          node-version: 20 
 
       - name: Install deps
         run: npm ci
 
       - name: Run script
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # ← 传递内置 token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node index.js

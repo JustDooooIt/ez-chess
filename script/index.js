@@ -102,6 +102,7 @@ async function OnSelectFaction(faction) {
   jsonObject.observers = Array.from(observers);
   jsonObject.seats[faction] = payload.sender.login;
   let json = JSON.stringify(jsonObject);
+  core.info(json);
   await updateDiscussion(payload.discussion.node_id, json);
 }
 

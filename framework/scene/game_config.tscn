@@ -11,13 +11,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iph5o")
 ScenePath = "res://normandy44/scene/multi.tscn"
+GameName = "normandy44"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Token" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "token"
+
+[node name="Room" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "room"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 selected = 0
 item_count = 2
@@ -26,6 +38,25 @@ popup/item_0/id = 0
 popup/item_1/text = "Allies"
 popup/item_1/id = 1
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="Create" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "create room"
+
+[node name="Finish" type="Button" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 text = "finish"
+
+[node name="Enter" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "enter
+"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Player" type="LineEdit" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Invite" type="Button" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "邀请"

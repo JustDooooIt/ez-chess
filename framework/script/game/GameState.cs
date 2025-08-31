@@ -6,6 +6,7 @@ public partial class GameState : RefCounted
 {
   public readonly static GameState Instance = new();
 
+  public string Username { get; set; }
   public int PlayerFaction { get; set; }
   public string PlayerFactionName => Factions[PlayerFaction];
   public int CurOperatorFaction { get; set; }
