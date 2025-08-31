@@ -109,12 +109,13 @@ async function OnSelectFaction(faction) {
 }
 
 async function run() {
-  const comments = await octokit.paginate(github.rest.issues.listComments, {
+  const comments = await octokit.paginate(octokit.rest.issues.listComments, {
     owner,
     repo,
     issue_number: QUEUE_ISSUE_NUMBER,
     per_page: 100,
   });
+
   let taskToProcess = null;
   for (const comment of comments) {
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
