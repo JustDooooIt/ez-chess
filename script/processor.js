@@ -48,6 +48,26 @@ mutation($discussionId: ID!, $body: String){
     }
   }
 }`;
+const GET_COMMENT_QUERY = `
+query GetSingleDiscussionComment($commentNodeId: ID!) {
+  node(id: $commentNodeId) {
+    ... on DiscussionComment {
+      id
+      databaseId 
+      author {
+        login
+        avatarUrl
+      }
+      body
+      url
+      createdAt
+      discussion {
+        title
+        number
+      }
+    }
+  }
+}`;
 
 function isBotSender(payload) {
   const login = payload?.sender?.login || "";
@@ -70,6 +90,11 @@ async function consumeComments(number, consumer) {
   );
 }
 
+async function getComment(id) {
+  const variables = { id };
+  return await octokit.graphql(GET_COMMENT_QUERY, variables);
+}
+
 async function getComments(number, before, last = 20) {
   const variables = {
     owner,
@@ -89,8 +114,8 @@ async function updateDiscussion(discussionId, body) {
   return await octokit.graphql(UPDATE_DISCUSSION_QUERY, variables);
 }
 
-async function OnEnterRoom() {
-  let jsonObject = JSON.parse(payload.discussion.body);
+async function OnEnterRoom(room) {
+  let jsonObject = JSON.parse(room);
   let observers = new Set(jsonObject.observers);
   observers.add(payload.sender.login);
   jsonObject.observers = Array.from(observers);
@@ -98,8 +123,8 @@ async function OnEnterRoom() {
   await updateDiscussion(payload.discussion.node_id, json);
 }
 
-async function OnSelectFaction(faction) {
-  let jsonObject = JSON.parse(payload.discussion.body);
+async function OnSelectFaction(room, faction) {
+  let jsonObject = JSON.parse(room);
   let observers = new Set(jsonObject.observers);
   observers.delete(payload.sender.login);
   jsonObject.observers = Array.from(observers);
@@ -125,14 +150,15 @@ async function run() {
   }
 
   let commentId = taskToProcess.body.split("::").pop();
-  core.info(commentId);
+  let comment = await getComment(commentId);
+  let commentBody = comment?.data?.node?.body;
 
-  // if (taskToProcess.body == "/enter") {
-  //   await OnEnterRoom();
-  // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
-  //   let faction = taskToProcess?.body?.split("/")?.pop();
-  //   await OnSelectFaction(faction);
-  // }
+  if (commentBody == "/enter") {
+    await OnEnterRoom(commentBody);
+  } else if (commentBody.startsWith("/choose/faction")) {
+    let faction = taskToProcess?.body?.split("/")?.pop();
+    await OnSelectFaction(commentBody, faction);
+  }
 
   const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
   await octokit.rest.issues.updateComment({
