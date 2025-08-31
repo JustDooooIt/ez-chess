@@ -1,9 +1,8 @@
 import * as github from "@actions/github";
 import * as core from "@actions/core";
 
-
 const { context } = github;
-const { repo: repoInfo, payload, issue } = context;
+const { repo: repoInfo } = context;
 const owner = repoInfo.owner;
 const repo = repoInfo.repo;
 const token = process.env.GITHUB_TOKEN;
@@ -121,12 +120,12 @@ async function run() {
   for (const comment of comments) {
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
       taskToProcess = comment;
-      break; 
+      break;
     }
   }
 
   let commentId = taskToProcess.body.split("::").pop();
-  core.info(commentId)
+  core.info(commentId);
 
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
@@ -137,7 +136,10 @@ async function run() {
 
   const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
   await octokit.rest.issues.updateComment({
-    owner, repo, comment_id: taskToProcess.id, body: updatedBody,
+    owner,
+    repo,
+    comment_id: taskToProcess.id,
+    body: updatedBody,
   });
 }
 

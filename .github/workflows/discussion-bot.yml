@@ -15,7 +15,7 @@ jobs:
       - name: 1. Add task to central queue
         uses: peter-evans/create-or-update-comment@v4
         with:
-          issue-number: 93
+          issue-number: 94
           body: |
             TASK::${{ github.event.discussion.number }}::${{ github.event.comment.id }}
 
