@@ -122,7 +122,6 @@ async function OnEnterRoom(discussionId, commentAuthor, room) {
   observers.add(commentAuthor);
   jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
-  core.info(json);
   await updateDiscussion(discussionId, json);
 }
 
@@ -136,7 +135,17 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   await updateDiscussion(discussionId, json);
 }
 
-async function run() {
+async function consumeIssue(taskToProcess) {
+  const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
+  await octokit.rest.issues.updateComment({
+    owner,
+    repo,
+    comment_id: taskToProcess.id,
+    body: updatedBody,
+  });
+}
+
+async function getTaskProcess() {
   const comments = await octokit.paginate(octokit.rest.issues.listComments, {
     owner,
     repo,
@@ -151,6 +160,11 @@ async function run() {
       break;
     }
   }
+  return taskToProcess;
+}
+
+async function run() {
+  let taskToProcess = getTaskProcess()
 
   let commentId = taskToProcess.body.split("::").pop();
   let comment = await getComment(commentId);
@@ -159,8 +173,6 @@ async function run() {
   let discussionId = comment?.node?.discussion.id;
   let discussionBody = comment?.node?.discussion.body;
 
-  core.info(commentAuthor)
-
   if (commentBody == "/enter") {
     await OnEnterRoom(discussionId, commentAuthor, discussionBody);
   } else if (commentBody.startsWith("/choose/faction")) {
@@ -168,13 +180,7 @@ async function run() {
     await OnSelectFaction(discussionId, commentAuthor, discussionBody, faction);
   }
 
-  const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
-  await octokit.rest.issues.updateComment({
-    owner,
-    repo,
-    comment_id: taskToProcess.id,
-    body: updatedBody,
-  });
+  await consumeIssue(taskToProcess)
 }
 
 run().catch((err) => {
