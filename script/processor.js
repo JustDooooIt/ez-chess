@@ -130,7 +130,7 @@ async function run() {
   const commentIdFragment = commentUrl.split('#').pop();
   
   const commentNumericId = commentIdFragment.split('-').pop();
-  core.info(originalComment.body);
+  core.info(commentNumericId);
 
   const { data: originalComment } = await octokit.rest.teams.getDiscussionCommentInOrg({
       org: owner, 
