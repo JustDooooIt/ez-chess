@@ -122,7 +122,13 @@ async function run() {
       break; // 找到后立即跳出循环
     }
   }
-  core.info(taskToProcess);
+  
+  if (taskToProcess.body == "/enter") {
+    await OnEnterRoom();
+  } else if (taskToProcess.body?.startsWith("/choose/faction")) {
+    let faction = taskToProcess?.body?.split("/")?.pop();
+    await OnSelectFaction(faction);
+  }
 }
 
 run().catch((err) => {
