@@ -132,6 +132,7 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   jsonObject.observers = Array.from(observers);
   jsonObject.seats[faction] = commentAuthor;
   let json = JSON.stringify(jsonObject);
+  core.info(json);
   await updateDiscussion(discussionId, json);
 }
 
@@ -164,7 +165,7 @@ async function getTaskProcess() {
 }
 
 async function run() {
-  let taskToProcess = await getTaskProcess()
+  let taskToProcess = await getTaskProcess();
 
   let commentId = taskToProcess.body.split("::").pop();
   let comment = await getComment(commentId);
@@ -180,7 +181,7 @@ async function run() {
     await OnSelectFaction(discussionId, commentAuthor, discussionBody, faction);
   }
 
-  await consumeIssue(taskToProcess)
+  await consumeIssue(taskToProcess);
 }
 
 run().catch((err) => {
