@@ -179,7 +179,7 @@ async function run() {
   if (commentBody == "/enter") {
     await OnEnterRoom(discussionId, commentAuthor, discussionBody);
   } else if (commentBody.startsWith("/choose/faction")) {
-    let faction = commentBody?.body?.split("/")?.pop();
+    let faction = commentBody?.split("/")?.pop();
     await OnSelectFaction(discussionId, commentAuthor, discussionBody, faction);
   }
 
