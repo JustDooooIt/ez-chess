@@ -139,7 +139,7 @@ async function run() {
   }
 
   const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
-  await github.rest.issues.updateComment({
+  await octokit.rest.issues.updateComment({
     owner, repo, comment_id: taskToProcess.id, body: updatedBody,
   });
 }
