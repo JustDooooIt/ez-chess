@@ -1,0 +1,89 @@
+name: 2. Process Discussion Task
+
+on:
+  workflow_dispatch:
+    inputs:
+      discussion_number:
+        description: 'The discussion number to process tasks for'
+        required: true
+        type: string
+
+# ✨ 魔法在这里！并发组是基于传入的 discussion_number 动态创建的 ✨
+concurrency:
+  group: process-discussion-${{ github.event.inputs.discussion_number }}
+  cancel-in-progress: false
+
+permissions:
+  issues: write      # 读写队列 Issue
+  discussions: write # 你的实际任务可能需要操作 discussion
+
+jobs:
+  process-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Process a single task for the discussion
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const QUEUE_ISSUE_NUMBER = 93; // <-- 修改为你的队列 Issue 编号
+            const discussionNumber = '${{ github.event.inputs.discussion_number }}';
+            const TASK_PREFIX = `TASK::${discussionNumber}::`;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            core.info(`Looking for tasks for discussion #${discussionNumber}...`);
+
+            // 1. 获取队列 Issue 的所有评论
+            const { data: comments } = await github.rest.issues.listComments({
+              owner, repo, issue_number: QUEUE_ISSUE_NUMBER, per_page: 100
+            });
+
+            // 2. 查找属于此 discussion 的第一个未完成任务
+            let taskToProcess = null;
+            for (const comment of comments) {
+              if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes('~~')) {
+                taskToProcess = comment;
+                break;
+              }
+            }
+
+            if (!taskToProcess) {
+              core.info(`No pending tasks found for discussion #${discussionNumber}.`);
+              return;
+            }
+
+            core.info(`Processing task from comment ID: ${taskToProcess.id}`);
+            core.info(`Task content: ${taskToProcess.body}`);
+
+            // 3. 在此执行你的核心业务逻辑（例如，耗时30秒）
+            // =================================================================
+            await core.group('Long Running Task', async () => {
+              // 模拟耗时操作
+              await new Promise(resolve => setTimeout(resolve, 30000));
+              core.info('Task finished successfully.');
+            });
+            // =================================================================
+
+            // 4. 将任务标记为已完成
+            const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
+            await github.rest.issues.updateComment({
+              owner, repo, comment_id: taskToProcess.id, body: updatedBody,
+            });
+
+            core.info(`Task ${taskToProcess.id} marked as complete.`);
+
+            // 5. [可选] 检查是否还有属于这个 discussion 的任务，并自我触发
+            // 这种“自我延续”的模式可以更快地清空队列，而无需等待下一次外部事件
+            for (const comment of comments) {
+              if (comment.id !== taskToProcess.id && comment.body.startsWith(TASK_PREFIX) && !comment.body.includes('~~')) {
+                core.info(`Found more tasks for discussion #${discussionNumber}. Re-triggering workflow for continuity.`);
+                await github.rest.actions.createWorkflowDispatch({
+                  owner, repo,
+                  workflow_id: 'processor.yml', // 使用文件名
+                  ref: context.ref,
+                  inputs: { discussion_number: discussionNumber }
+                });
+                break;
+              }
+            }
