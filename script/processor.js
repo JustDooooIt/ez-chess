@@ -1,9 +1,6 @@
 import * as github from "@actions/github";
 import * as core from "@actions/core";
 
-const QUEUE_ISSUE_NUMBER = 93;
-const discussionNumber = "${{ github.event.inputs.discussion_number }}";
-const TASK_PREFIX = `TASK::${discussionNumber}::`;
 
 const { context } = github;
 const { repo: repoInfo, payload, eventName } = context;
@@ -11,6 +8,10 @@ const owner = repoInfo.owner;
 const repo = repoInfo.repo;
 const token = process.env.GITHUB_TOKEN;
 const octokit = github.getOctokit(token);
+
+const QUEUE_ISSUE_NUMBER = 93;process.env
+const discussionNumber = process.env.discussion_number;
+const TASK_PREFIX = `TASK::${discussionNumber}::`;
 
 const GET_COMMENTS_QUERY = `
   query ($owner: String!, $repo: String!, $number: Int!, $last: Int!, $before: String) {
