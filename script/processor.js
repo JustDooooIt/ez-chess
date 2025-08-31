@@ -156,10 +156,10 @@ async function run() {
   let discussionBody = comment?.data?.node?.discussion.body;
 
   if (commentBody == "/enter") {
-    await OnEnterRoom(discussionBody);
+    await OnEnterRoom(discussionId, discussionBody);
   } else if (commentBody.startsWith("/choose/faction")) {
-    let faction = taskToProcess?.body?.split("/")?.pop();
-    await OnSelectFaction(discussionId,discussionBody, faction);
+    let faction = commentBody?.body?.split("/")?.pop();
+    await OnSelectFaction(discussionId, discussionBody, faction);
   }
 
   const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
