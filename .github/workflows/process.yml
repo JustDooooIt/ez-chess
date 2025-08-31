@@ -8,14 +8,13 @@ on:
         required: true
         type: string
 
-# ✨ 魔法在这里！并发组是基于传入的 discussion_number 动态创建的 ✨
 concurrency:
   group: process-discussion-${{ github.event.inputs.discussion_number }}
   cancel-in-progress: false
 
 permissions:
-  issues: write      # 读写队列 Issue
-  discussions: write # 你的实际任务可能需要操作 discussion
+  issues: write
+  discussions: write
 
 jobs:
   process-task:
