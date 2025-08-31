@@ -151,9 +151,9 @@ async function run() {
 
   let commentId = taskToProcess.body.split("::").pop();
   let comment = await getComment(commentId);
-  let commentBody = comment?.data?.node?.body;
-  let discussionId = comment?.data?.node?.discussion.id;
-  let discussionBody = comment?.data?.node?.discussion.body;
+  let commentBody = comment?.node?.body;
+  let discussionId = comment?.node?.discussion.id;
+  let discussionBody = comment?.node?.discussion.body;
 
   core.info(commentBody)
 
