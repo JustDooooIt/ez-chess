@@ -131,8 +131,10 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   observers.delete(commentAuthor);
   jsonObject.observers = Array.from(observers);
   jsonObject.seats[faction] = commentAuthor;
-  let json = JSON.stringify(jsonObject);
   core.info(commentAuthor);
+  core.info(faction);
+  core.info(jsonObject.seats);
+  let json = JSON.stringify(jsonObject);
   await updateDiscussion(discussionId, json);
 }
 
