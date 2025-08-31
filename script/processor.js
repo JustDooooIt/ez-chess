@@ -114,23 +114,23 @@ async function updateDiscussion(discussionId, body) {
   return await octokit.graphql(UPDATE_DISCUSSION_QUERY, variables);
 }
 
-async function OnEnterRoom(room) {
+async function OnEnterRoom(discussionId, room) {
   let jsonObject = JSON.parse(room);
   let observers = new Set(jsonObject.observers);
   observers.add(payload.sender.login);
   jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
-  await updateDiscussion(payload.discussion.node_id, json);
+  await updateDiscussion(discussionId, json);
 }
 
-async function OnSelectFaction(room, faction) {
+async function OnSelectFaction(discussionId, room, faction) {
   let jsonObject = JSON.parse(room);
   let observers = new Set(jsonObject.observers);
   observers.delete(payload.sender.login);
   jsonObject.observers = Array.from(observers);
   jsonObject.seats[faction] = payload.sender.login;
   let json = JSON.stringify(jsonObject);
-  await updateDiscussion(payload.discussion.node_id, json);
+  await updateDiscussion(discussionId, json);
 }
 
 async function run() {
@@ -152,12 +152,14 @@ async function run() {
   let commentId = taskToProcess.body.split("::").pop();
   let comment = await getComment(commentId);
   let commentBody = comment?.data?.node?.body;
+  let discussionId = comment?.data?.node?.discussion.id;
+  let discussionBody = comment?.data?.node?.discussion.body;
 
   if (commentBody == "/enter") {
-    await OnEnterRoom(commentBody);
+    await OnEnterRoom(discussionBody);
   } else if (commentBody.startsWith("/choose/faction")) {
     let faction = taskToProcess?.body?.split("/")?.pop();
-    await OnSelectFaction(commentBody, faction);
+    await OnSelectFaction(discussionId,discussionBody, faction);
   }
 
   const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
