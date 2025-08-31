@@ -17,7 +17,7 @@ jobs:
         with:
           issue-number: 94
           body: |
-            TASK::${{ github.event.discussion.number }}::${{ github.event.comment.id }}
+            TASK::${{ github.event.discussion.number }}::${{ github.event.comment.node_id }}
 
       - name: 2. Trigger the processor workflow
         uses: benc-uk/workflow-dispatch@v1
