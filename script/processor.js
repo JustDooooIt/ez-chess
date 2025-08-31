@@ -130,14 +130,10 @@ async function run() {
   const commentIdFragment = commentUrl.split('#').pop();
   
   const commentNumericId = commentIdFragment.split('-').pop();
-  core.info(commentNumericId);
 
-  const { data: originalComment } = await octokit.rest.teams.getDiscussionCommentInOrg({
-      org: owner, 
-      team_slug: repo, 
-      discussion_number: discussionNumber,
-      comment_number: commentNumericId,
-  });
+  core.info(payload.comment.id)
+
+
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
   // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
