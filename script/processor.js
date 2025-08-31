@@ -116,21 +116,21 @@ async function updateDiscussion(discussionId, body) {
   return await octokit.graphql(UPDATE_DISCUSSION_QUERY, variables);
 }
 
-async function OnEnterRoom(discussionId, room) {
+async function OnEnterRoom(discussionId, commentAuthor, room) {
   let jsonObject = JSON.parse(room);
   let observers = new Set(jsonObject.observers);
-  observers.add(payload.sender.login);
+  observers.add(commentAuthor);
   jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
   await updateDiscussion(discussionId, json);
 }
 
-async function OnSelectFaction(discussionId, room, faction) {
+async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   let jsonObject = JSON.parse(room);
   let observers = new Set(jsonObject.observers);
-  observers.delete(payload.sender.login);
+  observers.delete(commentAuthor);
   jsonObject.observers = Array.from(observers);
-  jsonObject.seats[faction] = payload.sender.login;
+  jsonObject.seats[faction] = commentAuthor;
   let json = JSON.stringify(jsonObject);
   await updateDiscussion(discussionId, json);
 }
@@ -154,17 +154,17 @@ async function run() {
   let commentId = taskToProcess.body.split("::").pop();
   let comment = await getComment(commentId);
   let commentBody = comment?.node?.body;
+  let commentAuthor = comment?.node?.author?.login;
   let discussionId = comment?.node?.discussion.id;
   let discussionBody = comment?.node?.discussion.body;
 
-  core.info(discussionId)
-  core.info(discussionBody)
+  core.info(commentAuthor)
 
   if (commentBody == "/enter") {
-    await OnEnterRoom(discussionId, discussionBody);
+    await OnEnterRoom(discussionId, commentAuthor, discussionBody);
   } else if (commentBody.startsWith("/choose/faction")) {
     let faction = commentBody?.body?.split("/")?.pop();
-    await OnSelectFaction(discussionId, discussionBody, faction);
+    await OnSelectFaction(discussionId, commentAuthor, discussionBody, faction);
   }
 
   const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
