@@ -122,13 +122,21 @@ async function run() {
       break; // 找到后立即跳出循环
     }
   }
+
+  let gameData = await octokit.request({method:"GET", taskToProcess});
+  core.info(gameData);
   
-  if (taskToProcess.body == "/enter") {
-    await OnEnterRoom();
-  } else if (taskToProcess.body?.startsWith("/choose/faction")) {
-    let faction = taskToProcess?.body?.split("/")?.pop();
-    await OnSelectFaction(faction);
-  }
+  // if (taskToProcess.body == "/enter") {
+  //   await OnEnterRoom();
+  // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
+  //   let faction = taskToProcess?.body?.split("/")?.pop();
+  //   await OnSelectFaction(faction);
+  // }
+
+  const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
+  await github.rest.issues.updateComment({
+    owner, repo, comment_id: taskToProcess.id, body: updatedBody,
+  });
 }
 
 run().catch((err) => {
