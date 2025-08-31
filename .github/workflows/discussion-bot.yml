@@ -22,6 +22,6 @@ jobs:
       - name: 2. Trigger the processor workflow
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: 2. Process Discussion Task # <-- 要调用的 workflow 的名字或文件名
+          workflow: 2. Process Discussion Task
           token: ${{ secrets.GITHUB_TOKEN }}
           inputs: '{ "discussion_number": "${{ github.event.discussion.number }}" }'
