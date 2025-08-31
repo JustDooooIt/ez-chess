@@ -10,7 +10,7 @@ const token = process.env.GITHUB_TOKEN;
 const octokit = github.getOctokit(token);
 
 const QUEUE_ISSUE_NUMBER = 93;process.env
-const discussionNumber = process.env.discussion_number;
+const discussionNumber = process.env.DISCUSSION_NUMBER;
 const TASK_PREFIX = `TASK::${discussionNumber}::`;
 
 const GET_COMMENTS_QUERY = `
