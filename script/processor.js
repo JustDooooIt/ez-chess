@@ -130,13 +130,13 @@ async function run() {
   }
 
   let gameData = await octokit.request({method:"GET", url: taskToProcess.url});
-  
-  if (taskToProcess.body == "/enter") {
-    await OnEnterRoom();
-  } else if (taskToProcess.body?.startsWith("/choose/faction")) {
-    let faction = taskToProcess?.body?.split("/")?.pop();
-    await OnSelectFaction(faction);
-  }
+  core.info(gameData.data);
+  // if (taskToProcess.body == "/enter") {
+  //   await OnEnterRoom();
+  // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
+  //   let faction = taskToProcess?.body?.split("/")?.pop();
+  //   await OnSelectFaction(faction);
+  // }
 
   const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
   await octokit.rest.issues.updateComment({
