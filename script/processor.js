@@ -118,7 +118,7 @@ async function run() {
   for (let i = 0; i < comments.length; i++) {
     const comment = comments[i];
     let body = JSON.parse(comment.body_text);
-    console.log(body);
+    core.info(body);
   }
 }
 
