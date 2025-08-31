@@ -125,8 +125,8 @@ async function run() {
     }
   }
 
-  core.info(taskToProcess.body.split("::").shift());
-  let gameData = await octokit.request({method:"GET", url: taskToProcess.body.split("::").shift()});
+  let gameData = await octokit.request({method:"GET", url: taskToProcess.body.split("::").pop()});
+  core.info(JSON.stringify(gameData));
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
   // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
