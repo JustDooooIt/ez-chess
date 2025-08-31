@@ -3,7 +3,7 @@ import * as core from "@actions/core";
 
 
 const { context } = github;
-const { repo: repoInfo, payload, eventName } = context;
+const { repo: repoInfo, payload, issue } = context;
 const owner = repoInfo.owner;
 const repo = repoInfo.repo;
 const token = process.env.GITHUB_TOKEN;
@@ -121,12 +121,23 @@ async function run() {
   for (const comment of comments) {
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
       taskToProcess = comment;
-      break; // 找到后立即跳出循环
+      break; 
     }
   }
 
-  let gameData = await octokit.request({method:"GET", url: taskToProcess.body.split("::").pop()});
-  core.info(JSON.stringify(gameData));
+  let commentUrl =taskToProcess.body.split("::").pop();
+  
+  const commentIdFragment = commentUrl.split('#').pop();
+  
+  const commentNumericId = commentIdFragment.split('-').pop();
+
+  const { data: originalComment } = await octokit.rest.teams.getDiscussionCommentInOrg({
+      org: owner, 
+      team_slug: repo, 
+      discussion_number: discussionNumber,
+      comment_number: commentNumericId,
+  });
+  core.info(originalComment.body);
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
   // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
