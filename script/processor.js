@@ -49,8 +49,8 @@ mutation($discussionId: ID!, $body: String){
   }
 }`;
 const GET_COMMENT_QUERY = `
-query GetSingleDiscussionComment($commentNodeId: ID!) {
-  node(id: $commentNodeId) {
+query GetSingleDiscussionComment($id: ID!) {
+  node(id: $id) {
     ... on DiscussionComment {
       id
       databaseId 
@@ -155,7 +155,6 @@ async function run() {
   let discussionId = comment?.data?.node?.discussion.id;
   let discussionBody = comment?.data?.node?.discussion.body;
 
-  core.info(discussionId)
   if (commentBody == "/enter") {
     await OnEnterRoom(discussionId, discussionBody);
   } else if (commentBody.startsWith("/choose/faction")) {
