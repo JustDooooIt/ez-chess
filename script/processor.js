@@ -122,6 +122,7 @@ async function OnEnterRoom(discussionId, commentAuthor, room) {
   observers.add(commentAuthor);
   jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
+  core.info(json);
   await updateDiscussion(discussionId, json);
 }
 
