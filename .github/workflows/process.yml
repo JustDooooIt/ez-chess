@@ -20,6 +20,9 @@ permissions:
 jobs:
   process-task:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: script
     steps:
       - uses: actions/checkout@v4
 
