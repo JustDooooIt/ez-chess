@@ -109,17 +109,20 @@ async function OnSelectFaction(faction) {
 }
 
 async function run() {
-  const { data: comments } = await octokit.rest.issues.listComments({
+  const comments = await octokit.paginate(github.rest.issues.listComments, {
     owner,
     repo,
     issue_number: QUEUE_ISSUE_NUMBER,
     per_page: 100,
   });
-  for (let i = 0; i < comments.length; i++) {
-    const comment = comments[i];
-    let body = JSON.parse(comment.body_text);
-    core.info(body);
+  let taskToProcess = null;
+  for (const comment of comments) {
+    if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
+      taskToProcess = comment;
+      break; // 找到后立即跳出循环
+    }
   }
+  core.info(taskToProcess);
 }
 
 run().catch((err) => {
