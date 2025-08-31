@@ -10,6 +10,8 @@ using Godot.Collections;
 /// </summary>
 public partial class GameLoader : Node
 {
+	public event Action GameLoaded;
+
 	private IDictionary<string, Variant> _config;
 	private GameManager _manager;
 	private HexMap _map;
@@ -18,6 +20,7 @@ public partial class GameLoader : Node
 	private PackedScene _piecesManagerScene;
 	private BaseRenderEventHandler _renderEventHandler;
 	private IOperationRunner _operationRunner;
+	private Pipelines _pipelines;
 
 	[Export]
 	public string ConfigPath { get; set; }
@@ -37,7 +40,9 @@ public partial class GameLoader : Node
 		_config = LoadConfig();
 		_pieceFactory = (IPieceFactory)PieceFactoryScript.New().AsGodotObject();
 		_renderEventHandler = (BaseRenderEventHandler)RenderEventHandlerScript.New().AsGodotObject();
+		_pipelines = GetNode<Pipelines>("/root/Game/Players");
 		_operationRunner = OperationRunner.New().AsGodotObject() as IOperationRunner;
+		_pipelines.OperationRunner = _operationRunner;
 		InitFirstFounded(_config);
 		StartPipeline();
 	}
@@ -56,7 +61,7 @@ public partial class GameLoader : Node
 		GameState.Instance.RoomState = new()
 		{
 			GameName = config["name"].AsString(),
-			Seats = [.. factionNames.Select(e=>"")],
+			Seats = [.. factionNames.Select(e => "")],
 		};
 		foreach (var factionName in factionNames)
 		{
@@ -94,14 +99,15 @@ public partial class GameLoader : Node
 					pieceAdapter.GameManager = _manager;
 					factionNode.AddChild(pieceAdapter);
 					factionNode.AddPiece(positionVec, pieceAdapter);
-					if (!_manager.IsNodeReady())
-						await ToSignal(_manager, "ready");
-					pieceAdapter.State.As<IPositionEventSender>().SendPositionEvent(positionVec);
+					GameLoaded += () => pieceAdapter.State.As<IPositionEventSender>().SendPositionEvent(positionVec);
 				}
 			}
 			factionId++;
 		}
+		if (!_manager.IsNodeReady())
+			await ToSignal(_manager, "ready");
 		_manager.InitPieces();
+		GameLoaded.Invoke();
 	}
 
 	private async void AddPlayer(string name)
@@ -116,10 +122,6 @@ public partial class GameLoader : Node
 			pipelineScene = GD.Load<PackedScene>("res://framework/scene/other.tscn");
 		}
 		var pipeline = pipelineScene.Instantiate<PlayerPipeline>();
-		if (pipeline is OtherPipeline other)
-		{
-			other.OperationRunner = _operationRunner;
-		}
 		pipeline.Name = name;
 		_manager.AddPlayer(pipeline);
 		GameState.Instance.PlayerCount++;

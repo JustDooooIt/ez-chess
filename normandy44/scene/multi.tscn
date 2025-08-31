@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=4 uid="uid://ccmsadmdtosnm"]
+[gd_scene load_steps=7 format=4 uid="uid://ccmsadmdtosnm"]
 
 [ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framework/scene/game.tscn" id="1_3huoh"]
 [ext_resource type="Script" uid="uid://dpqs571vpupq3" path="res://framework/script/game/MPGameManager.cs" id="2_er3e1"]
 [ext_resource type="Texture2D" uid="uid://bqr2fvxl15dbl" path="res://normandy44/resource/image/N44 Map-2015-FINAL-150.jpg" id="2_ye5cw"]
 [ext_resource type="TileSet" uid="uid://jc85wbccl3ta" path="res://normandy44/resource/terrain.tres" id="3_mbs8q"]
 [ext_resource type="Script" uid="uid://b8kdci0e21sil" path="res://normandy44/script/operation/OperationRunner.cs" id="5_mbs8q"]
+[ext_resource type="Script" uid="uid://dlq2utd2273h1" path="res://framework/script/pipeline/Pipelines.cs" id="6_m1u11"]
 
 [node name="Game" instance=ExtResource("1_3huoh")]
 script = ExtResource("2_er3e1")
@@ -37,3 +38,6 @@ tile_set = ExtResource("3_mbs8q")
 
 [node name="GameLoader" parent="." index="2"]
 OperationRunner = ExtResource("5_mbs8q")
+
+[node name="Players" parent="." index="3"]
+script = ExtResource("6_m1u11")

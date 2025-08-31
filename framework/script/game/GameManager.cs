@@ -7,7 +7,7 @@ using System.Text.Json;
 
 public partial class GameManager : Node2D
 {
-	private Node _players;
+	protected Node _players;
 	private Dictionary<string, Group<Vector2I, PieceAdapter>> _pieces = [];
 
   [Export]
@@ -61,7 +61,7 @@ public partial class GameManager : Node2D
 				foreach (var piece in pieces.Value)
 				{
 					Dictionary<string, object> pieceState = [];
-					pieceState["position"] = piece.State.As<IPositionable>().MapPosition;
+					pieceState["position"] = pieces.Key;
 					pieceState["name"] = piece.Name;
 					pieceState["pieceType"] = piece.PieceType;
 					pieceState["faction"] = piece.Faction;

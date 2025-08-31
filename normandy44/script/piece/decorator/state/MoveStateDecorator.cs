@@ -24,6 +24,7 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
       };
       await GithubUtils.SubmitOperation(GameState.Instance.RoomMetaData.Id, PieceAdapter, op, hash);
     }
+    PiecesManager.Pieces.Move(from, to, PieceAdapter);
   }
 
   public void SendMoveEvent(Vector2I from, Vector2I to)

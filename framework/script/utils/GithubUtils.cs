@@ -375,12 +375,16 @@ public class GithubUtils
 		{
 			if (comment.CreatedAt <= TimeLine)
 				return true;
-			var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body);
-			if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAME_DATA &&
-					jsonObject.ContainsKey("faction") && jsonObject["faction"].GetValue<int>() == faction)
+			try
 			{
-				comments.Add(comment);
+				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body);
+				if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAME_DATA &&
+						jsonObject.ContainsKey("faction") && jsonObject["faction"].GetValue<int>() == faction)
+				{
+					comments.Add(comment);
+				}
 			}
+			catch (System.Text.Json.JsonException) { }
 			return false;
 		});
 		if (comments.Count > 0)
@@ -390,11 +394,90 @@ public class GithubUtils
 		}
 		foreach (var comment in comments)
 		{
-			var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
-			if (jsonObject.ContainsKey("preStateHash") && jsonObject["preStateHash"].GetValue<string>() == curStateHash)
+			try
+			{
+				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
+				if (jsonObject.ContainsKey("preStateHash") && jsonObject["preStateHash"].GetValue<string>() == curStateHash)
+				{
+					operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(comment.Body, options));
+				}
+			}
+			catch (System.Text.Json.JsonException) { }
+		}
+	}
+
+	public static async Task ApplyOperation(int discussionNum, string curStateHash, Action<JsonObject> operationProcessor)
+	{
+		List<Comment> comments = [];
+		await ProcessComments(discussionNum, (comment) =>
+		{
+			if (comment.CreatedAt <= TimeLine)
+				return true;
+			try
+			{
+				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body);
+				if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAME_DATA)
+				{
+					comments.Add(comment);
+				}
+			}
+			catch (System.Text.Json.JsonException) { }
+			return false;
+		});
+		if (comments.Count > 0)
+		{
+			TimeLine = comments.Max(e => e.CreatedAt);
+			comments.Sort((e1, e2) => e1.CreatedAt.CompareTo(e2.CreatedAt));
+		}
+		foreach (var comment in comments)
+		{
+			try
+			{
+				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
+				if (jsonObject.ContainsKey("preStateHash") && jsonObject["preStateHash"].GetValue<string>() == curStateHash)
+				{
+					operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(comment.Body, options));
+				}
+			}
+			catch (System.Text.Json.JsonException) { }
+		}
+	}
+
+	/// <summary>
+	/// 读取历史对局信息, 恢复本地游戏状态
+	/// </summary>
+	/// <param name="discussionNum"></param>
+	/// <returns></returns>
+	public static async Task Recover(int discussionNum, Action<JsonObject> operationProcessor)
+	{
+		List<Comment> comments = [];
+		await ProcessComments(discussionNum, (comment) =>
+		{
+			try
+			{
+				if (comment.CreatedAt <= TimeLine)
+					return true;
+				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body);
+				if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAME_DATA)
+				{
+					comments.Add(comment);
+				}
+			}
+			catch (System.Text.Json.JsonException) { }
+			return false;
+		});
+		if (comments.Count > 0)
+		{
+			TimeLine = comments.Max(e => e.CreatedAt);
+			comments.Sort((e1, e2) => e1.CreatedAt.CompareTo(e2.CreatedAt));
+		}
+		foreach (var comment in comments)
+		{
+			try
 			{
 				operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(comment.Body, options));
 			}
+			catch (System.Text.Json.JsonException) { }
 		}
 	}
 
@@ -458,8 +541,8 @@ public class RoomState
 {
 	public string GameName { get; set; }
 	public string[] Seats { get; set; }
-	public string[] Placeholder { get; set; }
 	public string[] Observers { get; set; }
+	public string Host { get; set; }
 }
 
 public record RoomMetaData

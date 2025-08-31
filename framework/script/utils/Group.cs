@@ -7,6 +7,17 @@ public class Group<K, V>
 
   public Dictionary<K, List<V>> Wrapped => _dict;
 
+  public void Move(K key1, K key2, V value)
+  {
+    Remove(key1, value);
+    Add(key2, value);
+  }
+
+  public void Remove(K key, V value)
+  {
+    Get(key).Remove(value);
+  }
+
   public void Add(K key, V value)
   {
     if (_dict.TryGetValue(key, out var values))
