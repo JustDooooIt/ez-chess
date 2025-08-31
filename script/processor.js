@@ -62,8 +62,10 @@ query GetSingleDiscussionComment($id: ID!) {
       url
       createdAt
       discussion {
-        title
+        id
         number
+        title
+        body
       }
     }
   }
