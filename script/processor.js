@@ -125,11 +125,12 @@ async function run() {
     }
   }
 
-  let commentUrl =taskToProcess.body.split("::").pop();
+  let commentUrl = taskToProcess.body.split("::").pop();
   
   const commentIdFragment = commentUrl.split('#').pop();
   
   const commentNumericId = commentIdFragment.split('-').pop();
+  core.info(originalComment.body);
 
   const { data: originalComment } = await octokit.rest.teams.getDiscussionCommentInOrg({
       org: owner, 
@@ -137,7 +138,6 @@ async function run() {
       discussion_number: discussionNumber,
       comment_number: commentNumericId,
   });
-  core.info(originalComment.body);
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
   // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
