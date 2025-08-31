@@ -155,6 +155,7 @@ async function run() {
   let discussionId = comment?.data?.node?.discussion.id;
   let discussionBody = comment?.data?.node?.discussion.body;
 
+  core.info(discussionId)
   if (commentBody == "/enter") {
     await OnEnterRoom(discussionId, discussionBody);
   } else if (commentBody.startsWith("/choose/faction")) {
