@@ -155,7 +155,8 @@ async function run() {
   let discussionId = comment?.node?.discussion.id;
   let discussionBody = comment?.node?.discussion.body;
 
-  core.info(commentBody)
+  core.info(discussionId)
+  core.info(discussionBody)
 
   if (commentBody == "/enter") {
     await OnEnterRoom(discussionId, discussionBody);
