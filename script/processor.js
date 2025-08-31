@@ -164,8 +164,7 @@ async function getTaskProcess() {
 }
 
 async function run() {
-  let taskToProcess = getTaskProcess()
-  core.info(JSON.stringify(taskToProcess))
+  let taskToProcess = await getTaskProcess()
 
   let commentId = taskToProcess.body.split("::").pop();
   let comment = await getComment(commentId);
