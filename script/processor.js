@@ -9,7 +9,7 @@ const repo = repoInfo.repo;
 const token = process.env.GITHUB_TOKEN;
 const octokit = github.getOctokit(token);
 
-const QUEUE_ISSUE_NUMBER = 93;process.env
+const QUEUE_ISSUE_NUMBER = 94;
 const discussionNumber = process.env.DISCUSSION_NUMBER;
 const TASK_PREFIX = `TASK::${discussionNumber}::`;
 
@@ -125,14 +125,8 @@ async function run() {
     }
   }
 
-  let commentUrl = taskToProcess.body.split("::").pop();
-  
-  const commentIdFragment = commentUrl.split('#').pop();
-  
-  const commentNumericId = commentIdFragment.split('-').pop();
-
-  core.info(payload.comment.id)
-
+  let commentId = taskToProcess.body.split("::").pop();
+  core.info(commentId)
 
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
