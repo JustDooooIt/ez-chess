@@ -119,18 +119,14 @@ async function run() {
 
   let taskToProcess = null;
   for (const comment of comments) {
-    core.info(TASK_PREFIX)
-    core.info(comment.body, TASK_PREFIX)
-    core.info(comment.body.startsWith(TASK_PREFIX))
-    core.info(comment.body.includes("~~"))
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
       taskToProcess = comment;
       break; // 找到后立即跳出循环
     }
   }
 
+  core.info(taskToProcess.body.split("::").shift());
   let gameData = await octokit.request({method:"GET", url: taskToProcess.body.split("::").shift()});
-  core.info(JSON.stringify(gameData.data));
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
   // } else if (taskToProcess.body?.startsWith("/choose/faction")) {
