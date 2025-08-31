@@ -124,8 +124,8 @@ async function run() {
     }
   }
 
-  let gameData = await octokit.request({method:"GET", url: taskToProcess});
-  core.info(JSON.stringify(gameData));
+  core.info(JSON.stringify(taskToProcess));
+  let gameData = await octokit.request({method:"GET", url: taskToProcess.body});
   
   // if (taskToProcess.body == "/enter") {
   //   await OnEnterRoom();
