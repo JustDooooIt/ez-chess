@@ -118,7 +118,7 @@ async function run() {
 
   let taskToProcess = null;
   for (const comment of comments) {
-    core.info(comment.body)
+    core.info(comment.body, TASK_PREFIX)
     core.info(comment.body.startsWith(TASK_PREFIX))
     core.info(comment.body.includes("~~"))
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
