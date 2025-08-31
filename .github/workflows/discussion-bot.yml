@@ -4,7 +4,7 @@ on:
     types: [created]
 
 concurrency:
-  group: repo-${{ github.repository }}-wf-${{ github.workflow }}-discussion-${{ github.event.discussion.id }}
+  group: ${{ github.workflow }}-${{ github.event.discussion.number }}
   cancel-in-progress: false
 
 permissions:
