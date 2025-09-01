@@ -122,7 +122,6 @@ async function OnEnterRoom(discussionId, commentAuthor, room) {
   observers.add(commentAuthor);
   jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
-  core.info(json);
   await updateDiscussion(discussionId, json);
 }
 
@@ -153,7 +152,7 @@ async function processComment(processor) {
       owner,
       repo,
       issue_number: QUEUE_ISSUE_NUMBER,
-      per_page: 1,
+      per_page: 100,
     },
   );
 
