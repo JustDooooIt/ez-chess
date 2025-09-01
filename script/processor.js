@@ -122,6 +122,7 @@ async function OnEnterRoom(discussionId, commentAuthor, room) {
   observers.add(commentAuthor);
   jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
+  core.info(json);
   await updateDiscussion(discussionId, json);
 }
 
@@ -146,7 +147,7 @@ async function consumeIssue(issue) {
 }
 
 async function processComment(processor) {
-  const ite = await octokit.paginate.iterator(
+  const ite = octokit.paginate.iterator(
     octokit.rest.issues.listComments,
     {
       owner,
@@ -158,7 +159,6 @@ async function processComment(processor) {
 
   for await (const response of ite) {
     for (const comment of response.data) {
-      core.info(JSON.stringify(comment));
       if (
         comment.body.startsWith(TASK_PREFIX) &&
         !comment.body.includes("~~")
