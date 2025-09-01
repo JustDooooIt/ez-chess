@@ -148,7 +148,7 @@ async function consumeIssue(taskToProcess) {
   });
 }
 
-async function getTaskProcess() {
+async function processComment(processor) {
   const comments = await octokit.paginate(octokit.rest.issues.listComments, {
     owner,
     repo,
@@ -159,31 +159,34 @@ async function getTaskProcess() {
   let taskToProcess = null;
   for (const comment of comments) {
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
-      taskToProcess = comment;
-      break;
+      await processor(comment);
     }
   }
   return taskToProcess;
 }
 
 async function run() {
-  let taskToProcess = await getTaskProcess();
+  await processComment(async (comment) => {
+    let commentId = taskToProcess.body.split("::").pop();
+    let comment = await getComment(commentId);
+    let commentBody = comment?.node?.body;
+    let commentAuthor = comment?.node?.author?.login;
+    let discussionId = comment?.node?.discussion.id;
+    let discussionBody = comment?.node?.discussion.body;
 
-  let commentId = taskToProcess.body.split("::").pop();
-  let comment = await getComment(commentId);
-  let commentBody = comment?.node?.body;
-  let commentAuthor = comment?.node?.author?.login;
-  let discussionId = comment?.node?.discussion.id;
-  let discussionBody = comment?.node?.discussion.body;
-
-  if (commentBody == "/enter") {
-    await OnEnterRoom(discussionId, commentAuthor, discussionBody);
-  } else if (commentBody.startsWith("/choose/faction")) {
-    let faction = commentBody?.split("/")?.pop();
-    await OnSelectFaction(discussionId, commentAuthor, discussionBody, faction);
-  }
-
-  await consumeIssue(taskToProcess);
+    if (commentBody == "/enter") {
+      await OnEnterRoom(discussionId, commentAuthor, discussionBody);
+    } else if (commentBody.startsWith("/choose/faction")) {
+      let faction = commentBody?.split("/")?.pop();
+      await OnSelectFaction(
+        discussionId,
+        commentAuthor,
+        discussionBody,
+        faction,
+      );
+    }
+    await consumeIssue(taskToProcess);
+  });
 }
 
 run().catch((err) => {
