@@ -157,8 +157,7 @@ async function processComment(processor) {
   );
 
   for await (const response of ite) {
-    for (const originComment of response) {
-      let comment = originComment.data;
+    for (const comment of response.data) {
       core.info(JSON.stringify(comment));
       if (
         comment.body.startsWith(TASK_PREFIX) &&
