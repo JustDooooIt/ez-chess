@@ -132,7 +132,6 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   jsonObject.observers = Array.from(observers);
   jsonObject.seats[faction] = commentAuthor;
   let json = JSON.stringify(jsonObject);
-  core.info(json)
   await updateDiscussion(discussionId, json);
 }
 
@@ -147,14 +146,18 @@ async function consumeIssue(issue) {
 }
 
 async function processComment(processor) {
-  const comments = await octokit.paginate(octokit.rest.issues.listComments, {
-    owner,
-    repo,
-    issue_number: QUEUE_ISSUE_NUMBER,
-    per_page: 100,
-  });
+  const ite = await octokit.paginate.iterator(
+    octokit.rest.issues.listComments,
+    {
+      owner,
+      repo,
+      issue_number: QUEUE_ISSUE_NUMBER,
+      per_page: 1,
+    },
+  );
 
-  for (const comment of comments) {
+  for await (const response of ite) {
+    let comment = response.data;
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
       await processor(comment);
     }
