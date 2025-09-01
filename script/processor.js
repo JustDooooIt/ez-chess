@@ -131,9 +131,6 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   observers.delete(commentAuthor);
   jsonObject.observers = Array.from(observers);
   jsonObject.seats[faction] = commentAuthor;
-  core.info(commentAuthor);
-  core.info(faction);
-  core.info(jsonObject.seats);
   let json = JSON.stringify(jsonObject);
   await updateDiscussion(discussionId, json);
 }
@@ -168,6 +165,7 @@ async function run() {
     let commentId = issue.body.split("::").pop();
     let comment = await getComment(commentId);
     let commentBody = comment?.node?.body;
+    core.info(commentBody)
     let commentAuthor = comment?.node?.author?.login;
     let discussionId = comment?.node?.discussion.id;
     let discussionBody = comment?.node?.discussion.body;
