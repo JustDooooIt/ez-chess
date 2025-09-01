@@ -156,18 +156,16 @@ async function processComment(processor) {
     per_page: 100,
   });
 
-  let taskToProcess = null;
   for (const comment of comments) {
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
       await processor(comment);
     }
   }
-  return taskToProcess;
 }
 
 async function run() {
-  await processComment(async (comment) => {
-    let commentId = taskToProcess.body.split("::").pop();
+  await processComment(async (issue) => {
+    let commentId = issue.body.split("::").pop();
     let comment = await getComment(commentId);
     let commentBody = comment?.node?.body;
     let commentAuthor = comment?.node?.author?.login;
