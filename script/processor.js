@@ -158,6 +158,7 @@ async function processComment(processor) {
 
   for await (const response of ite) {
     let comment = response.data;
+    core.info(JSON.stringify(comment));
     if (comment.body.startsWith(TASK_PREFIX) && !comment.body.includes("~~")) {
       await processor(comment);
     }
