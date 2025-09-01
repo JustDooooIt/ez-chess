@@ -1,47 +1,52 @@
 using Godot;
 
 
-public record RenderEvent : Event
+public record PieceEvent : Event
 {
-  public RenderEvent(ulong piece) : base(piece) { }
+  //标记该事件是否是恢复阶段的事件
+  public bool recovered;
+  public PieceEvent(ulong piece, bool recovered = false) : base(piece)
+  {
+    this.recovered = recovered;
+  }
 }
 
-public record RenderMoveEvent : RenderEvent
+public record MoveEvent : PieceEvent
 {
   public Vector2I from;
   public Vector2I to;
   public Vector2I[] path;
 
-  public RenderMoveEvent(ulong piece, Vector2I from, Vector2I to, Vector2I[] path) : base(piece)
+  public MoveEvent(ulong piece, Vector2I from, Vector2I to, Vector2I[] path, bool recovered = false) : base(piece, recovered)
   {
-	this.from = from;
-	this.to = to;
-	this.path = path;
+    this.from = from;
+    this.to = to;
+    this.path = path;
   }
 }
 
-public record RenderSetupBoardEvent : RenderEvent
+public record SetupBoardEvent : PieceEvent
 {
   public Vector2I position;
 
-  public RenderSetupBoardEvent(ulong piece, Vector2I position) : base(piece)
+  public SetupBoardEvent(ulong piece, Vector2I position) : base(piece)
   {
-	this.position = position;
+    this.position = position;
   }
 }
-public record RenderFlipEvent : RenderEvent
+public record FlipEvent : PieceEvent
 {
-  public RenderFlipEvent(ulong piece) : base(piece)
+  public FlipEvent(ulong piece) : base(piece)
   {
 
   }
 }
 
-public record RenderPositionEvent : RenderEvent
+public record PositionEvent : PieceEvent
 {
   public Vector2I position;
-  public RenderPositionEvent(ulong piece, Vector2I position) : base(piece)
+  public PositionEvent(ulong piece, Vector2I position) : base(piece)
   {
-	this.position = position;
+    this.position = position;
   }
 }

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-public partial class FlipStateValve(IPieceState pieceState, RenderFlipEvent @event) : StateValve(pieceState)
+public partial class FlipStateValve(IPieceState pieceState, FlipEvent @event) : StateValve(pieceState)
 {
   protected override void DoLaunch()
   {

@@ -5,8 +5,10 @@ using Godot;
 
 public abstract partial class Pipeline : Node, ILaunchable, IStopable
 {
+  [Signal]
+  public delegate void ActionCompletedEventHandler();
   public event Action<Valve> ValveAdded;
- 
+
   public abstract void Launch();
   public abstract void Stop();
   public abstract void AddValve(Valve launchable);

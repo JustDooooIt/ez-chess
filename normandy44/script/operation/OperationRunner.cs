@@ -1,5 +1,6 @@
 
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using Godot;
 
 public partial class OperationRunner : RefCounted, IOperationRunner
@@ -10,7 +11,7 @@ public partial class OperationRunner : RefCounted, IOperationRunner
     {
       case OperationType.MOVE:
         var data = GithubUtils.Deserialize<GameData<MoveOperation>>(gameData);
-        piece.State.As<IMoveEventSender>()?.SendMoveEvent(data.Operation.From, data.Operation.To);
+        piece.State.As<IMoveEventSender>()?.SendMoveEvent(data.Operation.From, data.Operation.To, true);
         break;
     }
   }

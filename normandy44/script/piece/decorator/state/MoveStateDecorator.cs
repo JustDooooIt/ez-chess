@@ -4,39 +4,39 @@ using Godot;
 
 public partial class MoveStateDecorator(IPieceState piece, List<float> movements) :
   PieceStateDecorator(piece), IMoveable, IFlipable, IMoveEventSender, IFlipEventSender
-{
+{ 
   private int _stateIndex = movements.Count;
   public List<float> Movements { get; set; } = movements;
   public float CurMovement { get; set; } = movements[0];
   public float ResidualMovement { get; set; } = movements[0];
 
-  public async void Move(Vector2I from, Vector2I to, Vector2I[] path)
+  public async void ReciveEvent(MoveEvent @event)
   {
     var hash = PieceAdapter.GameManager.HashState();
-    As<IPositionable>().MapPosition = to;
-    if (!GameState.Instance.IsSolo && PipelineAdapter is not OtherPipeline)
+    As<IPositionable>().MapPosition = @event.to;
+    if (!GameState.Instance.IsSolo && !@event.recovered && PipelineAdapter is not OtherPipeline)
     {
       var op = new MoveOperation()
       {
-        From = from,
-        To = to,
-        Path = path
+        From = @event.from,
+        To = @event.to,
+        Path = @event.path,
       };
       await GithubUtils.SubmitOperation(GameState.Instance.RoomMetaData.Id, PieceAdapter, op, hash);
     }
-    PiecesManager.Pieces.Move(from, to, PieceAdapter);
+    PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
   }
 
-  public void SendMoveEvent(Vector2I from, Vector2I to)
+  public void SendMoveEvent(Vector2I from, Vector2I to, bool recovered = false)
   {
     ulong instanceId = GetPieceInstanceId();
     var instance = InstanceFromId(instanceId) as PieceInstance;
     var path = instance.HexMap.FindPath(from, to, ResidualMovement);
     if (path.Length > 0)
     {
-      Valve valve = new MoveStateValve(this, new(instanceId, from, to, path));
+      Valve valve = new MoveStateValve(this, new(instanceId, from, to, path, recovered));
       PipelineAdapter.StatePipeline.AddValve(valve);
-      PipelineAdapter.RenderPipeline.RegisterValve<RenderMoveEvent>(valve);
+      PipelineAdapter.RenderPipeline.RegisterValve<MoveEvent>(valve);
     }
   }
 
@@ -55,4 +55,5 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
   }
 
   public void SendFlipEvent() { }
+
 }

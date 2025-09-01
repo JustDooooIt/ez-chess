@@ -6,8 +6,8 @@ public partial class RenderEventHandler : BaseRenderEventHandler
   {
     return @event switch
     {
-      RenderMoveEvent moveEvent => new MoveInstanceValve((IPieceInstance)InstanceFromId(@event.pieceId), moveEvent),
-      RenderPositionEvent positionEvent => new PositionInstanceValve((IPieceInstance)InstanceFromId(@event.pieceId), positionEvent),
+      MoveEvent moveEvent => new MoveInstanceValve((IPieceInstance)InstanceFromId(@event.pieceId), moveEvent),
+      PositionEvent positionEvent => new PositionInstanceValve((IPieceInstance)InstanceFromId(@event.pieceId), positionEvent),
       _ => default,
     };
   }

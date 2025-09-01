@@ -10,7 +10,6 @@ public abstract partial class PieceInstanceDecorator(IPieceInstance wrapped) : P
   public bool IsSelected { get => _wrapped.IsSelected; set => _wrapped.IsSelected = value; }
   public bool IsHover { get => _wrapped.IsHover; set => _wrapped.IsHover = value; }
 
-
   public void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false)
   {
     _wrapped.AddCover(texture, faceIndex, defaultFace);

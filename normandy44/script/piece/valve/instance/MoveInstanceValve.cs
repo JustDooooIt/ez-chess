@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Godot;
 
-public partial class MoveInstanceValve(IPieceInstance pieceInstance, RenderMoveEvent moveEvent) : InstanceValve(pieceInstance)
+public partial class MoveInstanceValve(IPieceInstance pieceInstance, MoveEvent moveEvent) : InstanceValve(pieceInstance)
 {
-  private RenderMoveEvent _moveEvent = moveEvent;
+  private MoveEvent _moveEvent = moveEvent;
 
-  protected override void DoLaunch()
+  protected override async void DoLaunch()
   {
-    _pieceInstance.Proxy.As<IMoveable>()?.Move(_moveEvent.from, _moveEvent.to, _moveEvent.path);
+    _pieceInstance.Proxy.As<IMoveable>()?.ReciveEvent(_moveEvent);
   }
 }

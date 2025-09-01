@@ -21,6 +21,6 @@ public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDec
     ulong instance = GetPieceInstanceId();
     var valve = new PositionStateValve(this, new(instance, position));
     PipelineAdapter.StatePipeline.AddValve(valve);
-    PipelineAdapter.RenderPipeline.RegisterValve<RenderPositionEvent>(valve);
+    PipelineAdapter.RenderPipeline.RegisterValve<PositionEvent>(valve);
   }
 }

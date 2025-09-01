@@ -10,7 +10,7 @@ public partial class GameManager : Node2D
 	protected Node _players;
 	private Dictionary<string, Group<Vector2I, PieceAdapter>> _pieces = [];
 
-  [Export]
+	[Export]
 	public string GameName { get; set; } = "";
 
 	public override void _Ready()

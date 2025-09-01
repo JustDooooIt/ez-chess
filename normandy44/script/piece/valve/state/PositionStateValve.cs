@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-public partial class PositionStateValve(IPieceState pieceState, RenderPositionEvent @event) : StateValve(pieceState)
+public partial class PositionStateValve(IPieceState pieceState, PositionEvent @event) : StateValve(pieceState)
 {
   protected override void DoLaunch()
   {

@@ -9,12 +9,7 @@ using System.Threading.Tasks;
 public partial class MPGameManager : GameManager
 {
 	private Crypto _crypto = new();
-	private string _username;
-	private string _userId;
-	private RoomMetaData _roomMetaData;
-	private Dictionary<string, UserData> _others = [];
-	private CancellationToken _waiterToken;
-
+	
 	public override void _Ready()
 	{
 		base._Ready();
@@ -23,7 +18,7 @@ public partial class MPGameManager : GameManager
 
 	private void OnExitGame()
 	{
-		_ = GithubUtils.ExitRoom(_roomMetaData.Id);
+		_ = GithubUtils.ExitRoom(GameState.Instance.RoomMetaData.Id);
 	}
 
 	public override void _Notification(int what)

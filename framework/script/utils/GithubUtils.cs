@@ -368,6 +368,14 @@ public class GithubUtils
 		await AddComment(discussionId, $"/invite/@{player}");
 	}
 
+	/// <summary>
+	/// 处理一个最早的待机行动
+	/// </summary>
+	/// <param name="discussionNum"></param>
+	/// <param name="faction"></param>
+	/// <param name="curStateHash"></param>
+	/// <param name="operationProcessor"></param>
+	/// <returns></returns>
 	public static async Task ApplyOperation(int discussionNum, int faction, string curStateHash, Action<JsonObject> operationProcessor)
 	{
 		List<Comment> comments = [];
@@ -387,12 +395,13 @@ public class GithubUtils
 			catch (System.Text.Json.JsonException) { }
 			return false;
 		});
+		Comment comment = null;
 		if (comments.Count > 0)
 		{
-			TimeLine = comments.Max(e => e.CreatedAt);
-			comments.Sort((e1, e2) => e1.CreatedAt.CompareTo(e2.CreatedAt));
+			comment = comments.Where(e => e.CreatedAt > TimeLine).MinBy(e => e.CreatedAt);
+			TimeLine = comment.CreatedAt;
 		}
-		foreach (var comment in comments)
+		if (comment != null)
 		{
 			try
 			{
@@ -406,7 +415,7 @@ public class GithubUtils
 		}
 	}
 
-	public static async Task ApplyOperation(int discussionNum, string curStateHash, Action<JsonObject> operationProcessor)
+	public static async Task ApplyOperations(int discussionNum, Action<JsonObject> operationProcessor)
 	{
 		List<Comment> comments = [];
 		await ProcessComments(discussionNum, (comment) =>
@@ -434,10 +443,7 @@ public class GithubUtils
 			try
 			{
 				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
-				if (jsonObject.ContainsKey("preStateHash") && jsonObject["preStateHash"].GetValue<string>() == curStateHash)
-				{
-					operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(comment.Body, options));
-				}
+				operationProcessor.Invoke(jsonObject);
 			}
 			catch (System.Text.Json.JsonException) { }
 		}

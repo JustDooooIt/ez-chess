@@ -30,4 +30,4 @@ public partial class Infantry : PieceAdapter
     var _to = Instance.HexMap.ToMapPosition(to);
     State.As<IMoveEventSender>()?.SendMoveEvent(_from, _to);
   }
-}
+} 
