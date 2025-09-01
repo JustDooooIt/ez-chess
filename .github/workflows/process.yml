@@ -10,7 +10,7 @@ on:
 
 concurrency:
   group: process-discussion-${{ github.event.inputs.discussion_number }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   issues: write
