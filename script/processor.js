@@ -135,10 +135,15 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   await updateDiscussion(discussionId, json);
 }
 
-async function OnExitRoom(discussionId, commentAuthor, room, faction) {
+async function OnExitRoom(discussionId, commentAuthor, room) {
   let jsonObject = JSON.parse(room);
-  jsonObject.observers.push(commentAuthor);
-  jsonObject.seats[faction] = null;
+  let observers = new Set(jsonObject.observers);
+  let seats = new Set(jsonObject.seats);
+  observers.add(commentAuthor);
+  seats.delete(commentAuthor);
+  jsonObject.seats = seats;
+  jsonObject.observers = observers;
+  let json = JSON.stringify(jsonObject);
   await updateDiscussion(discussionId, json);
 }
 
@@ -192,7 +197,7 @@ async function run() {
         faction,
       );
     } else if (commentBody == "/exit") {
-      await OnExitRoom(discussionId, commentAuthor, discussionBody, faction);
+      await OnExitRoom(discussionId, commentAuthor, discussionBody);
     }
     await processIssue(issue);
   });
