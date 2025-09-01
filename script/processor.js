@@ -135,7 +135,14 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   await updateDiscussion(discussionId, json);
 }
 
-async function consumeIssue(issue) {
+async function OnExitRoom(discussionId, commentAuthor, room, faction) {
+  let jsonObject = JSON.parse(room);
+  jsonObject.observers.push(commentAuthor);
+  jsonObject.seats[faction] = null;
+  await updateDiscussion(discussionId, json);
+}
+
+async function processIssue(issue) {
   const updatedBody = `~~${issue.body.trim()}~~ --- Processed in run ${context.runId}`;
   await octokit.rest.issues.updateComment({
     owner,
@@ -146,15 +153,12 @@ async function consumeIssue(issue) {
 }
 
 async function processComment(processor) {
-  const ite = octokit.paginate.iterator(
-    octokit.rest.issues.listComments,
-    {
-      owner,
-      repo,
-      issue_number: QUEUE_ISSUE_NUMBER,
-      per_page: 100,
-    },
-  );
+  const ite = octokit.paginate.iterator(octokit.rest.issues.listComments, {
+    owner,
+    repo,
+    issue_number: QUEUE_ISSUE_NUMBER,
+    per_page: 100,
+  });
 
   for await (const response of ite) {
     for (const comment of response.data) {
@@ -187,8 +191,10 @@ async function run() {
         discussionBody,
         faction,
       );
+    } else if (commentBody == "/exit") {
+      await OnExitRoom(discussionId, commentAuthor, discussionBody, faction);
     }
-    await consumeIssue(issue);
+    await processIssue(issue);
   });
 }
 
