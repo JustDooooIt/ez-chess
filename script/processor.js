@@ -138,12 +138,12 @@ async function OnSelectFaction(discussionId, commentAuthor, room, faction) {
   await updateDiscussion(discussionId, json);
 }
 
-async function consumeIssue(taskToProcess) {
-  const updatedBody = `~~${taskToProcess.body.trim()}~~ --- Processed in run ${context.runId}`;
+async function consumeIssue(issue) {
+  const updatedBody = `~~${issue.body.trim()}~~ --- Processed in run ${context.runId}`;
   await octokit.rest.issues.updateComment({
     owner,
     repo,
-    comment_id: taskToProcess.id,
+    comment_id: issue.id,
     body: updatedBody,
   });
 }
@@ -183,7 +183,7 @@ async function run() {
         faction,
       );
     }
-    await consumeIssue(taskToProcess);
+    await consumeIssue(issue);
   });
 }
 
