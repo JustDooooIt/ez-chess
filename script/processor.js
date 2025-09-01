@@ -141,8 +141,8 @@ async function OnExitRoom(discussionId, commentAuthor, room) {
   let seats = new Set(jsonObject.seats);
   observers.add(commentAuthor);
   seats.delete(commentAuthor);
-  jsonObject.seats = seats;
-  jsonObject.observers = observers;
+  jsonObject.seats = Array.from(seats);
+  jsonObject.observers = Array.from(observers);
   let json = JSON.stringify(jsonObject);
   await updateDiscussion(discussionId, json);
 }
