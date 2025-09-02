@@ -12,6 +12,11 @@ jobs:
   dispatch-task:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
       - name: 1. Add task to central queue
         uses: peter-evans/create-or-update-comment@v4
         with:
