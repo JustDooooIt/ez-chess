@@ -1,0 +1,59 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dltldbi3addiq"]
+
+[ext_resource type="Texture2D" uid="uid://b87n0teqloh5a" path="res://alamein/resource/image/hexagon-2.png" id="1_qhy24"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ryduo"]
+texture = ExtResource("1_qhy24")
+texture_region_size = Vector2i(90, 104)
+0:0/next_alternative_id = 8
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/1 = 1
+0:0/1/modulate = Color(0.254902, 0.482353, 0.466667, 1)
+0:0/1/terrain_set = 0
+0:0/1/terrain = 0
+0:0/2 = 2
+0:0/2/modulate = Color(0.494118, 0.419608, 0.211765, 1)
+0:0/2/terrain_set = 0
+0:0/2/terrain = 1
+0:0/3 = 3
+0:0/3/modulate = Color(0.741176, 0.321569, 0.458824, 1)
+0:0/3/terrain_set = 0
+0:0/3/terrain = 2
+0:0/4 = 4
+0:0/4/modulate = Color(0.458824, 0.321569, 0.054902, 1)
+0:0/4/terrain_set = 0
+0:0/4/terrain = 3
+0:0/5 = 5
+0:0/5/modulate = Color(0.458824, 0.811765, 0.054902, 1)
+0:0/5/terrain_set = 0
+0:0/5/terrain = 4
+0:0/6 = 6
+0:0/6/modulate = Color(0.721569, 0.811765, 0.054902, 1)
+0:0/6/terrain_set = 0
+0:0/6/terrain = 5
+0:0/7 = 7
+0:0/7/modulate = Color(0.254902, 0.811765, 0.466667, 1)
+0:0/7/terrain_set = 0
+0:0/7/terrain = 6
+
+[resource]
+tile_shape = 3
+tile_layout = 1
+tile_size = Vector2i(90, 104)
+terrain_set_0/mode = 2
+terrain_set_0/terrain_0/name = "Desert"
+terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+terrain_set_0/terrain_1/name = "Highland"
+terrain_set_0/terrain_1/color = Color(0.5, 0.4375, 0.25, 1)
+terrain_set_0/terrain_2/name = "City"
+terrain_set_0/terrain_2/color = Color(0.46875, 0.5, 0.25, 1)
+terrain_set_0/terrain_3/name = "Fortress"
+terrain_set_0/terrain_3/color = Color(0.375, 0.5, 0.25, 1)
+terrain_set_0/terrain_4/name = "Beach"
+terrain_set_0/terrain_4/color = Color(0.28125, 0.5, 0.25, 1)
+terrain_set_0/terrain_5/name = "Sea"
+terrain_set_0/terrain_5/color = Color(0.25, 0.5, 0.3125, 1)
+terrain_set_0/terrain_6/name = "Road"
+terrain_set_0/terrain_6/color = Color(0.25, 0.5, 0.40625, 1)
+sources/1 = SubResource("TileSetAtlasSource_ryduo")

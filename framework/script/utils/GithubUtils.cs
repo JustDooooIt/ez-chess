@@ -25,7 +25,7 @@ public class GithubUtils
 	private static readonly string REPO = "ez-chess";
 	// private static readonly HashingContext hashingContext = new();
 	private static DateTime TimeLine { get; set; } = DateTime.MinValue;
-	private static Queue<(string discussionId, GameData gameData)> OperationCache { get; } = new();
+	private static Queue<(string discussionId, string opJson)> OperationCache { get; } = new();
 
 	static GithubUtils()
 	{
@@ -349,7 +349,7 @@ public class GithubUtils
 		int pieceType = piece.PieceType;
 		string pieceName = piece.Name;
 		int faction = piece.Faction;
-		var gameData = new GameData()
+		var gameData = new GameData<T>()
 		{
 			CommentType = CommentType.GAME_DATA,
 			PieceType = pieceType,
@@ -357,7 +357,7 @@ public class GithubUtils
 			Faction = faction,
 			Operation = operation,
 		};
-		OperationCache.Enqueue((discussionId, gameData));
+		OperationCache.Enqueue((discussionId, JsonSerializer.Serialize(gameData, options)));
 	}
 
 	public static async void SubmitOperationOnInterval()
@@ -373,11 +373,9 @@ public class GithubUtils
 		}
 	}
 
-	public static async Task<Comment> PostOperation(string discussionId, GameData gameData)
+	public static async Task<Comment> PostOperation(string discussionId, string opData)
 	{
-		string json = JsonSerializer.Serialize(gameData, options);
-		var comment = await AddComment(discussionId, json);
-		return comment;
+		return await AddComment(discussionId, opData);
 	}
 
 	public static async Task<Comment> PostOperation<T>(string discussionId, PieceAdapter piece, T operation) where T : Operation
@@ -385,7 +383,7 @@ public class GithubUtils
 		int pieceType = piece.PieceType;
 		string pieceName = piece.Name;
 		int faction = piece.Faction;
-		var gameData = new GameData()
+		var gameData = new GameData<T>()
 		{
 			CommentType = CommentType.GAME_DATA,
 			PieceType = pieceType,
@@ -463,7 +461,7 @@ public class GithubUtils
 					comments.Add(comment);
 				}
 			}
-			catch (System.Text.Json.JsonException) { }
+			catch (JsonException) { }
 			return false;
 		});
 		if (comments.Count > 0)
@@ -478,7 +476,7 @@ public class GithubUtils
 				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
 				operationProcessor.Invoke(jsonObject);
 			}
-			catch (System.Text.Json.JsonException) { }
+			catch (JsonException) { }
 		}
 	}
 
@@ -623,12 +621,12 @@ public record UserData : BaseData
 	public UserType PlayerType { get; set; }
 }
 
-public record GameData : BaseData
+public record GameData<T> : BaseData where T : Operation
 {
 	public string PieceName { get; set; }
 	public int PieceType { get; set; }
 	public int OperationType { get; set; }
-	public Operation Operation { get; set; }
+	public T Operation { get; set; }
 	public int Faction { get; set; }
 }
 

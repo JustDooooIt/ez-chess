@@ -58,6 +58,13 @@ public partial class GameLoader : Node
 		var factionNames = config["factions"].AsGodotArray<string>();
 		GameState.Instance.Factions = [.. factionNames];
 		int factionId = 0;
+		IDictionary<string, int> defaultSize;
+		Vector2I defaultSizeVec = Vector2I.Zero;
+		if (config.TryGetValue("defaultSize", out Variant value))
+		{
+			defaultSize = value.AsGodotDictionary<string, int>();
+			defaultSizeVec = new Vector2I(defaultSize["x"], defaultSize["y"]);
+		}
 		GameState.Instance.RoomState = new()
 		{
 			GameName = config["name"].AsString(),
@@ -80,8 +87,17 @@ public partial class GameLoader : Node
 					var pieceType = piece["type"].AsInt16();
 					var position = piece["position"].AsGodotDictionary<string, int>();
 					var positionVec = new Vector2I(position["x"], position["y"]);
-					var size = piece["size"].AsGodotDictionary<string, int>();
-					var sizeVec = new Vector2I(size["x"], size["y"]);
+					IDictionary<string, int> size;
+					Vector2I sizeVec;
+					if (piece.TryGetValue("size", out var sizeVar))
+					{
+						size = sizeVar.AsGodotDictionary<string, int>();
+						sizeVec = new Vector2I(size["x"], size["y"]);
+					}
+					else
+					{
+						sizeVec = defaultSizeVec;
+					}
 					Array<Texture2D> faceImage = [];
 					Array<Godot.Collections.Dictionary<string, Variant>> property = [];
 					foreach (var facev in faces)

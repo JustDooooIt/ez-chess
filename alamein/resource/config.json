@@ -1,0 +1,650 @@
+{
+	"name": "alamein",
+	"defaultSize": {
+		"x": 65,
+		"y": 65
+	},
+	"factions": [
+		"Axis",
+		"Allies"
+	],
+	"Axis": {
+		"group": 0,
+		"pieces": [
+			{
+				"name": "g164md382rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g164md382rgt.jpg",
+						"property": {
+							"attack": 2,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 2
+				}
+			},
+			{
+				"name": "g164md125rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g164md125rgt.jpg",
+						"property": {
+							"attack": 2,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			{
+				"name": "g164md433rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g164md433rgt.jpg",
+						"property": {
+							"attack": 2,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 3
+				}
+			},
+			{
+				"name": "iTrentoDiv",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iTrentoDiv.jpg",
+						"property": {
+							"attack": 1,
+							"move": 3
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 4
+				}
+			},
+			{
+				"name": "gFJrget",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/gFJrget.jpg",
+						"property": {
+							"attack": 1,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 5
+				}
+			},
+			{
+				"name": "iBresciaDiv",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iBresciaDiv.jpg",
+						"property": {
+							"attack": 1,
+							"move": 3
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 6
+				}
+			},
+			{
+				"name": "iPaviaDiv",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iPaviaDiv.jpg",
+						"property": {
+							"attack": 1,
+							"move": 3
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 8
+				}
+			},
+			{
+				"name": "iPaviiBolognaDivaDiv",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iBolognaDiv.jpg",
+						"property": {
+							"attack": 1,
+							"move": 3
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 10
+				}
+			},
+			{
+				"name": "iTriesteMD",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iTriesteMD.jpg",
+						"property": {
+							"attack": 1,
+							"move": 3
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 12
+				}
+			},
+			{
+				"name": "g90ld155rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g90ld155rgt.jpg",
+						"property": {
+							"attack": 4,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 15
+				}
+			},
+			{
+				"name": "g90ld361rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g90ld361rgt.jpg",
+						"property": {
+							"attack": 4,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 15
+				}
+			},
+			{
+				"name": "iLittorioTD",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iLittorioTD.jpg",
+						"property": {
+							"attack": 3,
+							"move": 6
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 16
+				}
+			},
+			{
+				"name": "iArieteTD",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iArieteTD.jpg",
+						"property": {
+							"attack": 3,
+							"move": 6
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 16
+				}
+			},
+			{
+				"name": "g21pd104rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g21pd104rgt.jpg",
+						"property": {
+							"attack": 4,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 17
+				}
+			},
+			{
+				"name": "g21pd5rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g21pd5rgt.jpg",
+						"property": {
+							"attack": 6,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 17
+				}
+			},
+			{
+				"name": "g21pd200rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g21pd200rgt.jpg",
+						"property": {
+							"attack": 4,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 2,
+					"y": 17
+				}
+			},
+			{
+				"name": "g15pd115rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g15pd115rgt.jpg",
+						"property": {
+							"attack": 4,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 0,
+					"y": 18
+				}
+			},
+			{
+				"name": "g15pd8rgt",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/g15pd8rgt.jpg",
+						"property": {
+							"attack": 6,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 18
+				}
+			},
+			{
+				"name": "iFolgoreDiv",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/iFolgoreDiv.jpg",
+						"property": {
+							"attack": 6,
+							"move": 10
+						}
+					}
+				],
+				"position": {
+					"x": 1,
+					"y": 19
+				}
+			}
+		]
+	},
+	"Allies": {
+		"group": 1,
+		"pieces": [
+			{
+				"name": "e9Aus20",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e9Aus20.jpg",
+						"property": {
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 2,
+					"y": 0
+				}
+			},
+			{
+				"name": "e9Aus24",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e9Aus24.jpg",
+						"property": {
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 3,
+					"y": 2
+				}
+			},
+			{
+				"name": "e1sa3",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e1sa3.jpg",
+						"property": {
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 4,
+					"y": 4
+				}
+			},
+			{
+				"name": "e1sa1",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e1sa1.jpg",
+						"property": {
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 5,
+					"y": 5
+				}
+			},
+			{
+				"name": "e1sa2",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e1sa2.jpg",
+						"property": {
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 5,
+					"y": 7
+				}
+			},
+			{
+				"name": "e5Ind9",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e5Ind9.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 4,
+					"y": 8
+				}
+			},
+			{
+				"name": "e44d132",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e44d132.jpg",
+						"property": {
+							"attack": 1,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 4,
+					"y": 9
+				}
+			},
+			{
+				"name": "e2NZ6",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e2NZ6.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 4,
+					"y": 11
+				}
+			},
+			{
+				"name": "e2NZ5",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e2NZ5.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 5,
+					"y": 13
+				}
+			},
+			{
+				"name": "e7td7m",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e7td7m.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 4,
+					"y": 15
+				}
+			},
+			{
+				"name": "e7td7",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e7td7.jpg",
+						"property": {
+							"attack": 4,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 5,
+					"y": 18
+				}
+			},
+			{
+				"name": "e9Aus26",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e9Aus26.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 11,
+					"y": 4
+				}
+			},
+			{
+				"name": "e5Ind5",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e5Ind5.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 10,
+					"y": 7
+				}
+			},
+			{
+				"name": "e8td23",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e8td23.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 8,
+					"y": 8
+				}
+			},
+			{
+				"name": "e44d133",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e44d133.jpg",
+						"property": {
+							"attack": 2,
+							"move": 4
+						}
+					}
+				],
+				"position": {
+					"x": 12,
+					"y": 10
+				}
+			},
+			{
+				"name": "e22",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e22.jpg",
+						"property": {
+							"attack": 4,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 10,
+					"y": 12
+				}
+			},
+			{
+				"name": "e44d131",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e44d131.jpg",
+						"property": {
+							"attack": 4,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 15,
+					"y": 8
+				}
+			},
+			{
+				"name": "e10td8",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e10td8.jpg",
+						"property": {
+							"attack": 4,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 19,
+					"y": 7
+				}
+			}
+		]
+	}
+}

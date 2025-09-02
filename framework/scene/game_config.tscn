@@ -10,8 +10,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iph5o")
-ScenePath = "res://normandy44/scene/multi.tscn"
-GameName = "normandy44"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0

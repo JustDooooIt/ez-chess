@@ -139,7 +139,7 @@ async function OnExitRoom(discussionId, commentAuthor, room) {
   let jsonObject = JSON.parse(room);
   let observers = new Set(jsonObject.observers);
   let seats = new Set(jsonObject.seats);
-  observers.add(commentAuthor);
+  observers.delete(commentAuthor);
   seats.delete(commentAuthor);
   jsonObject.seats = Array.from(seats);
   jsonObject.observers = Array.from(observers);
