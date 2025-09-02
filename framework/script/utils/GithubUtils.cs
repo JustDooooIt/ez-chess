@@ -23,8 +23,9 @@ public class GithubUtils
 	private static readonly string GAME_DISCUSSION_CATEGORY_ID = "DIC_kwDOPatLk84CueXj";
 	private static readonly string OWNER = "JustDooooIt";
 	private static readonly string REPO = "ez-chess";
-	private static readonly HashingContext hashingContext = new();
+	// private static readonly HashingContext hashingContext = new();
 	private static DateTime TimeLine { get; set; } = DateTime.MinValue;
+	private static Queue<(string discussionId, GameData gameData)> OperationCache { get; } = new();
 
 	static GithubUtils()
 	{
@@ -343,19 +344,54 @@ public class GithubUtils
 		return await res.Content.ReadFromJsonAsync<JsonObject>();
 	}
 
-	public static async Task<Comment> SubmitOperation<T>(string discussionId, PieceAdapter piece, T operation, string preStateHash) where T : Operation
+	public static void SaveOperation<T>(string discussionId, PieceAdapter piece, T operation) where T : Operation
 	{
 		int pieceType = piece.PieceType;
 		string pieceName = piece.Name;
 		int faction = piece.Faction;
-		var gameData = new GameData<T>()
+		var gameData = new GameData()
 		{
 			CommentType = CommentType.GAME_DATA,
 			PieceType = pieceType,
 			PieceName = pieceName,
 			Faction = faction,
 			Operation = operation,
-			PreStateHash = preStateHash
+		};
+		OperationCache.Enqueue((discussionId, gameData));
+	}
+
+	public static async void SubmitOperationOnInterval()
+	{
+		while (true)
+		{
+			while (OperationCache.Count > 0)
+			{
+				var (discussionId, gameData) = OperationCache.Dequeue();
+				await PostOperation(discussionId, gameData);
+			}
+			await Task.Delay(2500);
+		}
+	}
+
+	public static async Task<Comment> PostOperation(string discussionId, GameData gameData)
+	{
+		string json = JsonSerializer.Serialize(gameData, options);
+		var comment = await AddComment(discussionId, json);
+		return comment;
+	}
+
+	public static async Task<Comment> PostOperation<T>(string discussionId, PieceAdapter piece, T operation) where T : Operation
+	{
+		int pieceType = piece.PieceType;
+		string pieceName = piece.Name;
+		int faction = piece.Faction;
+		var gameData = new GameData()
+		{
+			CommentType = CommentType.GAME_DATA,
+			PieceType = pieceType,
+			PieceName = pieceName,
+			Faction = faction,
+			Operation = operation,
 		};
 		string json = JsonSerializer.Serialize(gameData, options);
 		var comment = await AddComment(discussionId, json);
@@ -376,7 +412,7 @@ public class GithubUtils
 	/// <param name="curStateHash"></param>
 	/// <param name="operationProcessor"></param>
 	/// <returns></returns>
-	public static async Task ApplyOperation(int discussionNum, int faction, string curStateHash, Action<JsonObject> operationProcessor)
+	public static async Task ApplyOperation(int discussionNum, int faction, Action<JsonObject> operationProcessor)
 	{
 		List<Comment> comments = [];
 		await ProcessComments(discussionNum, (comment) =>
@@ -406,10 +442,7 @@ public class GithubUtils
 			try
 			{
 				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
-				if (jsonObject.ContainsKey("preStateHash") && jsonObject["preStateHash"].GetValue<string>() == curStateHash)
-				{
-					operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(comment.Body, options));
-				}
+				operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(jsonObject));
 			}
 			catch (System.Text.Json.JsonException) { }
 		}
@@ -504,23 +537,23 @@ public class GithubUtils
 		return await AddComment(discussionId, json);
 	}
 
-	public static string HashState(string state)
-	{
-		var err = hashingContext.Start(HashingContext.HashType.Sha256);
-		if (err != Error.Ok)
-		{
-			return "";
-		}
-		var dataByte = state.ToUtf8Buffer();
-		err = hashingContext.Update(dataByte);
-		if (err != Error.Ok)
-		{
-			return "";
-		}
-		var hashByte = hashingContext.Finish();
-		var hexString = hashByte.HexEncode();
-		return hexString;
-	}
+	// public static string HashState(string state)
+	// {
+	// 	var err = hashingContext.Start(HashingContext.HashType.Sha256);
+	// 	if (err != Error.Ok)
+	// 	{
+	// 		return "";
+	// 	}
+	// 	var dataByte = state.ToUtf8Buffer();
+	// 	err = hashingContext.Update(dataByte);
+	// 	if (err != Error.Ok)
+	// 	{
+	// 		return "";
+	// 	}
+	// 	var hashByte = hashingContext.Finish();
+	// 	var hexString = hashByte.HexEncode();
+	// 	return hexString;
+	// }
 
 	public static T Deserialize<T>(JsonObject jsonObject)
 	{
@@ -590,14 +623,13 @@ public record UserData : BaseData
 	public UserType PlayerType { get; set; }
 }
 
-public record GameData<T> : BaseData where T : Operation
+public record GameData : BaseData
 {
 	public string PieceName { get; set; }
 	public int PieceType { get; set; }
 	public int OperationType { get; set; }
-	public T Operation { get; set; }
+	public Operation Operation { get; set; }
 	public int Faction { get; set; }
-	public string PreStateHash { get; set; }
 }
 
 public record QueryBody

@@ -50,26 +50,26 @@ public partial class GameManager : Node2D
 		}
 	}
 
-	public string HashState()
-	{
-		Dictionary<string, List<Dictionary<string, object>>> state = [];
-		foreach (var faction in _pieces)
-		{
-			state[faction.Key] = [];
-			foreach (var pieces in faction.Value.Wrapped)
-			{
-				foreach (var piece in pieces.Value)
-				{
-					Dictionary<string, object> pieceState = [];
-					pieceState["position"] = pieces.Key;
-					pieceState["name"] = piece.Name;
-					pieceState["pieceType"] = piece.PieceType;
-					pieceState["faction"] = piece.Faction;
-					state[faction.Key].Add(pieceState);
-				}
-			}
-		}
-		var json = GithubUtils.Serialize(state);
-		return GithubUtils.HashState(json);
-	}
+	// public string HashState()
+	// {
+	// 	Dictionary<string, List<Dictionary<string, object>>> state = [];
+	// 	foreach (var faction in _pieces)
+	// 	{
+	// 		state[faction.Key] = [];
+	// 		foreach (var pieces in faction.Value.Wrapped)
+	// 		{
+	// 			foreach (var piece in pieces.Value)
+	// 			{
+	// 				Dictionary<string, object> pieceState = [];
+	// 				pieceState["position"] = pieces.Key;
+	// 				pieceState["name"] = piece.Name;
+	// 				pieceState["pieceType"] = piece.PieceType;
+	// 				pieceState["faction"] = piece.Faction;
+	// 				state[faction.Key].Add(pieceState);
+	// 			}
+	// 		}
+	// 	}
+	// 	var json = GithubUtils.Serialize(state);
+	// 	return GithubUtils.HashState(json);
+	// }
 }

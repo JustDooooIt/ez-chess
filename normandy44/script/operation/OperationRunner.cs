@@ -10,8 +10,9 @@ public partial class OperationRunner : RefCounted, IOperationRunner
     switch ((OperationType)opType)
     {
       case OperationType.MOVE:
-        var data = GithubUtils.Deserialize<GameData<MoveOperation>>(gameData);
-        piece.State.As<IMoveEventSender>()?.SendMoveEvent(data.Operation.From, data.Operation.To, true);
+        var data = GithubUtils.Deserialize<GameData>(gameData);
+        var moveOperation = data.Operation as MoveOperation;
+        piece.State.As<IMoveEventSender>()?.SendMoveEvent(moveOperation.From, moveOperation.To, true);
         break;
     }
   }

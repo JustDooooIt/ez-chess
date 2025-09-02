@@ -4,15 +4,14 @@ using Godot;
 
 public partial class MoveStateDecorator(IPieceState piece, List<float> movements) :
   PieceStateDecorator(piece), IMoveable, IFlipable, IMoveEventSender, IFlipEventSender
-{ 
+{
   private int _stateIndex = movements.Count;
   public List<float> Movements { get; set; } = movements;
   public float CurMovement { get; set; } = movements[0];
   public float ResidualMovement { get; set; } = movements[0];
 
-  public async void ReciveEvent(MoveEvent @event)
+  public void ReciveEvent(MoveEvent @event)
   {
-    var hash = PieceAdapter.GameManager.HashState();
     As<IPositionable>().MapPosition = @event.to;
     if (!GameState.Instance.IsSolo && !@event.recovered && PipelineAdapter is not OtherPipeline)
     {
@@ -22,7 +21,7 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
         To = @event.to,
         Path = @event.path,
       };
-      await GithubUtils.SubmitOperation(GameState.Instance.RoomMetaData.Id, PieceAdapter, op, hash);
+      GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, PieceAdapter, op);
     }
     PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
   }

@@ -24,7 +24,6 @@ public partial class Pipelines : Node
   {
     foreach (var child in GetChildren())
     {
-      var hash = GameManager.HashState();
       await GithubUtils.ApplyOperations(GameState.Instance.RoomMetaData.Number, (gameData) =>
       {
         if (gameData.ContainsKey("operation") && gameData["operation"].AsObject().ContainsKey("type"))
@@ -48,8 +47,7 @@ public partial class Pipelines : Node
       while (true)
       {
         int faction = pipeline.GetIndex();
-        var hash = GameManager.HashState();
-        await GithubUtils.ApplyOperation(GameState.Instance.RoomMetaData.Number, faction, hash, (gameData) =>
+        await GithubUtils.ApplyOperation(GameState.Instance.RoomMetaData.Number, faction, (gameData) =>
         {
           if (gameData.ContainsKey("operation") && gameData["operation"].AsObject().ContainsKey("type"))
           {

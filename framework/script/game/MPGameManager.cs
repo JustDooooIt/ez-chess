@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 public partial class MPGameManager : GameManager
 {
 	private Crypto _crypto = new();
-	
+
 	public override void _Ready()
 	{
 		base._Ready();
 		GameState.Instance.IsSolo = false;
+		GithubUtils.SubmitOperationOnInterval();
 	}
 
 	private void OnExitGame()
