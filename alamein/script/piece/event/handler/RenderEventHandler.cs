@@ -6,9 +6,11 @@ public partial class RenderEventHandler : BaseRenderEventHandler
   {
     return @event switch
     {
-      MoveEvent moveEvent => new MoveInstanceValve((IPieceInstance)InstanceFromId(@event.pieceId), moveEvent),
-      PositionEvent positionEvent => new PositionInstanceValve((IPieceInstance)InstanceFromId(@event.pieceId), positionEvent),
+      MoveEvent moveEvent => new MoveInstanceValve((InstanceFromId(@event.pieceId) as PieceAdapter).Instance, moveEvent),
+      PositionEvent positionEvent => new PositionInstanceValve((InstanceFromId(@event.pieceId) as PieceAdapter).Instance, positionEvent),
+      AttackEvent attackEvent => new AttackInstanceValve((InstanceFromId(@event.pieceId) as PieceAdapter).Instance, attackEvent),
+      RetreatEvent retreatEvent => new RetreatInstanceValve((InstanceFromId(@event.pieceId) as PieceAdapter).Instance, retreatEvent),
       _ => default,
-    };
+    };  
   }
 }

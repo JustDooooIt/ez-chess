@@ -18,8 +18,7 @@ public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDec
 
   public void SendPositionEvent(Vector2I position)
   {
-    ulong instance = GetPieceInstanceId();
-    var valve = new PositionStateValve(this, new(instance, position));
+    var valve = new PositionStateValve(this, new(GetPieceId(), position));
     PipelineAdapter.StatePipeline.AddValve(valve);
     PipelineAdapter.RenderPipeline.RegisterValve<PositionEvent>(valve);
   }

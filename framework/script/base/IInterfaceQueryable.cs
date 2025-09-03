@@ -27,14 +27,15 @@ public interface IInterfaceQueryable
 
   public IInterfaceQueryable GetProxy()
   {
-    var piece = (IPiece)Wrapper;
-    do
+    IPiece piece = (IPiece)this;
+    while (piece != null)
     {
       if (piece.Wrapper == null)
         return piece;
       else
         piece = (IPiece)piece.Wrapper;
-    } while (true);
+    }
+    return piece;
   }
 
   public virtual T As<T>() where T : class

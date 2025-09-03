@@ -13,5 +13,6 @@ public interface IPieceInstance : IPiece
   public bool Selectable{ get; set; }
   public bool IsSelected { get; set; }
   public bool IsHover { get; set; }
+  public bool IsRunning { get; set; }
   void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false);
 }

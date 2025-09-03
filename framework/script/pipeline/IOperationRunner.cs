@@ -4,5 +4,5 @@ using Godot;
 
 public interface IOperationRunner
 {
-  void RunOperation(int opType, PieceAdapter piece, JsonObject gameData);
+  void RunOperation(GameManager manager, JsonObject operation, bool recovered);
 }

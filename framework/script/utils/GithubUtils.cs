@@ -344,20 +344,9 @@ public class GithubUtils
 		return await res.Content.ReadFromJsonAsync<JsonObject>();
 	}
 
-	public static void SaveOperation<T>(string discussionId, PieceAdapter piece, T operation) where T : Operation
+	public static void SaveOperation<T>(string discussionId, T operation) where T : Operation
 	{
-		int pieceType = piece.PieceType;
-		string pieceName = piece.Name;
-		int faction = piece.Faction;
-		var gameData = new GameData<T>()
-		{
-			CommentType = CommentType.GAME_DATA,
-			PieceType = pieceType,
-			PieceName = pieceName,
-			Faction = faction,
-			Operation = operation,
-		};
-		OperationCache.Enqueue((discussionId, JsonSerializer.Serialize(gameData, options)));
+		OperationCache.Enqueue((discussionId, JsonSerializer.Serialize(operation, options)));
 	}
 
 	public static async void SubmitOperationOnInterval()
@@ -378,24 +367,24 @@ public class GithubUtils
 		return await AddComment(discussionId, opData);
 	}
 
-	public static async Task<Comment> PostOperation<T>(string discussionId, PieceAdapter piece, T operation) where T : Operation
-	{
-		int pieceType = piece.PieceType;
-		string pieceName = piece.Name;
-		int faction = piece.Faction;
-		var gameData = new GameData<T>()
-		{
-			CommentType = CommentType.GAME_DATA,
-			PieceType = pieceType,
-			PieceName = pieceName,
-			Faction = faction,
-			Operation = operation,
-		};
-		string json = JsonSerializer.Serialize(gameData, options);
-		var comment = await AddComment(discussionId, json);
-		TimeLine = comment.CreatedAt;
-		return comment;
-	}
+	// public static async Task<Comment> PostOperation<T>(string discussionId, PieceAdapter piece, T operation) where T : Operation
+	// {
+	// 	int pieceType = piece.PieceType;
+	// 	string pieceName = piece.Name;
+	// 	int faction = piece.Faction;
+	// 	var gameData = new GameData<T>()
+	// 	{
+	// 		CommentType = CommentType.GAME_DATA,
+	// 		PieceType = pieceType,
+	// 		PieceName = pieceName,
+	// 		Faction = faction,
+	// 		Operation = operation,
+	// 	};
+	// 	string json = JsonSerializer.Serialize(gameData, options);
+	// 	var comment = await AddComment(discussionId, json);
+	// 	TimeLine = comment.CreatedAt;
+	// 	return comment;
+	// }
 
 	public static async Task InviteOthers(string discussionId, string player)
 	{
@@ -604,9 +593,10 @@ public record PieceData
 	public Dictionary<int, object> Data { get; set; } = [];
 }
 
-public record Operation
+public record Operation : BaseData
 {
 	public int Type { get; set; }
+	public int Faction { get; set; }
 }
 
 public record BaseData

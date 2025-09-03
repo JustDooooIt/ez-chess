@@ -1,31 +1,28 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
-public partial class AttackStateDecorator(IPieceState wrapped, List<float> attackPoints) : PieceStateDecorator(wrapped), IAttackable, IFlipable, IAttackEventSender
+public partial class AttackStateDecorator(IPieceState wrapped, float attack) : PieceStateDecorator(wrapped), IAttackable, IAttackEventSender, IAttackPointProvider
 {
-  private int _stateIndex;
-  private List<float> AttackPoints { get; set; } = attackPoints;
-  private float CurAttackPoint { get; set; } = attackPoints[0];
-  public int MaxIndex => AttackPoints.Count;
+  public float AttackPoint { get; set; } = attack;
 
-  public void Attack(Vector2I from, Vector2I to)
+  public void ReciveEvent(AttackEvent @event)
   {
-
+    if (!@event.recovered && PipelineAdapter is not OtherPipeline)
+    {
+      CombatController.Instance.AddCombatUnit(@event.pieceId, @event.targetPiece);
+      PieceAdapter.Instance.IsRunning = true;
+      GD.Print("攻击成功");
+    }
   }
 
-  public void Flip()
+  public void SendAttackEvent(Vector2I target, PieceAdapter targetPiece)
   {
-    _stateIndex++;
-    _stateIndex %= AttackPoints.Count;
-  }
-
-  public void SendAttackEvent(Vector2I from, Vector2I to)
-  {
-
-  }
-
-  public void SendFlipEvent()
-  {
-    
+    ulong pieceId = GetPieceId();
+    Vector2I from = PieceAdapter.State.As<IPositionable>().MapPosition;
+    var @event = new AttackEvent(from, pieceId, target, targetPiece.GetInstanceId());
+    Valve valve = new AttackStateValve(this, @event);
+    PipelineAdapter.StatePipeline.AddValve(valve);
+    PipelineAdapter.RenderPipeline.RegisterValve<AttackEvent>(valve);
   }
 }

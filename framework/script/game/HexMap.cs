@@ -124,10 +124,9 @@ public partial class HexMap : Sprite2D
 			{
 				// 使用内置函数获取邻居坐标
 				Vector2I neighborCoord = _baseTerrain.GetNeighborCell(coord, direction);
-				var tile = _baseTerrain.GetCellTileData(neighborCoord);
-
+				
 				// 检查这个邻居坐标是否在我们的可通行点字典中
-				if (tile != null && tile.Terrain != -1 && _terrainCost[tile.Terrain] != -1 && _coordToId.TryGetValue(neighborCoord, out long neighborId))
+				if (_coordToId.TryGetValue(neighborCoord, out long neighborId))
 				{
 					_astar.ConnectPoints(id, neighborId);
 				}

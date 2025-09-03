@@ -5,7 +5,7 @@ public partial class MoveInstanceValve(IPieceInstance pieceInstance, MoveEvent m
 {
   private MoveEvent _moveEvent = moveEvent;
 
-  protected override async void DoLaunch()
+  protected override void DoLaunch()
   {
     _pieceInstance.Proxy.As<IMoveable>()?.ReciveEvent(_moveEvent);
   }

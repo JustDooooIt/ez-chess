@@ -30,6 +30,8 @@ public partial class GameLoader : Node
 	public CSharpScript RenderEventHandlerScript { get; set; }
 	[Export]
 	public CSharpScript OperationRunner { get; set; }
+	[Export]
+	public int Stages { get; set; }
 
 	public override void _Ready()
 	{
@@ -43,6 +45,7 @@ public partial class GameLoader : Node
 		_pipelines = GetNode<Pipelines>("/root/Game/Players");
 		_operationRunner = OperationRunner.New().AsGodotObject() as IOperationRunner;
 		_pipelines.OperationRunner = _operationRunner;
+		GameState.Instance.StageCount = Stages;
 		InitFirstFounded(_config);
 		StartPipeline();
 	}
@@ -57,6 +60,7 @@ public partial class GameLoader : Node
 	{
 		var factionNames = config["factions"].AsGodotArray<string>();
 		GameState.Instance.Factions = [.. factionNames];
+		GameState.Instance.CurOperatorFaction = factionNames.ToList().FindIndex(e => e == config["firstMover"].AsString());
 		int factionId = 0;
 		IDictionary<string, int> defaultSize;
 		Vector2I defaultSizeVec = Vector2I.Zero;
@@ -161,4 +165,5 @@ public partial class GameLoader : Node
 			await ToSignal(_manager, "ready");
 		_manager.StartPipelines();
 	}
+
 }

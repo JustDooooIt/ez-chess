@@ -1,5 +1,6 @@
 {
 	"name": "alamein",
+	"firstMover": "Axis",
 	"defaultSize": {
 		"x": 65,
 		"y": 65

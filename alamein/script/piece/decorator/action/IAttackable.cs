@@ -1,6 +1,5 @@
 using Godot;
 
-public interface IAttackable
+public interface IAttackable : IAction<AttackEvent>
 {
-  void Attack(Vector2I from, Vector2I to);
 }

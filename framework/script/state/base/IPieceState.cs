@@ -2,5 +2,5 @@ using Godot;
 
 public interface IPieceState : IPiece
 {
-  public PieceAdapter PieceAdapter{ get; set; }
+  public PieceAdapter PieceAdapter { get; set; }
 }

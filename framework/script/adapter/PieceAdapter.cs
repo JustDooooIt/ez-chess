@@ -14,31 +14,33 @@ public partial class PieceAdapter : Node
   public PlayerPipeline PipelineAdapter { get; set; }
   public GameManager GameManager { get; set; }
   public PiecesManager PiecesManager { get; set; }
+  public HexMap HexMap { get; set; }
   public int Faction { get; set; }
   public int PieceType { get; set; }
   public int Group { get; set; }
 
   public override void _Ready()
   {
-	SetPiecesManager();
-	SetPipelineAdapter();
-	SetPieceAdapter();
+    SetPiecesManager();
+    SetPipelineAdapter();
+    SetPieceAdapter();
+    SetHexMap();
   }
 
   public void Init(IPieceState state, IPieceInstance instance)
   {
-	State = state;
-	Instance = instance;
-	_state_node_dict[state.Origin.GetInstanceId()] = instance.Origin.GetInstanceId();
-	_node_state_dict[instance.Origin.GetInstanceId()] = state.Origin.GetInstanceId();
-	if (Instance is PieceInstanceDecorator decorator)
-	{
-	  AddChild((Node)decorator.Origin);
-	}
-	else
-	{
-	  AddChild(Instance as Node);
-	}
+    State = state;
+    Instance = instance;
+    _state_node_dict[state.Origin.GetInstanceId()] = instance.Origin.GetInstanceId();
+    _node_state_dict[instance.Origin.GetInstanceId()] = state.Origin.GetInstanceId();
+    if (Instance is PieceInstanceDecorator decorator)
+    {
+      AddChild((Node)decorator.Origin);
+    }
+    else
+    {
+      AddChild(Instance as Node);
+    }
   }
 
   public static ulong GetStateFromInstance(ulong id) { return _node_state_dict[id]; }
@@ -47,23 +49,34 @@ public partial class PieceAdapter : Node
 
   private void SetPipelineAdapter()
   {
-	PipelineAdapter = GetNode<PlayerPipeline>($"../../../Players/{PiecesManager.Name}");
-	State.PipelineAdapter = PipelineAdapter;
-	Instance.PipelineAdapter = PipelineAdapter;
-	State.PiecesManager = PiecesManager;
-	Instance.PiecesManager = PiecesManager;
+    PipelineAdapter = GetNode<PlayerPipeline>($"../../../Players/{PiecesManager.Name}");
+    State.PipelineAdapter = PipelineAdapter;
+    Instance.PipelineAdapter = PipelineAdapter;
+    State.PiecesManager = PiecesManager;
+    Instance.PiecesManager = PiecesManager;
   }
 
   private void SetPiecesManager()
   {
-	PiecesManager = GetNode<PiecesManager>("..");
-	State.PiecesManager = PiecesManager;
-	Instance.PiecesManager = PiecesManager;
+    PiecesManager = GetNode<PiecesManager>("..");
+    State.PiecesManager = PiecesManager;
+    Instance.PiecesManager = PiecesManager;
   }
 
   private void SetPieceAdapter()
   {
-	State.PieceAdapter = this;
-	Instance.PieceAdapter = this;
+    State.PieceAdapter = this;
+    Instance.PieceAdapter = this;
+  }
+
+  private void SetHexMap()
+  {
+    HexMap = GameManager.GetNode<HexMap>("HexMap");
+  }
+
+  public void Decorate(PieceStateDecorator stateDecorator, PieceInstanceDecorator instanceDecorator)
+  {
+    State = stateDecorator;
+    Instance = instanceDecorator;
   }
 }

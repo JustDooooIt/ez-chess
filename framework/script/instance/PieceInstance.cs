@@ -32,6 +32,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	public bool IsHover { get; set; } = false;
 	public int Faction { get; set; }
 	public int PieceType { get; set; }
+	public bool IsRunning { get; set; }
 
 	public override void _Ready()
 	{
@@ -47,6 +48,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	private void Hover()
 	{
 		IsHover = true;
+		GameState.Instance.HoveredPiece = PieceAdapter;
 		if (!IsSelected)
 		{
 			SetOutline(true);
@@ -56,6 +58,7 @@ public partial class PieceInstance : Node2D, IPieceInstance
 	private void UnHover()
 	{
 		IsHover = false;
+		GameState.Instance.HoveredPiece = null;
 		if (!IsSelected)
 		{
 			SetOutline(false);

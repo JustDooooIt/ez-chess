@@ -2,40 +2,43 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
 
-public partial class MoveStateDecorator(IPieceState piece, List<float> movements) :
-  PieceStateDecorator(piece), IMoveable, IFlipable, IMoveEventSender, IFlipEventSender
+public partial class MoveStateDecorator(IPieceState piece, float movement) :
+  PieceStateDecorator(piece), IMoveable, IMoveEventSender
 {
-  private int _stateIndex = movements.Count;
-  public List<float> Movements { get; set; } = movements;
-  public float CurMovement { get; set; } = movements[0];
-  public float ResidualMovement { get; set; } = movements[0];
+  public float CurMovement { get; set; } = movement;
+  public float ResidualMovement { get; set; } = movement;
 
   public void ReciveEvent(MoveEvent @event)
   {
     As<IPositionable>().MapPosition = @event.to;
-    if (!GameState.Instance.IsSolo && !@event.recovered && PipelineAdapter is not OtherPipeline)
+    if (!@event.recovered && PipelineAdapter is not OtherPipeline)
     {
       var op = new MoveOperation()
       {
         From = @event.from,
         To = @event.to,
         Path = @event.path,
+        PieceName = PieceAdapter.Name,
+        Type = (int) OperationType.MOVE,
+        Faction = PieceAdapter.Faction,
+        CommentType = CommentType.GAME_DATA
       };
-      GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, PieceAdapter, op);
+      GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, op);
     }
     PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
   }
 
   public void SendMoveEvent(Vector2I from, Vector2I to, bool recovered = false)
   {
-    ulong instanceId = GetPieceInstanceId();
-    var instance = InstanceFromId(instanceId) as PieceInstance;
-    var path = instance.HexMap.FindPath(from, to, ResidualMovement);
+    ulong pieceId = GetPieceId();
+    var piece = InstanceFromId(pieceId) as PieceAdapter;
+    var path = piece.Instance.HexMap.FindPath(from, to, ResidualMovement);
     if (path.Length > 0)
     {
-      Valve valve = new MoveStateValve(this, new(instanceId, from, to, path, recovered));
-      PipelineAdapter.StatePipeline.AddValve(valve);
-      PipelineAdapter.RenderPipeline.RegisterValve<MoveEvent>(valve);
+      // Valve valve = new MoveStateValve(this, new(pieceId, from, to, path, recovered));
+      // PipelineAdapter.StatePipeline.AddValve(valve);
+      // PipelineAdapter.RenderPipeline.RegisterValve<MoveEvent>(valve);
+      AddValve<MoveEvent, MoveStateValve>(new(pieceId, from, to, path, recovered));
     }
   }
 
@@ -46,13 +49,4 @@ public partial class MoveStateDecorator(IPieceState piece, List<float> movements
 
     return base.As<V>();
   }
-
-  public void Flip()
-  {
-    _stateIndex++;
-    _stateIndex %= Movements.Count;
-  }
-
-  public void SendFlipEvent() { }
-
 }

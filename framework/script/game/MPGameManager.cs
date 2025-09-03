@@ -1,14 +1,5 @@
-using Godot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-
 public partial class MPGameManager : GameManager
 {
-	private Crypto _crypto = new();
 
 	public override void _Ready()
 	{

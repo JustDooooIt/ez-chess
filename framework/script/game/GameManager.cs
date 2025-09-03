@@ -8,15 +8,20 @@ using System.Text.Json;
 public partial class GameManager : Node2D
 {
 	protected Node _players;
-	private Dictionary<string, Group<Vector2I, PieceAdapter>> _pieces = [];
+	private Button _endStage;
+	public List<Group<Vector2I, PieceAdapter>> Pieces { get; } = [];
 
 	[Export]
 	public string GameName { get; set; } = "";
-
 	public override void _Ready()
 	{
 		_players ??= GetNode<Node>("Players");
 		GameState.Instance.IsSolo = true;
+		_endStage = GetNode<Button>("CanvasLayer/Control/EndStage");
+		_endStage.Pressed += () =>
+		{
+
+		};
 	}
 
 	public void AddPlayer(PlayerPipeline pipeline)
@@ -46,7 +51,7 @@ public partial class GameManager : Node2D
 		var pieces = piecesRootNode.GetChildren().Cast<PiecesManager>().ToList();
 		foreach (var piecesManager in pieces)
 		{
-			_pieces[piecesManager.Name] = piecesManager.Pieces;
+			Pieces.Add(piecesManager.Pieces);
 		}
 	}
 

@@ -9,6 +9,8 @@ public abstract partial class PieceInstanceDecorator(IPieceInstance wrapped) : P
   public HexMap HexMap { get => _wrapped.HexMap; set => _wrapped.HexMap = value; }
   public bool IsSelected { get => _wrapped.IsSelected; set => _wrapped.IsSelected = value; }
   public bool IsHover { get => _wrapped.IsHover; set => _wrapped.IsHover = value; }
+  public bool IsRunning { get => _wrapped.IsRunning; set  => _wrapped.IsRunning = value; }
+
 
   public void AddCover(Texture2D texture, int faceIndex, bool defaultFace = false)
   {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator(wrapped), IMoveable
+public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator(wrapped), IRetreatable
 {
-  public void ReciveEvent(MoveEvent @event)
+  public void ReciveEvent(RetreatEvent @event)
   {
     var instance = (IPieceInstance)Origin;
     instance.Selectable = false;

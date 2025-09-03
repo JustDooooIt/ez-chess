@@ -1,14 +1,15 @@
-[gd_scene load_steps=7 format=4 uid="uid://c3xreokavvgfh"]
+[gd_scene load_steps=8 format=4 uid="uid://c3xreokavvgfh"]
 
 [ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framework/scene/game.tscn" id="1_d4g3i"]
 [ext_resource type="Texture2D" uid="uid://c7r6d8qd77t1s" path="res://alamein/resource/image/mainmap.jpg" id="2_01s2e"]
+[ext_resource type="Script" uid="uid://cajgi37xjcpfn" path="res://alamein/script/game/AlameinManager.cs" id="2_gitvn"]
 [ext_resource type="TileSet" uid="uid://dltldbi3addiq" path="res://alamein/resource/game.tres" id="3_nu8hi"]
 [ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://alamein/script/piece/factory/PieceFactory.cs" id="4_lyve2"]
 [ext_resource type="Script" uid="uid://de0c5xemwqod0" path="res://alamein/script/piece/event/handler/RenderEventHandler.cs" id="5_gitvn"]
 [ext_resource type="Script" uid="uid://b8kdci0e21sil" path="res://alamein/script/operation/OperationRunner.cs" id="6_trdbq"]
 
 [node name="Game" instance=ExtResource("1_d4g3i")]
-GameName = "alamein"
+script = ExtResource("2_gitvn")
 
 [node name="HexMap" parent="." index="1"]
 texture = ExtResource("2_01s2e")
@@ -43,3 +44,23 @@ ConfigPath = "res://alamein/resource/config.json"
 PieceFactoryScript = ExtResource("4_lyve2")
 RenderEventHandlerScript = ExtResource("5_gitvn")
 OperationRunner = ExtResource("6_trdbq")
+Stages = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." index="5"]
+
+[node name="Control" type="Control" parent="CanvasLayer" index="0"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EndStage" type="Button" parent="CanvasLayer/Control" index="0"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 128.0
+offset_bottom = 47.0
+text = "End current stage"
