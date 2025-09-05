@@ -439,7 +439,7 @@ public class GithubUtils
 		Comment comment = null;
 		if (comments.Count > 0)
 		{
-			comment = comments.Where(e => e.CreatedAt > TimeLine).MinBy(e => e.CreatedAt);
+			comment = comments.Where(e => e.CreatedAt >= TimeLine).MinBy(e => e.CreatedAt);
 			TimeLine = comment.CreatedAt;
 		}
 		if (comment != null)
