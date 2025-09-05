@@ -38,9 +38,5 @@ public partial class PipelineEventBus
 
 public abstract record Event
 {
-  public ulong pieceId;
-  public Event(ulong pieceId)
-  {
-    this.pieceId = pieceId;
-  }
+  
 }

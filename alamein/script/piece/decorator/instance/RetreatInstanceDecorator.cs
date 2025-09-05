@@ -12,8 +12,12 @@ public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceIns
     foreach (var point in @event.path)
     {
       var position = instance.HexMap.ToLocalPosition(point);
-      tween.TweenProperty((Node)instance.Origin, "position", position, 0.5);
+      tween.TweenProperty((Node)instance.Origin, "position", position, 0.25);
     }
-    tween.TweenCallback(Callable.From(() => { instance.Selectable = true; instance.IsRunning = false; }));
+    tween.TweenCallback(Callable.From(() =>
+    {
+      instance.Selectable = true;
+      instance.IsRunning = false;
+    }));
   }
 }

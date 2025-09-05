@@ -3,7 +3,7 @@ using Godot;
 
 public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator(wrapped), IMoveable
 {
-  public void ReciveEvent(MoveEvent @event)
+  public virtual void ReciveEvent(MoveEvent @event)
   {
     var instance = (IPieceInstance)Origin;
     instance.Selectable = false;
@@ -12,7 +12,7 @@ public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstan
     foreach (var point in @event.path)
     {
       var position = instance.HexMap.ToLocalPosition(point);
-      tween.TweenProperty((Node)instance.Origin, "position", position, 0.5);
+      tween.TweenProperty((Node)instance.Origin, "position", position, 0.25);
     }
     tween.TweenCallback(Callable.From(() => { instance.Selectable = true; instance.IsRunning = false; }));
   }

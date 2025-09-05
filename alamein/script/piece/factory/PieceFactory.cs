@@ -20,7 +20,9 @@ public partial class PieceFactory : PieceFactoryBase, IPieceFactory
 			.WithPositionState()
 			.WithMovetState(property.Select(e => (float)e["move"].AsDouble()).ToList().First())
 			.WithAttackState(property.Select(e => (float)e["attack"].AsDouble()).ToList().First())
-			.WithRetreatState(); 
+			.WithRetreatState()
+			.WithDisposeState()
+			.WithResetState(); 
 		var instance = instanceScene.Instantiate<PieceInstance>()
 			.WithPositionAction()
 			.WithMovetAction()

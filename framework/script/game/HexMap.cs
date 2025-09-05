@@ -150,8 +150,9 @@ public partial class HexMap : Sprite2D
 		return new Vector2I(x, y) + _mapBounds.Position;
 	}
 
-	public Vector2I[] FindPath(Vector2I startCoord, Vector2I endCoord, float movementPoints)
+	public Vector2I[] FindPath(Vector2I startCoord, Vector2I endCoord, float movementPoints, out float cost)
 	{
+		cost = -1;
 		// 1. 检查起点和终点是否是有效的、可通行的地块
 		if (!_coordToId.ContainsKey(startCoord) || !_coordToId.ContainsKey(endCoord))
 		{
@@ -178,6 +179,7 @@ public partial class HexMap : Sprite2D
 		{
 			totalCost += _astar._ComputeCost(idPath[i], idPath[i + 1]);
 		}
+		cost = totalCost;
 
 		// 5. 比较总成本和移动力，并返回相应结果
 		if (totalCost <= movementPoints)

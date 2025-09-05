@@ -20,6 +20,7 @@ public partial class GameLoader : Node
 	private PackedScene _piecesManagerScene;
 	private BaseRenderEventHandler _renderEventHandler;
 	private IOperationRunner _operationRunner;
+	private IEnvironmentRunner _environmentRunner;
 	private Pipelines _pipelines;
 
 	[Export]
@@ -30,6 +31,8 @@ public partial class GameLoader : Node
 	public CSharpScript RenderEventHandlerScript { get; set; }
 	[Export]
 	public CSharpScript OperationRunner { get; set; }
+	[Export]
+	public CSharpScript EnvironmentRunner { get; set; }
 	[Export]
 	public int Stages { get; set; }
 
@@ -44,7 +47,9 @@ public partial class GameLoader : Node
 		_renderEventHandler = (BaseRenderEventHandler)RenderEventHandlerScript.New().AsGodotObject();
 		_pipelines = GetNode<Pipelines>("/root/Game/Players");
 		_operationRunner = OperationRunner.New().AsGodotObject() as IOperationRunner;
+		_environmentRunner = EnvironmentRunner.New().AsGodotObject() as IEnvironmentRunner;
 		_pipelines.OperationRunner = _operationRunner;
+		_pipelines.EnvironmentRunner = _environmentRunner;
 		GameState.Instance.StageCount = Stages;
 		InitFirstFounded(_config);
 		StartPipeline();
@@ -127,7 +132,7 @@ public partial class GameLoader : Node
 		if (!_manager.IsNodeReady())
 			await ToSignal(_manager, "ready");
 		_manager.InitPieces();
-		GameLoaded.Invoke();
+		GameLoaded?.Invoke();
 	}
 
 	private async void AddPlayer(string name)
@@ -148,6 +153,7 @@ public partial class GameLoader : Node
 		if (!pipeline.IsNodeReady())
 			await ToSignal(pipeline, "ready");
 		_renderEventHandler.Pipeline = pipeline.RenderPipeline;
+		_renderEventHandler.GameManager = _manager;
 		pipeline.RenderPipeline.RenderEventHandler = _renderEventHandler;
 	}
 

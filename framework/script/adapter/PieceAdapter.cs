@@ -79,4 +79,9 @@ public partial class PieceAdapter : Node
     State = stateDecorator;
     Instance = instanceDecorator;
   }
+  
+	public static PieceAdapter GetPiece(GameManager manager, int faction, string pieceName)
+  {
+    return manager.GetNode<Node>("Pieces").GetChild<Node>(faction).GetNode<PieceAdapter>(pieceName);
+  }
 }

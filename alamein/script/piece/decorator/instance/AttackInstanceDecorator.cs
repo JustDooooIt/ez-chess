@@ -11,8 +11,8 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator, IAttackab
 
   public void ReciveEvent(AttackEvent @event)
   {
-    var fromPiece = InstanceFromId(@event.pieceId) as PieceAdapter;
-    var targetPiece = InstanceFromId(@event.targetPiece) as PieceAdapter;
+    var fromPiece = PieceAdapter.GameManager.GetPiece(@event.fromFaction, @event.fromPiece);
+    var targetPiece = PieceAdapter.GameManager.GetPiece(@event.targetFaction, @event.targetPiece);
     var instance = targetPiece.Instance.Origin as Node;
     var tag = instance.GetNode<Node>("Tag");
     Button combatButton = null;
@@ -25,7 +25,7 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator, IAttackab
       };
       combatButton.Pressed += () =>
       {
-        var combatResult = CombatController.Instance.ProcessCombat(@event.targetPiece);
+        var combatResult = CombatController.Instance.ProcessCombat(targetPiece.GetInstanceId());
         SaveOperation(fromPiece.Faction, fromPiece.Name, targetPiece.Faction, targetPiece.Name, combatResult);
         tag.RemoveChild(combatButton);
         combatButton.QueueFree();

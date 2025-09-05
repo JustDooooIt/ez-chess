@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bwcgwpn25wptn"]
+[gd_scene load_steps=3 format=3 uid="uid://bwcgwpn25wptn"]
 
 [ext_resource type="Script" uid="uid://c1fy2sp3gv7p8" path="res://framework/script/game/GameConfig.cs" id="1_iph5o"]
+[ext_resource type="PackedScene" uid="uid://c3xreokavvgfh" path="res://alamein/scene/game.tscn" id="2_5bpff"]
 
 [node name="GameConfig" type="Control"]
 layout_mode = 3
@@ -10,51 +11,50 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iph5o")
+Scene = ExtResource("2_5bpff")
+GameName = "alamein"
+Factions = Array[String](["Axis", "Allies"])
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 66.0
+grow_horizontal = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer1" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="Token" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
+[node name="Token" type="LineEdit" parent="HBoxContainer/VBoxContainer1"]
 layout_mode = 2
-placeholder_text = "token"
+placeholder_text = "Github Token"
 
-[node name="Room" type="LineEdit" parent="HBoxContainer/VBoxContainer"]
+[node name="Faction" type="OptionButton" parent="HBoxContainer/VBoxContainer1"]
 layout_mode = 2
-placeholder_text = "room"
 
-[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer"]
+[node name="Create" type="Button" parent="HBoxContainer/VBoxContainer1"]
 layout_mode = 2
-selected = 0
-item_count = 2
-popup/item_0/text = "Axis"
-popup/item_0/id = 0
-popup/item_1/text = "Allies"
-popup/item_1/id = 1
-
-[node name="Create" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "create room"
-
-[node name="Finish" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "finish"
-
-[node name="Enter" type="Button" parent="HBoxContainer/VBoxContainer"]
-layout_mode = 2
-text = "enter
-"
+text = "Create room"
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="Player" type="LineEdit" parent="HBoxContainer/VBoxContainer2"]
+[node name="Room" type="LineEdit" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+placeholder_text = "Room"
+
+[node name="Enter" type="Button" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "enter
+"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 
-[node name="Invite" type="Button" parent="HBoxContainer/VBoxContainer2"]
+[node name="Player" type="LineEdit" parent="HBoxContainer/VBoxContainer3"]
 layout_mode = 2
-text = "邀请"
+placeholder_text = "Player"
+
+[node name="Invite" type="Button" parent="HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "Invite"

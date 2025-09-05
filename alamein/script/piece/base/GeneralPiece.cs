@@ -4,6 +4,8 @@ public partial class GeneralPiece : PieceAdapter
 {
   public bool Retreatable { get; set; } = false;
 
+  private States _state;
+
   public override void _UnhandledInput(InputEvent @event)
   {
     if (@event is InputEventMouseButton mouseButton)
@@ -21,6 +23,7 @@ public partial class GeneralPiece : PieceAdapter
         var from = (Instance.Origin as PieceInstance).Position;
         var to = (Instance.Origin as PieceInstance).GetGlobalMousePosition();
         Move(from, to);
+        _state = States.MOVED;
       }
       else if (GameState.Instance.Stage == (int)GameState.Stages.ATTACK &&
               Instance.IsSelected &&
@@ -33,16 +36,29 @@ public partial class GeneralPiece : PieceAdapter
               mouseButton.ButtonMask == MouseButtonMask.Right)
       {
         Attack(GameState.Instance.HoveredPiece);
+        _state = States.ATTACKED;
       }
       else if (Instance.IsSelected &&
                !Instance.IsHover &&
                !Instance.IsRunning &&
-               Retreatable &&
-               Faction == GameState.Instance.PlayerFaction)
+               Retreatable)
       {
         var from = (Instance.Origin as PieceInstance).Position;
         var to = (Instance.Origin as PieceInstance).GetGlobalMousePosition();
         Retreat(from, to);
+      }
+      else if (Instance.IsSelected &&
+               !Instance.IsHover &&
+               Instance.IsRunning &&
+               GameState.Instance.HoveredPiece == null &&
+               GameState.Instance.Stage == (int)GameState.Stages.ATTACK &&
+               _state == States.ATTACKED &&
+               mouseButton.ButtonMask == MouseButtonMask.Right)
+      {
+        var from = (Instance.Origin as PieceInstance).Position;
+        var to = (Instance.Origin as PieceInstance).GetGlobalMousePosition();
+        Exploitation(from, to);
+        _state = States.EXPLOITATION;
       }
     }
   }
@@ -59,10 +75,25 @@ public partial class GeneralPiece : PieceAdapter
     State.As<IMoveEventSender>()?.SendMoveEvent(_from, _to);
   }
 
+  private void Exploitation(Vector2 from, Vector2 to)
+  {
+    var _from = Instance.HexMap.ToMapPosition(from);
+    var _to = Instance.HexMap.ToMapPosition(to);
+    if (HexUtils.GetHexDistance(_from, _to, HexUtils.HexLayout.Pointy) == 1)
+    {
+      State.As<IMoveEventSender>()?.SendMoveEvent(_from, _to);
+    }
+  }
+
   private void Retreat(Vector2 from, Vector2 to)
   {
     var _from = Instance.HexMap.ToMapPosition(from);
     var _to = Instance.HexMap.ToMapPosition(to);
     State.As<IRetreatEventSender>()?.SendRetreatEvent(_from, _to);
+  }
+
+  public enum States
+  {
+    MOVED, ATTACKED, RETREATED, EXPLOITATION
   }
 }

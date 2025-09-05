@@ -15,6 +15,7 @@ public partial class RenderPipeline : PipelineImpl<InstanceValve>
 public abstract partial class BaseRenderEventHandler : RefCounted
 {
 	public RenderPipeline Pipeline { get; set; }
+	public GameManager GameManager { get; set; }
 
 	public void HandleEvent<T>(T @event) where T : Event
 	{

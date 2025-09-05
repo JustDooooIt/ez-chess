@@ -20,30 +20,76 @@ public partial class OperationRunner : RefCounted, IOperationRunner
 			case OperationType.ATTACK:
 				{
 					var operation = GithubUtils.Deserialize<AttackOperation>(data);
-					GameState.Instance.CurOperatorFaction = GameState.Instance.PlayerFaction;
-					var piece = GetPiece(manager, operation.TargetFaction, operation.Target);
-					if (piece is GeneralPiece generalPiece)
-						generalPiece.Retreatable = true;
+					var fromPiece = PieceAdapter.GetPiece(manager, operation.FromFaction, operation.From);
+					var targetPiece = PieceAdapter.GetPiece(manager, operation.TargetFaction, operation.Target);
+					var combatResult = operation.CombatResult;
+					switch (combatResult)
+					{
+						case (int)CombatResult.AE:
+							{
+								fromPiece.State.As<IDisposeEventSender>().SendDisposeEvent();
+							}
+							break;
+						case (int)CombatResult.AR:
+							{
+								if (fromPiece is GeneralPiece generalPiece)
+									generalPiece.Retreatable = true;
+								fromPiece.State.As<IRetreatRangeProvider>().RetreatRange = 1;
+							}
+							break;
+						case (int)CombatResult.DR1:
+							{
+								if (targetPiece is GeneralPiece generalPiece)
+									generalPiece.Retreatable = true;
+								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 1;
+							}
+							break;
+						case (int)CombatResult.DR2:
+							{
+								if (targetPiece is GeneralPiece generalPiece)
+									generalPiece.Retreatable = true;
+								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 2;
+							}
+							break;
+						case (int)CombatResult.DR3:
+							{
+								if (targetPiece is GeneralPiece generalPiece)
+									generalPiece.Retreatable = true;
+								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 3;
+							}
+							break;
+						case (int)CombatResult.DR4:
+							{
+								if (targetPiece is GeneralPiece generalPiece)
+									generalPiece.Retreatable = true;
+								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 4;
+							}
+							break;
+						case (int)CombatResult.DE:
+							{
+								targetPiece.State.As<IDisposeEventSender>().SendDisposeEvent();
+							}
+							break;
+						default:
+							break;
+					}
+
 				}
 				break;
 			case OperationType.RETREAT:
 				{
 					var operation = GithubUtils.Deserialize<RetreatOperation>(data);
-					Vector2I[] path = operation.Path;
-					var piece = GetPiece(manager, operation.Faction, operation.PieceName);
-					var tween = piece.CreateTween();
-					foreach (var point in path)
-					{
-						tween.TweenProperty(piece.Instance.Origin as Node2D, "position", piece.HexMap.ToLocalPosition(point), 1);
-					}
-					
+					var piece = PieceAdapter.GetPiece(manager, operation.Faction, operation.PieceName);
+					piece.State.As<IRetreatEventSender>()?.SendRetreatEvent(operation.From, operation.To);
+				}
+				break;
+			case OperationType.DISPOSE:
+				{
+					var operation = GithubUtils.Deserialize<DisposeOperation>(data);
+					var piece = PieceAdapter.GetPiece(manager, operation.Faction, operation.PieceName);
+					piece.State.As<IDisposeEventSender>().SendDisposeEvent();
 				}
 				break;
 		}
-	}
-
-	private static PieceAdapter GetPiece(GameManager manager, int faction, string pieceName)
-	{
-		return manager.GetNode<Node>("Pieces").GetChild<Node>(faction).GetNode<PieceAdapter>(pieceName);
 	}
 }

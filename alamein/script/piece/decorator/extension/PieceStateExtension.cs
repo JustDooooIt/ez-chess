@@ -10,4 +10,8 @@ public static class PieceStateExtensions
 		=> new AttackStateDecorator(piece, attackPoint);
 	public static IPieceState WithRetreatState(this IPieceState piece)
 		=> new RetreatStateDecorator(piece);
+	public static IPieceState WithDisposeState(this IPieceState piece)
+		=> new DisposeStateDecorator(piece);
+	public static IPieceState WithResetState(this IPieceState piece)
+		=> new ResetStateDecorator(piece);
 }

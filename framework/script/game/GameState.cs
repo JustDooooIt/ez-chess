@@ -6,15 +6,13 @@ public partial class GameState : RefCounted
 {
   public readonly static GameState Instance = new();
   public event Action<int> StageChanged;
+  public event Action<int> TurnChanged;
 
   private int _stage = 0;
+  private int _turn = 0;
 
-  GameState()
-  {
-    Stage = 0;
-  }
 
-  public int Turn { get; set; } = 0;
+  public int Turn { get => _turn; set => SetTurn(value); }
   public int StageCount { get; set; } = 0;
   public int Stage { get => _stage; set => SetStage(value); }
   public string Username { get; set; }
@@ -35,10 +33,15 @@ public partial class GameState : RefCounted
     StageChanged?.Invoke(stage);
   }
 
+  private void SetTurn(int turn)
+  {
+    this._turn = turn;
+    TurnChanged?.Invoke(turn);
+  }
+
   public void EndStage()
   {
     Stage = (Stage + 1) % StageCount;
-    GD.Print(Stage);
   }
 
   public enum Stages

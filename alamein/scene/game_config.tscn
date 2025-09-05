@@ -3,5 +3,4 @@
 [ext_resource type="PackedScene" uid="uid://bwcgwpn25wptn" path="res://framework/scene/game_config.tscn" id="1_abwda"]
 
 [node name="GameConfig" instance=ExtResource("1_abwda")]
-ScenePath = "res://alamein/scene/game.tscn"
 GameName = "Alamein"

@@ -29,7 +29,12 @@ public record RetreatOperation : Operation
   public Vector2I[] Path { get; set; }
 }
 
+public record DisposeOperation : Operation
+{
+  public string PieceName { get; set; }
+}
+
 public enum OperationType
 {
-  MOVE, ATTACK, RETREAT
+  MOVE, ATTACK, RETREAT, DISPOSE
 }

@@ -1,3 +1,6 @@
+
+using Godot;
+
 public partial class MPGameManager : GameManager
 {
 
@@ -6,6 +9,8 @@ public partial class MPGameManager : GameManager
 		base._Ready();
 		GameState.Instance.IsSolo = false;
 		GithubUtils.SubmitOperationOnInterval();
+		var roomLabel = GetNode<Label>("CanvasLayer/Control/Room/Label");
+		roomLabel.Text = GameState.Instance.RoomMetaData.Number.ToString();
 	}
 
 	private void OnExitGame()

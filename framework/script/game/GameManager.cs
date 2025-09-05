@@ -55,6 +55,11 @@ public partial class GameManager : Node2D
 		}
 	}
 
+	public PieceAdapter GetPiece(int faction, string name)
+	{
+		return GetNode<Node>("Pieces").GetChild(faction).GetNode<PieceAdapter>(name);
+	}
+
 	// public string HashState()
 	// {
 	// 	Dictionary<string, List<Dictionary<string, object>>> state = [];

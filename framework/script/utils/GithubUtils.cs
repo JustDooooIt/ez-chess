@@ -23,7 +23,7 @@ public class GithubUtils
 	private static readonly string GAME_DISCUSSION_CATEGORY_ID = "DIC_kwDOPatLk84CueXj";
 	private static readonly string OWNER = "JustDooooIt";
 	private static readonly string REPO = "ez-chess";
-	// private static readonly HashingContext hashingContext = new();
+
 	private static DateTime TimeLine { get; set; } = DateTime.MinValue;
 	private static Queue<(string discussionId, string opJson)> OperationCache { get; } = new();
 
@@ -192,7 +192,18 @@ public class GithubUtils
 		var request = new { query = GET_COMMMENTS_QUERY, variables };
 		var json = JsonSerializer.Serialize(request, options);
 		var content = new StringContent(json);
-		var res = await httpClient.PostAsync(BASE_URL, content);
+		HttpResponseMessage res = null;
+		try
+		{
+			res = await httpClient.PostAsync(BASE_URL, content);
+		}
+		catch (System.Exception)
+		{
+			while (res == null || !res.IsSuccessStatusCode)
+			{
+				res = await httpClient.PostAsync(BASE_URL, content);
+			}
+		}
 		var result = await res.Content.ReadFromJsonAsync<JsonObject>(options);
 		return result["data"]["repository"]["discussion"]["comments"].Deserialize<Comments>(options);
 	}
@@ -340,7 +351,18 @@ public class GithubUtils
 	{
 		var json = JsonSerializer.Serialize(request, options);
 		var content = new StringContent(json);
-		var res = await httpClient.PostAsync(BASE_URL, content);
+		HttpResponseMessage res = null;
+		try
+		{
+			res = await httpClient.PostAsync(BASE_URL, content);
+		}
+		catch (System.Exception)
+		{
+			while (res == null || !res.IsSuccessStatusCode)
+			{
+				res = await httpClient.PostAsync(BASE_URL, content);
+			}
+		}
 		return await res.Content.ReadFromJsonAsync<JsonObject>();
 	}
 
@@ -399,7 +421,7 @@ public class GithubUtils
 	/// <param name="curStateHash"></param>
 	/// <param name="operationProcessor"></param>
 	/// <returns></returns>
-	public static async Task ApplyOperation(int discussionNum, int faction, Action<JsonObject> operationProcessor)
+	public static async Task ApplyComment(int discussionNum, int faction, Action<JsonObject> operationProcessor)
 	{
 		List<Comment> comments = [];
 		await ProcessComments(discussionNum, (comment) =>
@@ -409,11 +431,7 @@ public class GithubUtils
 			try
 			{
 				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body);
-				if (jsonObject.ContainsKey("commentType") && jsonObject["commentType"].GetValue<int>() == (int)CommentType.GAME_DATA &&
-						jsonObject.ContainsKey("faction") && jsonObject["faction"].GetValue<int>() == faction)
-				{
-					comments.Add(comment);
-				}
+				comments.Add(comment);
 			}
 			catch (System.Text.Json.JsonException) { }
 			return false;
@@ -426,10 +444,11 @@ public class GithubUtils
 		}
 		if (comment != null)
 		{
+			GD.Print(comment.Body);
 			try
 			{
 				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);
-				operationProcessor.Invoke(JsonSerializer.Deserialize<JsonObject>(jsonObject));
+				operationProcessor.Invoke(jsonObject);
 			}
 			catch (System.Text.Json.JsonException) { }
 		}
@@ -507,23 +526,6 @@ public class GithubUtils
 		}
 	}
 
-	public static async Task<Comment> SaveGameData(string discussionId, int faction, List<PieceAdapter> pieces, Func<PieceAdapter, PieceData> pieceProcessor)
-	{
-		Environment env = new()
-		{
-			Faction = faction,
-			CommentType = CommentType.ENVIRONMENT_DATA
-		};
-		List<PieceData> pieceDatas = [];
-		foreach (var piece in pieces)
-		{
-			pieceDatas.Add(pieceProcessor.Invoke(piece));
-		}
-		env.PieceDatas = [.. pieceDatas];
-		var json = JsonSerializer.Serialize(env);
-		return await AddComment(discussionId, json);
-	}
-
 	// public static string HashState(string state)
 	// {
 	// 	var err = hashingContext.Start(HashingContext.HashType.Sha256);
@@ -552,6 +554,26 @@ public class GithubUtils
 		return JsonSerializer.Serialize(dict, options);
 	}
 
+	public static async Task ChangeFaction(string discussionId, int faction)
+	{
+		var factionData = new FactionData()
+		{
+			CommentType = CommentType.ENVIRONMENT_DATA,
+			Type = EnvDataType.FACTION,
+			Faction = faction,
+		};
+		await AddComment(discussionId, JsonSerializer.Serialize(factionData, options));
+	}
+
+	public static async Task IncreaseTurn(string discussionId)
+	{
+		var turnData = new TurnData()
+		{
+			CommentType = CommentType.ENVIRONMENT_DATA,
+			Type = EnvDataType.TURN
+		};
+		await AddComment(discussionId, JsonSerializer.Serialize(turnData, options));
+	}
 }
 
 public record Discussion

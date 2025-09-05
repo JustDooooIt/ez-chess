@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Godot;
 
 public partial class RetreatStateDecorator(IPieceState piece) :
-  PieceStateDecorator(piece), IRetreatable, IRetreatEventSender
+  PieceStateDecorator(piece), IRetreatable, IRetreatRangeProvider, IRetreatEventSender
 {
   private HexMap map;
+  public int RetreatRange { get; set; } = 0;
 
   public void ReciveEvent(RetreatEvent @event)
   {
@@ -27,6 +28,7 @@ public partial class RetreatStateDecorator(IPieceState piece) :
       GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, op);
     }
     PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
+    (PieceAdapter as GeneralPiece).Retreatable = false;
   }
 
   public void SendRetreatEvent(Vector2I from, Vector2I to, bool recovered = false)
@@ -36,13 +38,14 @@ public partial class RetreatStateDecorator(IPieceState piece) :
     ulong pieceId = GetPieceId();
     var piece = InstanceFromId(pieceId) as PieceAdapter;
     if (path.Length > 0)
-      AddValve<RetreatEvent, RetreatStateValve>(new(pieceId, from, to, path, recovered));
+      AddValve<RetreatEvent, RetreatStateValve>(new(PieceAdapter.Faction, PieceAdapter.Name, from, to, path, recovered));
   }
 
   private long Vector2IToId(Vector2I vec)
   {
     return ((long)vec.X << 32) | (uint)vec.Y;
   }
+  
   public AStar2D CreateRetreatMap()
   {
     AStar2D astar = new();
@@ -50,7 +53,7 @@ public partial class RetreatStateDecorator(IPieceState piece) :
     var baseTerrain = map.GetChild(0).GetNode<TileMapLayer>("BaseTerrain");
     var piecePos = As<IPositionable>().MapPosition;
 
-    int maxRange = 2;
+    int maxRange = RetreatRange;
 
     // --- 1. 发现阶段: 找到所有在范围内的瓦片 ---
     // 使用 HashSet 以获得 O(1) 的查找效率，非常适合检查一个瓦片是否在范围内

@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 using Godot;
 
 public partial class MoveStateDecorator(IPieceState piece, float movement) :
-  PieceStateDecorator(piece), IMoveable, IMoveEventSender
+  PieceStateDecorator(piece), IMoveable, IMoveEventSender, IResetable
 {
-  public float CurMovement { get; set; } = movement;
+  public float Movement { get; set; } = movement;
   public float ResidualMovement { get; set; } = movement;
 
   public void ReciveEvent(MoveEvent @event)
   {
     As<IPositionable>().MapPosition = @event.to;
+    ResidualMovement -= @event.cost;
     if (!@event.recovered && PipelineAdapter is not OtherPipeline)
     {
       var op = new MoveOperation()
@@ -19,7 +20,7 @@ public partial class MoveStateDecorator(IPieceState piece, float movement) :
         To = @event.to,
         Path = @event.path,
         PieceName = PieceAdapter.Name,
-        Type = (int) OperationType.MOVE,
+        Type = (int)OperationType.MOVE,
         Faction = PieceAdapter.Faction,
         CommentType = CommentType.GAME_DATA
       };
@@ -32,13 +33,10 @@ public partial class MoveStateDecorator(IPieceState piece, float movement) :
   {
     ulong pieceId = GetPieceId();
     var piece = InstanceFromId(pieceId) as PieceAdapter;
-    var path = piece.Instance.HexMap.FindPath(from, to, ResidualMovement);
+    var path = piece.Instance.HexMap.FindPath(from, to, ResidualMovement, out var cost);
     if (path.Length > 0)
     {
-      // Valve valve = new MoveStateValve(this, new(pieceId, from, to, path, recovered));
-      // PipelineAdapter.StatePipeline.AddValve(valve);
-      // PipelineAdapter.RenderPipeline.RegisterValve<MoveEvent>(valve);
-      AddValve<MoveEvent, MoveStateValve>(new(pieceId, from, to, path, recovered));
+      AddValve<MoveEvent, MoveStateValve>(new(PieceAdapter.Faction, PieceAdapter.Name, from, to, cost, path, recovered));
     }
   }
 
@@ -49,4 +47,10 @@ public partial class MoveStateDecorator(IPieceState piece, float movement) :
 
     return base.As<V>();
   }
+
+  public void ReciveEvent(ResetEvent @event)
+  {
+    ResidualMovement = Movement;
+  }
+
 }

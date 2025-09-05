@@ -1,0 +1,1 @@
+public interface IDisposable : IAction<DisposeEvent> { }

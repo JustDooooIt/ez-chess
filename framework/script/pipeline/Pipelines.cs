@@ -11,6 +11,7 @@ public partial class Pipelines : Node
 
 	private GameManager GameManager { get; set; }
 	public IOperationRunner OperationRunner { get; set; }
+	public IEnvironmentRunner EnvironmentRunner { get; set; }
 
 	public override void _Ready()
 	{
@@ -43,11 +44,16 @@ public partial class Pipelines : Node
 			while (true)
 			{
 				int faction = pipeline.GetIndex();
-				await GithubUtils.ApplyOperation(GameState.Instance.RoomMetaData.Number, faction, (operation) =>
+				await GithubUtils.ApplyComment(GameState.Instance.RoomMetaData.Number, faction, (commentJson) =>
 				{
-					if (operation.ContainsKey("type"))
+					if (commentJson.ContainsKey("commentType") && commentJson["commentType"].GetValue<int>() == (int)CommentType.GAME_DATA &&
+							commentJson.ContainsKey("faction") && commentJson["faction"].GetValue<int>() == faction)
 					{
-						OperationRunner.RunOperation(GameManager, operation, false);
+						OperationRunner.RunOperation(GameManager, commentJson, false);
+					}
+					else if (commentJson.ContainsKey("commentType") && commentJson["commentType"].GetValue<int>() == (int)CommentType.ENVIRONMENT_DATA)
+					{
+						EnvironmentRunner.SetEnvironment(GameManager, commentJson);
 					}
 				});
 				await Task.Delay(2500);

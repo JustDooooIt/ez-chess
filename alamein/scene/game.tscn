@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=4 uid="uid://c3xreokavvgfh"]
+[gd_scene load_steps=9 format=4 uid="uid://c3xreokavvgfh"]
 
 [ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framework/scene/game.tscn" id="1_d4g3i"]
 [ext_resource type="Texture2D" uid="uid://c7r6d8qd77t1s" path="res://alamein/resource/image/mainmap.jpg" id="2_01s2e"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://c7ep4i4b51jbb" path="res://alamein/script/piece/factory/PieceFactory.cs" id="4_lyve2"]
 [ext_resource type="Script" uid="uid://de0c5xemwqod0" path="res://alamein/script/piece/event/handler/RenderEventHandler.cs" id="5_gitvn"]
 [ext_resource type="Script" uid="uid://b8kdci0e21sil" path="res://alamein/script/operation/OperationRunner.cs" id="6_trdbq"]
+[ext_resource type="Script" uid="uid://cmcifmbe7hlot" path="res://alamein/script/operation/EnvironmentRunner.cs" id="8_trdbq"]
 
 [node name="Game" instance=ExtResource("1_d4g3i")]
 script = ExtResource("2_gitvn")
@@ -44,6 +45,7 @@ ConfigPath = "res://alamein/resource/config.json"
 PieceFactoryScript = ExtResource("4_lyve2")
 RenderEventHandlerScript = ExtResource("5_gitvn")
 OperationRunner = ExtResource("6_trdbq")
+EnvironmentRunner = ExtResource("8_trdbq")
 Stages = 2
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." index="5"]
@@ -61,6 +63,49 @@ mouse_filter = 2
 layout_mode = 0
 offset_left = 24.0
 offset_top = 16.0
-offset_right = 128.0
+offset_right = 107.0
 offset_bottom = 47.0
-text = "End current stage"
+text = "End stage"
+
+[node name="Stage" type="Panel" parent="CanvasLayer/Control" index="1"]
+layout_mode = 0
+offset_left = 112.0
+offset_top = 16.0
+offset_right = 176.0
+offset_bottom = 48.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/Stage" index="0"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 32.0
+text = "MOVE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Turn" type="Panel" parent="CanvasLayer/Control" index="2"]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 16.0
+offset_right = 248.0
+offset_bottom = 48.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/Turn" index="0"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 32.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Room" type="Panel" parent="CanvasLayer/Control" index="3"]
+layout_mode = 0
+offset_left = 256.0
+offset_top = 16.0
+offset_right = 320.0
+offset_bottom = 48.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/Room" index="0"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 32.0
+horizontal_alignment = 1
+vertical_alignment = 1
