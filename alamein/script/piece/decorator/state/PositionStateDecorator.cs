@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDecorator(wrapped), IPositionable, IPositionEventSender
+public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDecorator<PositionEvent>(wrapped), IPositionable, IPositionEventSender
 {
   private Vector2I _mapPosition;
 
@@ -21,5 +21,15 @@ public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDec
     var valve = new PositionStateValve(this, new(PieceAdapter.Faction, PieceAdapter.Name, position));
     PipelineAdapter.StatePipeline.AddValve(valve);
     PipelineAdapter.RenderPipeline.RegisterValve<PositionEvent>(valve);
+  }
+
+  protected override void DoReciveEvent(PositionEvent @event)
+  {
+    
+  }
+
+  protected override void SaveOperation(PositionEvent @event)
+  {
+
   }
 }

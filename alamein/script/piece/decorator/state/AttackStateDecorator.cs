@@ -2,21 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public partial class AttackStateDecorator(IPieceState wrapped, float attack) : PieceStateDecorator(wrapped), IAttackable, IAttackEventSender, IAttackPointProvider
+public partial class AttackStateDecorator(IPieceState wrapped, float attack) : PieceStateDecorator<AttackEvent>(wrapped), IAttackable, IAttackEventSender, IAttackPointProvider
 {
   public float AttackPoint { get; set; } = attack;
-
-  public void ReciveEvent(AttackEvent @event)
-  {
-    
-    if (!@event.recovered && PipelineAdapter is not OtherPipeline)
-    {
-      var fromPiece = PieceAdapter.GameManager.GetPiece(@event.fromFaction, @event.fromPiece);
-      var toPiece = PieceAdapter.GameManager.GetPiece(@event.targetFaction, @event.targetPiece);
-      CombatController.Instance.AddCombatUnit(fromPiece.GetInstanceId(), toPiece.GetInstanceId());
-      PieceAdapter.Instance.IsRunning = true;
-    }
-  }
 
   public void SendAttackEvent(Vector2I target, PieceAdapter targetPiece)
   {
@@ -25,5 +13,18 @@ public partial class AttackStateDecorator(IPieceState wrapped, float attack) : P
     Valve valve = new AttackStateValve(this, @event);
     PipelineAdapter.StatePipeline.AddValve(valve);
     PipelineAdapter.RenderPipeline.RegisterValve<AttackEvent>(valve);
+  }
+
+  protected override void DoReciveEvent(AttackEvent @event)
+  {
+    
+  }
+
+  protected override void SaveOperation(AttackEvent @event)
+  {
+    var fromPiece = PieceAdapter.GameManager.GetPiece(@event.fromFaction, @event.fromPiece);
+    var toPiece = PieceAdapter.GameManager.GetPiece(@event.targetFaction, @event.targetPiece);
+    CombatController.Instance.AddCombatUnit(fromPiece.GetInstanceId(), toPiece.GetInstanceId());
+    PieceAdapter.Instance.IsRunning = true;
   }
 }

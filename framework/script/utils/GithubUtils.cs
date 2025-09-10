@@ -444,7 +444,6 @@ public class GithubUtils
 		}
 		if (comment != null)
 		{
-			GD.Print(comment.Body);
 			try
 			{
 				var jsonObject = JsonSerializer.Deserialize<JsonObject>(comment.Body, options);

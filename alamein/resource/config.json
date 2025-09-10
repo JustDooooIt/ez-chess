@@ -523,6 +523,23 @@
 					}
 				],
 				"position": {
+					"x": 14,
+					"y": 18
+				}
+			},
+			{
+				"name": "e7td4",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e7td4.jpg",
+						"property": {
+							"attack": 4,
+							"move": 8
+						}
+					}
+				],
+				"position": {
 					"x": 5,
 					"y": 18
 				}
@@ -645,7 +662,25 @@
 					"x": 19,
 					"y": 7
 				}
-			}
+			},
+			{
+				"name": "e161Ind",
+				"type": 0,
+				"faces": [
+					{
+						"image": "res://alamein/resource/image/e161Ind.jpg",
+						"property": {
+							"attack": 1,
+							"move": 8
+						}
+					}
+				],
+				"position": {
+					"x": 6,
+					"y": 7
+				}
+			},
+			
 		]
 	}
 }

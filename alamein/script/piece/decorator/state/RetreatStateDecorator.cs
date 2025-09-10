@@ -4,32 +4,10 @@ using System.Threading.Tasks;
 using Godot;
 
 public partial class RetreatStateDecorator(IPieceState piece) :
-  PieceStateDecorator(piece), IRetreatable, IRetreatRangeProvider, IRetreatEventSender
+  PieceStateDecorator<RetreatEvent>(piece), IRetreatable, IRetreatRangeProvider, IRetreatEventSender
 {
   private HexMap map;
   public int RetreatRange { get; set; } = 0;
-
-  public void ReciveEvent(RetreatEvent @event)
-  {
-    As<IPositionable>().MapPosition = @event.to;
-
-    if (!@event.recovered && PipelineAdapter is not OtherPipeline)
-    {
-      var op = new RetreatOperation()
-      {
-        From = @event.from,
-        To = @event.to,
-        Path = @event.path,
-        PieceName = PieceAdapter.Name,
-        Type = (int)OperationType.RETREAT,
-        Faction = PieceAdapter.Faction,
-        CommentType = CommentType.GAME_DATA
-      };
-      GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, op);
-    }
-    PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
-    (PieceAdapter as GeneralPiece).Retreatable = false;
-  }
 
   public void SendRetreatEvent(Vector2I from, Vector2I to, bool recovered = false)
   {
@@ -45,7 +23,7 @@ public partial class RetreatStateDecorator(IPieceState piece) :
   {
     return ((long)vec.X << 32) | (uint)vec.Y;
   }
-  
+
   public AStar2D CreateRetreatMap()
   {
     AStar2D astar = new();
@@ -116,4 +94,27 @@ public partial class RetreatStateDecorator(IPieceState piece) :
     }
     return astar;
   }
+
+  protected override void DoReciveEvent(RetreatEvent @event)
+  {
+    As<IPositionable>().MapPosition = @event.to;
+    PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
+    (PieceAdapter as GeneralPiece).Retreatable = false;
+  }
+
+  protected override void SaveOperation(RetreatEvent @event)
+  {
+    var op = new RetreatOperation()
+    {
+      From = @event.from,
+      To = @event.to,
+      Path = @event.path,
+      PieceName = PieceAdapter.Name,
+      Type = (int)OperationType.RETREAT,
+      Faction = PieceAdapter.Faction,
+      CommentType = CommentType.GAME_DATA
+    };
+    GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, op);
+  }
+
 }
