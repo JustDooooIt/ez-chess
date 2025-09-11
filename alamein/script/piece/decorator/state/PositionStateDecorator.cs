@@ -22,7 +22,7 @@ public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDec
     PipelineAdapter.StatePipeline.AddValve(valve);
     PipelineAdapter.RenderPipeline.RegisterValve<PositionEvent>(valve);
   }
-
+ 
   protected override void DoReciveEvent(PositionEvent @event)
   {
     

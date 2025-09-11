@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 
-public partial class PositionStateValve(IPieceState pieceState, PositionEvent @event) : StateValve(pieceState)
+public partial class PositionStateValve(IPieceState pieceState, PositionEvent @event) : StateValve(pieceState, @event)
 {
   protected override void DoLaunch()
   {
-    _pieceState.As<IPositionable>().MapPosition = @event.position;
+    _pieceState.Query<IPositionable>().MapPosition = @event.position;
     PipelineEventBus.Instance.Publish(GetInstanceId(), @event);
   }
 }

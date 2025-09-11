@@ -1,6 +1,6 @@
 using Godot;
 
-public abstract partial class PieceInstanceDecorator(IPieceInstance wrapped) : PieceDecorator(wrapped), IPieceInstance
+public abstract partial class PieceInstanceDecorator<E>(IPieceInstance wrapped) : PieceDecorator<E>(wrapped), IPieceInstance where E : PieceEvent
 {
   private IPieceInstance _wrapped = wrapped;
   public PieceAdapter PieceAdapter { get => _wrapped.PieceAdapter; set => _wrapped.PieceAdapter = value; }

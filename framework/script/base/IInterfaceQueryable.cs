@@ -38,7 +38,7 @@ public interface IInterfaceQueryable
     return piece;
   }
 
-  public virtual T As<T>() where T : class
+  public virtual T Query<T>() where T : class
   {
     if (this is T selfImpl) return selfImpl;
 

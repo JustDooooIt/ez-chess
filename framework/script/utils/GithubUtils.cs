@@ -618,6 +618,7 @@ public record Operation : BaseData
 {
 	public int Type { get; set; }
 	public int Faction { get; set; }
+  public string PieceName { get; set; }
 }
 
 public record BaseData

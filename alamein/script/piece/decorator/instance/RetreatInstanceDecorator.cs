@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator(wrapped), IRetreatable
+public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<RetreatEvent>(wrapped), IRetreatable
 {
-  public void ReciveEvent(RetreatEvent @event)
+  protected override void DoReciveEvent(RetreatEvent @event)
   {
     var instance = (IPieceInstance)Origin;
     instance.Selectable = false;
@@ -19,5 +19,10 @@ public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceIns
       instance.Selectable = true;
       instance.IsRunning = false;
     }));
+  }
+
+  protected override void SaveOperation(RetreatEvent @event)
+  {
+
   }
 }

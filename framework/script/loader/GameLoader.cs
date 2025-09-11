@@ -124,7 +124,7 @@ public partial class GameLoader : Node
 					pieceAdapter.GameManager = _manager;
 					factionNode.AddChild(pieceAdapter);
 					factionNode.AddPiece(positionVec, pieceAdapter);
-					GameLoaded += () => pieceAdapter.State.As<IPositionEventSender>().SendPositionEvent(positionVec);
+					GameLoaded += () => pieceAdapter.State.Query<IPositionEventSender>().SendPositionEvent(positionVec);
 				}
 			}
 			factionId++;

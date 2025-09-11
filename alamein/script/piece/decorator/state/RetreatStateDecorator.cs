@@ -11,7 +11,7 @@ public partial class RetreatStateDecorator(IPieceState piece) :
 
   public void SendRetreatEvent(Vector2I from, Vector2I to, bool recovered = false)
   {
-    var astar = CreateRetreatMap();
+    var astar = CreateAStar();
     Vector2I[] path = [.. astar.GetPointPath(Vector2IToId(from), Vector2IToId(to)).Select(e => new Vector2I((int)e.X, (int)e.Y))];
     ulong pieceId = GetPieceId();
     var piece = InstanceFromId(pieceId) as PieceAdapter;
@@ -24,12 +24,12 @@ public partial class RetreatStateDecorator(IPieceState piece) :
     return ((long)vec.X << 32) | (uint)vec.Y;
   }
 
-  public AStar2D CreateRetreatMap()
+  public AStar2D CreateAStar()
   {
     AStar2D astar = new();
     map = PieceAdapter.HexMap;
     var baseTerrain = map.GetChild(0).GetNode<TileMapLayer>("BaseTerrain");
-    var piecePos = As<IPositionable>().MapPosition;
+    var piecePos = Query<IPositionable>().MapPosition;
 
     int maxRange = RetreatRange;
 
@@ -97,7 +97,7 @@ public partial class RetreatStateDecorator(IPieceState piece) :
 
   protected override void DoReciveEvent(RetreatEvent @event)
   {
-    As<IPositionable>().MapPosition = @event.to;
+    Query<IPositionable>().MapPosition = @event.to;
     PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
     (PieceAdapter as GeneralPiece).Retreatable = false;
   }

@@ -10,6 +10,7 @@ public partial class RenderEventHandler : BaseRenderEventHandler
       PositionEvent positionEvent => new PositionInstanceValve(GetPiece(positionEvent.faction, positionEvent.pieceName).Instance, positionEvent),
       AttackEvent attackEvent => new AttackInstanceValve(GetPiece(attackEvent.fromFaction, attackEvent.fromPiece).Instance, attackEvent),
       RetreatEvent retreatEvent => new RetreatInstanceValve(GetPiece(retreatEvent.faction, retreatEvent.pieceName).Instance, retreatEvent),
+      AdvanceEvent advanceEvent => new AdvanceInstanceValve(GetPiece(advanceEvent.faction, advanceEvent.pieceName).Instance, advanceEvent),
       _ => default,
     };
   }

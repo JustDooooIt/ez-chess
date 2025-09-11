@@ -55,28 +55,28 @@ public partial class CombatController : RefCounted
 				{
 					if (piece is GeneralPiece generalPiece)
 						generalPiece.Retreatable = true;
-					piece.State.As<IRetreatRangeProvider>().RetreatRange = 1;
+					piece.State.Query<IRetreatRangeProvider>().RetreatRange = 1;
 				}
 				break;
 			case CombatResult.DR2:
 				{
 					if (piece is GeneralPiece generalPiece)
 						generalPiece.Retreatable = true;
-					piece.State.As<IRetreatRangeProvider>().RetreatRange = 2;
+					piece.State.Query<IRetreatRangeProvider>().RetreatRange = 2;
 				}
 				break;
 			case CombatResult.DR3:
 				{
 					if (piece is GeneralPiece generalPiece)
 						generalPiece.Retreatable = true;
-					piece.State.As<IRetreatRangeProvider>().RetreatRange = 3;
+					piece.State.Query<IRetreatRangeProvider>().RetreatRange = 3;
 				}
 				break;
 			case CombatResult.DR4:
 				{
 					if (piece is GeneralPiece generalPiece)
 						generalPiece.Retreatable = true;
-					piece.State.As<IRetreatRangeProvider>().RetreatRange = 4;
+					piece.State.Query<IRetreatRangeProvider>().RetreatRange = 4;
 				}
 				break;
 			default:
@@ -90,7 +90,7 @@ public partial class CombatController : RefCounted
 	private float GetAttackPoint(ulong piece)
 	{
 		var pieceAdapter = InstanceFromId(piece) as PieceAdapter;
-		return pieceAdapter.State.As<IAttackPointProvider>().AttackPoint;
+		return pieceAdapter.State.Query<IAttackPointProvider>().AttackPoint;
 	}
 }
 

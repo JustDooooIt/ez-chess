@@ -1,7 +1,7 @@
-public partial class DisposeStateValve(IPieceState pieceState, DisposeEvent @event) : StateValve(pieceState)
+public partial class DisposeStateValve(IPieceState pieceState, DisposeEvent @event) : StateValve(pieceState, @event)
 {
   protected override void DoLaunch()
   {
-    _pieceState.As<IDisposable>().ReciveEvent(@event);
+    _pieceState.Query<IDisposable>().ReciveEvent(@event);
   }
 }

@@ -19,12 +19,12 @@ public partial class MoveStateDecorator(IPieceState piece, float movement) :
     }
   }
 
-  public override V As<V>() where V : class
+  public override V Query<V>() where V : class
   {
     if (typeof(V) == typeof(IMoveable))
       return this as V;
 
-    return base.As<V>();
+    return base.Query<V>();
   }
 
   public void ReciveEvent(ResetEvent @event)
@@ -34,7 +34,7 @@ public partial class MoveStateDecorator(IPieceState piece, float movement) :
 
   protected override void DoReciveEvent(MoveEvent @event)
   {
-    As<IPositionable>().MapPosition = @event.to;
+    Query<IPositionable>().MapPosition = @event.to;
     ResidualMovement -= @event.cost;
     PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
   }

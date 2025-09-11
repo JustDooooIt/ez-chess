@@ -8,12 +8,12 @@ public partial class PieceFactory : PieceFactoryBase, IPieceFactory
 	{
 		return pieceType switch
 		{
-			0 => Create<GeneralPiece>(pieceType, group, faction, name, images, defaultFace, areaSize, property, CreateInfantry),
+			0 => Create<GeneralPiece>(pieceType, group, faction, name, images, defaultFace, areaSize, property, CreateGeneralPiece),
 			_ => default,
 		};
 	}
 
-	private (IPieceState, IPieceInstance) CreateInfantry(Array<Dictionary<string, Variant>> property)
+	private (IPieceState, IPieceInstance) CreateGeneralPiece(Array<Dictionary<string, Variant>> property)
 	{
 		var instanceScene = GD.Load<PackedScene>(IPieceFactory.PIECE_INSTANCE_PATH);
 		var state = new PieceState()
@@ -22,12 +22,14 @@ public partial class PieceFactory : PieceFactoryBase, IPieceFactory
 			.WithAttackState(property.Select(e => (float)e["attack"].AsDouble()).ToList().First())
 			.WithRetreatState()
 			.WithDisposeState()
-			.WithResetState(); 
+			.WithResetState()
+			.WithAdvanceState();
 		var instance = instanceScene.Instantiate<PieceInstance>()
 			.WithPositionAction()
 			.WithMovetAction()
 			.WithAttackAction()
-			.WithRetreatAction();
+			.WithRetreatAction()
+			.WithAdvanceAction();
 		return (state, instance);
 	}
 }

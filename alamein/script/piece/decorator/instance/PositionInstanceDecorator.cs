@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class PositionInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator(wrapped), IPositionable
+public partial class PositionInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<PositionEvent>(wrapped), IPositionable
 {
   private Vector2I _mapPosition;
 
@@ -15,5 +15,15 @@ public partial class PositionInstanceDecorator(IPieceInstance wrapped) : PieceIn
   private Vector2I GetMapPosition()
   {
     return _mapPosition;
+  }
+
+  protected override void DoReciveEvent(PositionEvent @event)
+  {
+
+  }
+
+  protected override void SaveOperation(PositionEvent @event)
+  {
+
   }
 }

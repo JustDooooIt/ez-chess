@@ -65,14 +65,14 @@ public partial class GeneralPiece : PieceAdapter
 
   private void Attack(PieceAdapter targetPiece)
   {
-    State.As<IAttackEventSender>()?.SendAttackEvent(targetPiece.State.As<IPositionable>().MapPosition, targetPiece);
+    State.Query<IAttackEventSender>()?.SendAttackEvent(targetPiece.State.Query<IPositionable>().MapPosition, targetPiece);
   }
 
   private void Move(Vector2 from, Vector2 to)
   {
     var _from = Instance.HexMap.ToMapPosition(from);
     var _to = Instance.HexMap.ToMapPosition(to);
-    State.As<IMoveEventSender>()?.SendMoveEvent(_from, _to);
+    State.Query<IMoveEventSender>()?.SendMoveEvent(_from, _to);
   }
 
   private void Exploitation(Vector2 from, Vector2 to)
@@ -81,7 +81,7 @@ public partial class GeneralPiece : PieceAdapter
     var _to = Instance.HexMap.ToMapPosition(to);
     if (HexUtils.GetHexDistance(_from, _to, HexUtils.HexLayout.Pointy) == 1)
     {
-      State.As<IMoveEventSender>()?.SendMoveEvent(_from, _to);
+      State.Query<IAdvanceEventSender>()?.SendAdvanceEvent(_from, _to);
     }
   }
 
@@ -89,7 +89,7 @@ public partial class GeneralPiece : PieceAdapter
   {
     var _from = Instance.HexMap.ToMapPosition(from);
     var _to = Instance.HexMap.ToMapPosition(to);
-    State.As<IRetreatEventSender>()?.SendRetreatEvent(_from, _to);
+    State.Query<IRetreatEventSender>()?.SendRetreatEvent(_from, _to);
   }
 
   public enum States

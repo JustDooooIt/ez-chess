@@ -1,8 +1,8 @@
-public partial class AttackStateValve(IPieceState pieceState, AttackEvent @event) : StateValve(pieceState)
+public partial class AttackStateValve(IPieceState pieceState, AttackEvent @event) : StateValve(pieceState, @event)
 {
   protected override void DoLaunch()
   {
-    _pieceState.As<IAttackable>()?.ReciveEvent(@event);
+    _pieceState.Query<IAttackable>()?.ReciveEvent(@event);
     PipelineEventBus.Instance.Publish(GetInstanceId(), @event);
   }
 }

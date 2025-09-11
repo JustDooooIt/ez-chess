@@ -15,7 +15,7 @@ public partial class DisposeStateDecorator(IPieceState wrapped) : PieceStateDeco
   {
     PiecesManager.RemoveChild(PieceAdapter);
     PieceAdapter.QueueFree();
-    PiecesManager.Pieces.Remove(As<IPositionable>().MapPosition, PieceAdapter);
+    PiecesManager.Pieces.Remove(Query<IPositionable>().MapPosition, PieceAdapter);
   }
 
   protected override void SaveOperation(DisposeEvent @event)

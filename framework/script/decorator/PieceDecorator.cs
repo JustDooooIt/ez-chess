@@ -21,11 +21,11 @@ public abstract partial class PieceDecorator : RefCounted, IPiece
 	public int Faction { get => _wrapped.Faction; set => _wrapped.Faction = value; }
 	public int PieceType { get => _wrapped.PieceType; set => _wrapped.PieceType = value; }
 
-	public virtual V As<V>() where V : class
+	public virtual V Query<V>() where V : class
 	{
 		if (this is V selfImpl) return selfImpl;
 		if (_wrapped is V wrappedImpl) return wrappedImpl;
-		if (_wrapped is IInterfaceQueryable queryable) return queryable.As<V>();
+		if (_wrapped is IInterfaceQueryable queryable) return queryable.Query<V>();
 		return null;
 	}
 

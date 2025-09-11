@@ -33,13 +33,13 @@ public partial class PieceAdapter : Node
     Instance = instance;
     _state_node_dict[state.Origin.GetInstanceId()] = instance.Origin.GetInstanceId();
     _node_state_dict[instance.Origin.GetInstanceId()] = state.Origin.GetInstanceId();
-    if (Instance is PieceInstanceDecorator decorator)
+    if (Instance is Node node)
     {
-      AddChild((Node)decorator.Origin);
+      AddChild(node);
     }
     else
     {
-      AddChild(Instance as Node);
+      AddChild(instance.Origin as Node);
     }
   }
 
@@ -79,8 +79,8 @@ public partial class PieceAdapter : Node
     State = stateDecorator;
     Instance = instanceDecorator;
   }
-  
-	public static PieceAdapter GetPiece(GameManager manager, int faction, string pieceName)
+
+  public static PieceAdapter GetPiece(GameManager manager, int faction, string pieceName)
   {
     return manager.GetNode<Node>("Pieces").GetChild<Node>(faction).GetNode<PieceAdapter>(pieceName);
   }

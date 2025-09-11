@@ -1,8 +1,8 @@
-public partial class RetreatStateValve(IPieceState pieceState, RetreatEvent retreatEvent) : StateValve(pieceState)
+public partial class RetreatStateValve(IPieceState pieceState, RetreatEvent @event) : StateValve(pieceState, @event)
 {
   protected override void DoLaunch()
   {
-    _pieceState.As<IRetreatable>().ReciveEvent(retreatEvent);
-    PipelineEventBus.Instance.Publish(GetInstanceId(), retreatEvent);
+    _pieceState.Query<IRetreatable>().ReciveEvent(@event);
+    PipelineEventBus.Instance.Publish(GetInstanceId(), @event);
   }
 }

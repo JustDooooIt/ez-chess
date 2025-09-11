@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 using Godot;
 
-public partial class RetreatInstanceValve(IPieceInstance pieceInstance, RetreatEvent moveEvent) : InstanceValve(pieceInstance)
+public partial class RetreatInstanceValve(IPieceInstance pieceInstance, RetreatEvent @event) : InstanceValve(pieceInstance, @event)
 {
-  private RetreatEvent _moveEvent = moveEvent;
+  private RetreatEvent _moveEvent = @event;
 
   protected override void DoLaunch()
   {
-    _pieceInstance.Proxy.As<IRetreatable>()?.ReciveEvent(_moveEvent);
+    _pieceInstance.Proxy.Query<IRetreatable>()?.ReciveEvent(_moveEvent);
   }
 }

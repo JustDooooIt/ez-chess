@@ -14,7 +14,7 @@ public partial class OperationRunner : RefCounted, IOperationRunner
 				{
 					var operation = GithubUtils.Deserialize<MoveOperation>(data);
 					var piece = manager.GetNode<Node>("Pieces").GetChild<Node>(operation.Faction).GetNode<PieceAdapter>(operation.PieceName);
-					piece.State.As<IMoveEventSender>()?.SendMoveEvent(operation.From, operation.To, recovered);
+					piece.State.Query<IMoveEventSender>()?.SendMoveEvent(operation.From, operation.To, recovered);
 				}
 				break;
 			case OperationType.ATTACK:
@@ -27,47 +27,47 @@ public partial class OperationRunner : RefCounted, IOperationRunner
 					{
 						case (int)CombatResult.AE:
 							{
-								fromPiece.State.As<IDisposeEventSender>().SendDisposeEvent();
+								fromPiece.State.Query<IDisposeEventSender>().SendDisposeEvent();
 							}
 							break;
 						case (int)CombatResult.AR:
 							{
 								if (fromPiece is GeneralPiece generalPiece)
 									generalPiece.Retreatable = true;
-								fromPiece.State.As<IRetreatRangeProvider>().RetreatRange = 1;
+								fromPiece.State.Query<IRetreatRangeProvider>().RetreatRange = 1;
 							}
 							break;
 						case (int)CombatResult.DR1:
 							{
 								if (targetPiece is GeneralPiece generalPiece)
 									generalPiece.Retreatable = true;
-								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 1;
+								targetPiece.State.Query<IRetreatRangeProvider>().RetreatRange = 1;
 							}
 							break;
 						case (int)CombatResult.DR2:
 							{
 								if (targetPiece is GeneralPiece generalPiece)
 									generalPiece.Retreatable = true;
-								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 2;
+								targetPiece.State.Query<IRetreatRangeProvider>().RetreatRange = 2;
 							}
 							break;
 						case (int)CombatResult.DR3:
 							{
 								if (targetPiece is GeneralPiece generalPiece)
 									generalPiece.Retreatable = true;
-								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 3;
+								targetPiece.State.Query<IRetreatRangeProvider>().RetreatRange = 3;
 							}
 							break;
 						case (int)CombatResult.DR4:
 							{
 								if (targetPiece is GeneralPiece generalPiece)
 									generalPiece.Retreatable = true;
-								targetPiece.State.As<IRetreatRangeProvider>().RetreatRange = 4;
+								targetPiece.State.Query<IRetreatRangeProvider>().RetreatRange = 4;
 							}
 							break;
 						case (int)CombatResult.DE:
 							{
-								targetPiece.State.As<IDisposeEventSender>().SendDisposeEvent();
+								targetPiece.State.Query<IDisposeEventSender>().SendDisposeEvent();
 							}
 							break;
 						default:
@@ -80,14 +80,21 @@ public partial class OperationRunner : RefCounted, IOperationRunner
 				{
 					var operation = GithubUtils.Deserialize<RetreatOperation>(data);
 					var piece = PieceAdapter.GetPiece(manager, operation.Faction, operation.PieceName);
-					piece.State.As<IRetreatEventSender>()?.SendRetreatEvent(operation.From, operation.To);
+					piece.State.Query<IRetreatEventSender>()?.SendRetreatEvent(operation.From, operation.To);
 				}
 				break;
-			case OperationType.DISPOSE:
+			// case OperationType.DISPOSE:
+			// 	{
+			// 		var operation = GithubUtils.Deserialize<DisposeOperation>(data);
+			// 		var piece = PieceAdapter.GetPiece(manager, operation.Faction, operation.PieceName);
+			// 		piece.State.Query<IDisposeEventSender>().SendDisposeEvent();
+			// 	}
+			// 	break;
+			case OperationType.ADVANCE:
 				{
-					var operation = GithubUtils.Deserialize<DisposeOperation>(data);
+					var operation = GithubUtils.Deserialize<AdvanceOperation>(data);
 					var piece = PieceAdapter.GetPiece(manager, operation.Faction, operation.PieceName);
-					piece.State.As<IDisposeEventSender>().SendDisposeEvent();
+					piece.State.Query<IAdvanceEventSender>().SendAdvanceEvent(operation.From, operation.To);
 				}
 				break;
 		}

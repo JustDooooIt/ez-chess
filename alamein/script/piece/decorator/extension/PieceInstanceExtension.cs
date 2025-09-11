@@ -8,4 +8,6 @@ public static class PieceInstanceExtensions
 		=> new AttackInstanceDecorator(piece);
 	public static IPieceInstance WithRetreatAction(this IPieceInstance piece)
 		=> new RetreatInstanceDecorator(piece);
+	public static IPieceInstance WithAdvanceAction(this IPieceInstance piece)
+		=> new AdvanceInstanceDecorator(piece);
 }

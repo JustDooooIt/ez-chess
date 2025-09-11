@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class AttackInstanceDecorator : PieceInstanceDecorator, IAttackable
+public partial class AttackInstanceDecorator : PieceInstanceDecorator<AttackEvent>, IAttackable
 {
   private IPieceInstance _wrapped;
 
@@ -9,7 +9,12 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator, IAttackab
     _wrapped = wrapped;
   }
 
-  public void ReciveEvent(AttackEvent @event)
+  protected override void DoReciveEvent(AttackEvent @event)
+  {
+
+  }
+
+  protected override void SaveOperation(AttackEvent @event)
   {
     var fromPiece = PieceAdapter.GameManager.GetPiece(@event.fromFaction, @event.fromPiece);
     var targetPiece = PieceAdapter.GameManager.GetPiece(@event.targetFaction, @event.targetPiece);
@@ -36,6 +41,7 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator, IAttackab
 
   private void SaveOperation(int fromFaction, string fromPiece, int targetFaction, string targetPiece, CombatResult combatResult)
   {
+
     AttackOperation operation = new()
     {
       CombatResult = (int)combatResult,

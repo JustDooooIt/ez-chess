@@ -11,6 +11,7 @@
 
 [node name="Game" instance=ExtResource("1_d4g3i")]
 script = ExtResource("2_gitvn")
+GameName = "Alamein"
 
 [node name="HexMap" parent="." index="1"]
 texture = ExtResource("2_01s2e")

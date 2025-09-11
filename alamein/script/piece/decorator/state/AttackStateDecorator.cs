@@ -8,7 +8,7 @@ public partial class AttackStateDecorator(IPieceState wrapped, float attack) : P
 
   public void SendAttackEvent(Vector2I target, PieceAdapter targetPiece)
   {
-    Vector2I from = PieceAdapter.State.As<IPositionable>().MapPosition;
+    Vector2I from = PieceAdapter.State.Query<IPositionable>().MapPosition;
     var @event = new AttackEvent(from, PieceAdapter.Faction, PieceAdapter.Name, target, targetPiece.Faction, targetPiece.Name);
     Valve valve = new AttackStateValve(this, @event);
     PipelineAdapter.StatePipeline.AddValve(valve);

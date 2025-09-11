@@ -14,4 +14,6 @@ public static class PieceStateExtensions
 		=> new DisposeStateDecorator(piece);
 	public static IPieceState WithResetState(this IPieceState piece)
 		=> new ResetStateDecorator(piece);
+	public static IPieceState WithAdvanceState(this IPieceState piece)
+		=> new AdvanceStateDecorator(piece);
 }

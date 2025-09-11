@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 
-public partial class AttackInstanceValve(IPieceInstance pieceInstance, AttackEvent @event) : InstanceValve(pieceInstance)
+public partial class AttackInstanceValve(IPieceInstance pieceInstance, AttackEvent @event) : InstanceValve(pieceInstance, @event)
 {
   protected override void DoLaunch()
   {
-    pieceInstance.As<IAttackable>()?.ReciveEvent(@event);
+    _pieceInstance.Query<IAttackable>()?.ReciveEvent(@event);
   }
 }

@@ -6,7 +6,6 @@ using Godot;
 
 public record MoveOperation : Operation
 {
-  public string PieceName { get; set; }
   public Vector2I From { get; set; }
   public Vector2I To { get; set; }
   public Vector2I[] Path { get; set; }
@@ -23,7 +22,6 @@ public record AttackOperation : Operation
 
 public record RetreatOperation : Operation
 {
-  public string PieceName { get; set; }
   public Vector2I From { get; set; }
   public Vector2I To { get; set; }
   public Vector2I[] Path { get; set; }
@@ -31,10 +29,15 @@ public record RetreatOperation : Operation
 
 public record DisposeOperation : Operation
 {
-  public string PieceName { get; set; }
+}
+
+public record AdvanceOperation : Operation
+{
+  public Vector2I From { get; set; }
+  public Vector2I To { get; set; }
 }
 
 public enum OperationType
 {
-  MOVE, ATTACK, RETREAT, DISPOSE
+  MOVE, ATTACK, RETREAT, DISPOSE, ADVANCE
 }
