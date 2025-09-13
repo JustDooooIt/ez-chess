@@ -1,5 +1,8 @@
 {
-	"name": "alamein",
+	"name": "Alamein",
+	"version": 1.0,
+	"description": "",
+	"game": "res://alamein/scene/game.tscn",
 	"firstMover": "Axis",
 	"defaultSize": {
 		"x": 65,

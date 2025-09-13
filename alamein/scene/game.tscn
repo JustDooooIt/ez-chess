@@ -42,7 +42,7 @@ tile_set = ExtResource("3_nu8hi")
 tile_set = ExtResource("3_nu8hi")
 
 [node name="GameLoader" parent="." index="2"]
-ConfigPath = "res://alamein/resource/config.json"
+ConfigPath = "res://alamein/config.json"
 PieceFactoryScript = ExtResource("4_lyve2")
 RenderEventHandlerScript = ExtResource("5_gitvn")
 OperationRunner = ExtResource("6_trdbq")

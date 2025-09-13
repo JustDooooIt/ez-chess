@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="ez-chess"
-run/main_scene="uid://7w18fpdd2ttx"
+run/main_scene="uid://1x7sbial7rju"
 config/features=PackedStringArray("4.4", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 

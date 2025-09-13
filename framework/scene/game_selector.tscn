@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://1x7sbial7rju"]
+
+[ext_resource type="Script" uid="uid://bl87kcg4k8u0d" path="res://framework/script/game/GameSelector.cs" id="1_qhh4e"]
+
+[node name="GameSelector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qhh4e")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="MenuBar" type="MenuBar" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="File" type="PopupMenu" parent="VBoxContainer/MenuBar"]
+item_count = 1
+item_0/text = "Open Module"
+item_0/id = 0
+
+[node name="FileDialog" type="FileDialog" parent="VBoxContainer/MenuBar/File"]
+title = "Open a File"
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.pck")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ItemList" type="ItemList" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+max_columns = 3
+fixed_column_width = 377

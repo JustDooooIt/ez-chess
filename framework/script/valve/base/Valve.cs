@@ -14,22 +14,22 @@ public abstract partial class Valve(IPiece piece) : RefCounted, IValve, IActionE
   public ValveStates ValveState { get => _valveState; protected set => SetVlaveState(value); }
   public void Launch()
   {
-    ValveState = ValveStates.LAUNCHING;
-    DoLaunch();
-    EmitSignal("ValveCompleted");
-    ValveState = ValveStates.STOPED;
+	ValveState = ValveStates.LAUNCHING;
+	DoLaunch();
+	EmitSignal("ValveCompleted");
+	ValveState = ValveStates.STOPED;
   }
 
   protected abstract void DoLaunch();
 
   private void SetVlaveState(ValveStates state)
   {
-    _valveState = state;
-    StateChanged?.Invoke(state);
+	_valveState = state;
+	StateChanged?.Invoke(state);
   }
 
   public enum ValveStates
   {
-    IDLED, LAUNCHING, STOPED
+	IDLED, LAUNCHING, STOPED
   }
 }

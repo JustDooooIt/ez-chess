@@ -89,7 +89,7 @@ public partial class OperationRunner : RefCounted, IOperationRunner
 			// 		var piece = PieceAdapter.GetPiece(manager, operation.Faction, operation.PieceName);
 			// 		piece.State.Query<IDisposeEventSender>().SendDisposeEvent();
 			// 	}
-			// 	break;
+			// 	break; 
 			case OperationType.ADVANCE:
 				{
 					var operation = GithubUtils.Deserialize<AdvanceOperation>(data);
