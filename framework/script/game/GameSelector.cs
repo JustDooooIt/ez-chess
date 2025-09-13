@@ -34,7 +34,7 @@ public partial class GameSelector : Control
 		else
 		{
 			var baseDir = path.GetFile().GetBaseName();
-			var configPath = $"res://{baseDir}/config/config.json";
+			var configPath = $"res://{baseDir}/config.json";
 			if (FileAccess.FileExists(configPath))
 			{
 				var file = FileAccess.Open(configPath, FileAccess.ModeFlags.Read);
