@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Godot.Collections;
 
 public partial class GameState : RefCounted
 {
@@ -11,7 +12,7 @@ public partial class GameState : RefCounted
   private int _stage = 0;
   private int _turn = 0;
 
-
+  public Dictionary Config { get; set; } = [];
   public int Turn { get => _turn; set => SetTurn(value); }
   public int StageCount { get; set; } = 0;
   public int Stage { get => _stage; set => SetStage(value); }

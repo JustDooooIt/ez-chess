@@ -12,7 +12,7 @@ public partial class GameLoader : Node
 {
 	public event Action GameLoaded;
 
-	private IDictionary<string, Variant> _config;
+	private Dictionary _config;
 	private GameManager _manager;
 	private HexMap _map;
 	private Node _piecesContainer;
@@ -55,13 +55,14 @@ public partial class GameLoader : Node
 		StartPipeline();
 	}
 
-	private IDictionary<string, Variant> LoadConfig()
+	private Dictionary LoadConfig()
 	{
-		var file = FileAccess.Open(ConfigPath, FileAccess.ModeFlags.Read);
-		return Json.ParseString(file.GetAsText()).AsGodotDictionary<string, Variant>();
+		// var file = FileAccess.Open(ConfigPath, FileAccess.ModeFlags.Read);
+		// return Json.ParseString(file.GetAsText()).AsGodotDictionary<string, Variant>();
+		return GameState.Instance.Config;
 	}
 
-	private async void InitFirstFounded(IDictionary<string, Variant> config)
+	private async void InitFirstFounded(Dictionary config)
 	{
 		var factionNames = config["factions"].AsGodotArray<string>();
 		GameState.Instance.Factions = [.. factionNames];

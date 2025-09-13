@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 
 public partial class GameConfig : Control
 {
-	[Export]
 	public PackedScene Scene { get; set; }
-	[Export]
 	public string GameName { get; set; }
-	[Export]
 	public Array<string> Factions { get; set; }
 
 	public override void _Ready()
 	{
+		GameName = GameState.Instance.Config["name"].AsString();
+		Factions = GameState.Instance.Config["factions"].AsGodotArray<string>();
+		Scene = GD.Load<PackedScene>(GameState.Instance.Config["path"].AsString());
 		FactionSelector();
 	}
 
