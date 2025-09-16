@@ -57,9 +57,15 @@ public partial class GameLoader : Node
 
 	private Dictionary LoadConfig()
 	{
-		// var file = FileAccess.Open(ConfigPath, FileAccess.ModeFlags.Read);
-		// return Json.ParseString(file.GetAsText()).AsGodotDictionary<string, Variant>();
-		return GameState.Instance.Config;
+		if (GameState.Instance.Config.Count > 0)
+		{
+			return GameState.Instance.Config;
+		}
+		else
+		{
+			var file = FileAccess.Open(ConfigPath, FileAccess.ModeFlags.Read);
+			return Json.ParseString(file.GetAsText()).AsGodotDictionary();
+		}
 	}
 
 	private async void InitFirstFounded(Dictionary config)

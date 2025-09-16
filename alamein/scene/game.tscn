@@ -11,7 +11,6 @@
 
 [node name="Game" instance=ExtResource("1_d4g3i")]
 script = ExtResource("2_gitvn")
-GameName = "Alamein"
 
 [node name="HexMap" parent="." index="1"]
 texture = ExtResource("2_01s2e")
@@ -58,7 +57,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
 
 [node name="EndStage" type="Button" parent="CanvasLayer/Control" index="0"]
 layout_mode = 0

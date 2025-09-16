@@ -10,9 +10,7 @@ public partial class GameManager : Node2D
 	protected Node _players;
 	private Button _endStage;
 	public List<Group<Vector2I, PieceAdapter>> Pieces { get; } = [];
-
-	[Export]
-	public string GameName { get; set; } = "";
+	
 	public override void _Ready()
 	{
 		_players ??= GetNode<Node>("Players");

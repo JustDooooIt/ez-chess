@@ -6,12 +6,12 @@ public partial class CombatController : RefCounted
 {
 	public readonly static CombatController Instance = new();
 	public CombatResult[][] CombatTable { get; } = [
-	[CombatResult.AE, CombatResult.AR, CombatResult.AR, CombatResult.AR, CombatResult.DR1, CombatResult.DR3, CombatResult.DE],
-	[CombatResult.AR, CombatResult.AR, CombatResult.AR, CombatResult.DR1, CombatResult.DR2, CombatResult.DR4, CombatResult.DE],
-	[CombatResult.AR, CombatResult.AR, CombatResult.DR1, CombatResult.DR2, CombatResult.DR3, CombatResult.DE, CombatResult.DE],
-	[CombatResult.AR, CombatResult.DR1, CombatResult.DR2, CombatResult.DR3, CombatResult.DR4, CombatResult.DE, CombatResult.DE],
-	[CombatResult.AR, CombatResult.DR2, CombatResult.DR3, CombatResult.DR4, CombatResult.DE, CombatResult.DE, CombatResult.DE],
-	[CombatResult.DR1, CombatResult.DR3, CombatResult.DR4, CombatResult.DE, CombatResult.DE, CombatResult.DE, CombatResult.DE],
+		[CombatResult.AE, CombatResult.AR, CombatResult.AR, CombatResult.AR, CombatResult.DR1, CombatResult.DR3, CombatResult.DE],
+		[CombatResult.AR, CombatResult.AR, CombatResult.AR, CombatResult.DR1, CombatResult.DR2, CombatResult.DR4, CombatResult.DE],
+		[CombatResult.AR, CombatResult.AR, CombatResult.DR1, CombatResult.DR2, CombatResult.DR3, CombatResult.DE, CombatResult.DE],
+		[CombatResult.AR, CombatResult.DR1, CombatResult.DR2, CombatResult.DR3, CombatResult.DR4, CombatResult.DE, CombatResult.DE],
+		[CombatResult.AR, CombatResult.DR2, CombatResult.DR3, CombatResult.DR4, CombatResult.DE, CombatResult.DE, CombatResult.DE],
+		[CombatResult.DR1, CombatResult.DR3, CombatResult.DR4, CombatResult.DE, CombatResult.DE, CombatResult.DE, CombatResult.DE],
 	];
 
 	public Dictionary<ulong, HashSet<ulong>> Combats { get; } = [];
