@@ -52,6 +52,6 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator<AttackEven
       TargetFaction = @event.targetFaction,
       Type = (int)OperationType.ATTACK,
       CommentType = CommentType.GAME_DATA
-    }; ;
+    };
   }
 }
