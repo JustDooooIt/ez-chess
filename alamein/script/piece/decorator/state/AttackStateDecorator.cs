@@ -2,9 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public partial class AttackStateDecorator(IPieceState wrapped, float attack) : PieceStateDecorator<AttackEvent>(wrapped), IAttackable, IAttackEventSender, IAttackPointProvider
+public partial class AttackStateDecorator : PieceStateDecorator<AttackEvent>, IAttackable, IAttackEventSender, IAttackPointProvider
 {
-  public float AttackPoint { get; set; } = attack;
+  public float AttackPoint { get; set; }
+
+  public AttackStateDecorator(IPieceState wrapped, float attack) : base(wrapped)
+  {
+    this.AttackPoint = attack;
+    IsAutoSubmit = false;
+  }
 
   public void SendAttackEvent(Vector2I target, PieceAdapter targetPiece)
   {
@@ -15,12 +21,12 @@ public partial class AttackStateDecorator(IPieceState wrapped, float attack) : P
     PipelineAdapter.RenderPipeline.RegisterValve<AttackEvent>(valve);
   }
 
-  protected override void DoReciveEvent(AttackEvent @event)
+  protected override void _ReciveEvent(AttackEvent @event)
   {
-    
-  }
 
-  protected override void SaveOperation(AttackEvent @event)
+  }
+  
+  protected override void _SaveOperation(AttackEvent @event)
   {
     var fromPiece = PieceAdapter.GameManager.GetPiece(@event.fromFaction, @event.fromPiece);
     var toPiece = PieceAdapter.GameManager.GetPiece(@event.targetFaction, @event.targetPiece);

@@ -14,15 +14,7 @@ script = ExtResource("2_gitvn")
 
 [node name="HexMap" parent="." index="1"]
 texture = ExtResource("2_01s2e")
-_terrainCost = Dictionary[int, float]({
-0: 0.0,
-1: 2.0,
-2: 1.0,
-3: 1.0,
-4: 1.0,
-5: 1.0,
-6: -1.0
-})
+_terrainCost = Array[float]([1.0, 2.0, 1.0, 1.0, 1.0, 1.0, -1.0])
 
 [node name="TerrainLayers" parent="HexMap" index="0"]
 position = Vector2(452.515, 11.84)
@@ -57,6 +49,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="EndStage" type="Button" parent="CanvasLayer/Control" index="0"]
 layout_mode = 0

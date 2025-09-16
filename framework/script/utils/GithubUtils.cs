@@ -370,6 +370,11 @@ public class GithubUtils
 	{
 		OperationCache.Enqueue((discussionId, JsonSerializer.Serialize(operation, options)));
 	}
+	
+	public static void SaveOperation(string discussionId, Operation operation)
+	{
+		OperationCache.Enqueue((discussionId, JsonSerializer.Serialize(operation, operation.GetType(), options)));
+	}
 
 	public static async void SubmitOperationOnInterval()
 	{
@@ -618,7 +623,7 @@ public record Operation : BaseData
 {
 	public int Type { get; set; }
 	public int Faction { get; set; }
-  public string PieceName { get; set; }
+	public string PieceName { get; set; }
 }
 
 public record BaseData

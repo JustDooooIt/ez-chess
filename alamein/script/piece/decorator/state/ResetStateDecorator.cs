@@ -1,7 +1,7 @@
 public partial class ResetStateDecorator(IPieceState wrapped) : PieceStateDecorator<ResetEvent>(wrapped), IResetable
 {
 
-  protected override void DoReciveEvent(ResetEvent @event)
+  protected override void _ReciveEvent(ResetEvent @event)
   {
     foreach (var it in ((IInterfaceQueryable)this).Proxy.QueryAll<IResetable>())
     {
@@ -12,8 +12,5 @@ public partial class ResetStateDecorator(IPieceState wrapped) : PieceStateDecora
     }
   }
 
-  protected override void SaveOperation(ResetEvent @event)
-  {
-    throw new System.NotImplementedException();
-  }
+  protected override Operation _ToOperation(ResetEvent @event) => null;
 }

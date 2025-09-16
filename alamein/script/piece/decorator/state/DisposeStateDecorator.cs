@@ -11,22 +11,21 @@ public partial class DisposeStateDecorator(IPieceState wrapped) : PieceStateDeco
 		AddValve<DisposeEvent, DisposeStateValve>(@event);
 	}
 
-	protected override void DoReciveEvent(DisposeEvent @event)
+	protected override void _ReciveEvent(DisposeEvent @event)
 	{
 		PiecesManager.RemoveChild(PieceAdapter);
 		PieceAdapter.QueueFree();
 		PiecesManager.Pieces.Remove(Query<IPositionable>().MapPosition, PieceAdapter);
 	}
 
-	protected override void SaveOperation(DisposeEvent @event)
+	protected override Operation _ToOperation(DisposeEvent @event)
 	{
-		DisposeOperation operation = new()
+		return new()
 		{
 			PieceName = PieceAdapter.Name,
 			Faction = PieceAdapter.Faction,
 			Type = (int)OperationType.DISPOSE,
 			CommentType = CommentType.GAME_DATA
 		};
-		GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, operation);
 	}
 }

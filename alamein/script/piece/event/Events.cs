@@ -58,6 +58,7 @@ public record AttackEvent : PieceEvent
   public Vector2I target;
   public int fromFaction;
   public int targetFaction;
+  // public int combatResult;
 
   public AttackEvent(Vector2I from, int fromFaction, string fromPiece, Vector2I target, int targetFaction, string targetPiece) : base(fromFaction, fromPiece, false)
   {
@@ -68,6 +69,16 @@ public record AttackEvent : PieceEvent
     this.targetFaction = targetFaction;
     this.fromPiece = fromPiece;
   }
+  // public AttackEvent(Vector2I from, int fromFaction, string fromPiece, Vector2I target, int targetFaction, string targetPiece, int CombatResult) : base(fromFaction, fromPiece, false)
+  // {
+  //   this.targetPiece = targetPiece;
+  //   this.from = from;
+  //   this.target = target;
+  //   this.fromFaction = fromFaction;
+  //   this.targetFaction = targetFaction;
+  //   this.fromPiece = fromPiece;
+  //   this.combatResult = CombatResult;
+  // }
 }
 
 public record DisposeEvent : PieceEvent

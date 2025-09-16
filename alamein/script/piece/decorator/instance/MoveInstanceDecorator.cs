@@ -3,7 +3,7 @@ using Godot;
 
 public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<MoveEvent>(wrapped), IMoveable
 {
-  protected override void DoReciveEvent(MoveEvent @event)
+  protected override void _ReciveEvent(MoveEvent @event)
   {
     var instance = (IPieceInstance)Origin;
     instance.Selectable = false;
@@ -15,10 +15,5 @@ public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstan
       tween.TweenProperty((Node)instance.Origin, "position", position, 0.25);
     }
     tween.TweenCallback(Callable.From(() => { instance.Selectable = true; instance.IsRunning = false; }));
-  }
-
-  protected override void SaveOperation(MoveEvent @event)
-  {
-
   }
 }

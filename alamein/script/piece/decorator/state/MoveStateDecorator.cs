@@ -32,16 +32,16 @@ public partial class MoveStateDecorator(IPieceState piece, float movement) :
     ResidualMovement = Movement;
   }
 
-  protected override void DoReciveEvent(MoveEvent @event)
+  protected override void _ReciveEvent(MoveEvent @event)
   {
     Query<IPositionable>().MapPosition = @event.to;
     ResidualMovement -= @event.cost;
     PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
   }
 
-  protected override void SaveOperation(MoveEvent @event)
+  protected override Operation _ToOperation(MoveEvent @event)
   {
-    var op = new MoveOperation()
+    return new MoveOperation()
     {
       From = @event.from,
       To = @event.to,
@@ -51,6 +51,5 @@ public partial class MoveStateDecorator(IPieceState piece, float movement) :
       Faction = PieceAdapter.Faction,
       CommentType = CommentType.GAME_DATA
     };
-    GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, op);
   }
 }

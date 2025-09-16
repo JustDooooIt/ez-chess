@@ -3,7 +3,7 @@ using Godot;
 
 public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<RetreatEvent>(wrapped), IRetreatable
 {
-  protected override void DoReciveEvent(RetreatEvent @event)
+  protected override void _ReciveEvent(RetreatEvent @event)
   {
     var instance = (IPieceInstance)Origin;
     instance.Selectable = false;
@@ -21,8 +21,4 @@ public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceIns
     }));
   }
 
-  protected override void SaveOperation(RetreatEvent @event)
-  {
-
-  }
 }

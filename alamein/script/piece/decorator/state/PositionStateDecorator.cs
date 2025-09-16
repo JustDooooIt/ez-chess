@@ -23,13 +23,13 @@ public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDec
     PipelineAdapter.RenderPipeline.RegisterValve<PositionEvent>(valve);
   }
  
-  protected override void DoReciveEvent(PositionEvent @event)
+  protected override void _ReciveEvent(PositionEvent @event)
   {
     
   }
 
-  protected override void SaveOperation(PositionEvent @event)
+  protected override Operation _ToOperation(PositionEvent @event)
   {
-
+    return null;
   }
 }

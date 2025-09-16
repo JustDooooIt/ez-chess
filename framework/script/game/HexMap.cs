@@ -16,7 +16,7 @@ public partial class HexMap : Sprite2D
 	public Rect2I MapBounds => _mapBounds;
 
 	[Export]
-	protected Godot.Collections.Dictionary<int, float> _terrainCost = [];
+	protected Godot.Collections.Array<float> _terrainCost = [];
 
 	protected virtual AStar CreateAStar()
 	{

@@ -7,20 +7,21 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator<AttackEven
   public AttackInstanceDecorator(IPieceInstance wrapped) : base(wrapped)
   {
     _wrapped = wrapped;
+    IsAutoSubmit = false;
   }
 
-  protected override void DoReciveEvent(AttackEvent @event)
+  protected override void _ReciveEvent(AttackEvent @event)
   {
 
   }
 
-  protected override void SaveOperation(AttackEvent @event)
+  protected override void _SaveOperation(AttackEvent @event)
   {
     var fromPiece = PieceAdapter.GameManager.GetPiece(@event.fromFaction, @event.fromPiece);
     var targetPiece = PieceAdapter.GameManager.GetPiece(@event.targetFaction, @event.targetPiece);
     var instance = targetPiece.Instance.Origin as Node;
     var tag = instance.GetNode<Node>("Tag");
-    Button combatButton = null;
+    Button combatButton;
     if ((combatButton = tag.GetNodeOrNull<Button>("Combat")) == null)
     {
       combatButton = new Button
@@ -31,7 +32,8 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator<AttackEven
       combatButton.Pressed += () =>
       {
         var combatResult = CombatController.Instance.ProcessCombat(targetPiece.GetInstanceId());
-        SaveOperation(fromPiece.Faction, fromPiece.Name, targetPiece.Faction, targetPiece.Name, combatResult);
+        var op = ToOperation(@event, combatResult);
+        GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, op);
         tag.RemoveChild(combatButton);
         combatButton.QueueFree();
       };
@@ -39,19 +41,17 @@ public partial class AttackInstanceDecorator : PieceInstanceDecorator<AttackEven
     }
   }
 
-  private void SaveOperation(int fromFaction, string fromPiece, int targetFaction, string targetPiece, CombatResult combatResult)
+  protected Operation ToOperation(AttackEvent @event, CombatResult combatResult)
   {
-
-    AttackOperation operation = new()
+    return new AttackOperation()
     {
       CombatResult = (int)combatResult,
-      From = fromPiece,
-      FromFaction = fromFaction,
-      Target = targetPiece,
-      TargetFaction = targetFaction,
+      From = @event.fromPiece,
+      FromFaction = @event.fromFaction,
+      Target = @event.targetPiece,
+      TargetFaction = @event.targetFaction,
       Type = (int)OperationType.ATTACK,
       CommentType = CommentType.GAME_DATA
-    };
-    GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, operation);
+    }; ;
   }
 }

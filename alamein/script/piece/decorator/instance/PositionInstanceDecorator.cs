@@ -17,12 +17,7 @@ public partial class PositionInstanceDecorator(IPieceInstance wrapped) : PieceIn
     return _mapPosition;
   }
 
-  protected override void DoReciveEvent(PositionEvent @event)
-  {
-
-  }
-
-  protected override void SaveOperation(PositionEvent @event)
+  protected override void _ReciveEvent(PositionEvent @event)
   {
 
   }

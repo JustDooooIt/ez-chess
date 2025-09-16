@@ -95,16 +95,16 @@ public partial class RetreatStateDecorator(IPieceState piece) :
     return astar;
   }
 
-  protected override void DoReciveEvent(RetreatEvent @event)
+  protected override void _ReciveEvent(RetreatEvent @event)
   {
     Query<IPositionable>().MapPosition = @event.to;
     PiecesManager.Pieces.Move(@event.from, @event.to, PieceAdapter);
     (PieceAdapter as GeneralPiece).Retreatable = false;
   }
 
-  protected override void SaveOperation(RetreatEvent @event)
+  protected override Operation _ToOperation(RetreatEvent @event)
   {
-    var op = new RetreatOperation()
+    return new RetreatOperation()
     {
       From = @event.from,
       To = @event.to,
@@ -114,7 +114,5 @@ public partial class RetreatStateDecorator(IPieceState piece) :
       Faction = PieceAdapter.Faction,
       CommentType = CommentType.GAME_DATA
     };
-    GithubUtils.SaveOperation(GameState.Instance.RoomMetaData.Id, op);
   }
-
 }
