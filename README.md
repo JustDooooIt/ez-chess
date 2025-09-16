@@ -26,3 +26,6 @@ EZ-Chess 是个脚手架，将战棋流程抽象出来，为开发提供便利�
 4. `decorator`是装饰器，分为`PieceStateDecorator`和`PieceInstanceDecorator`，分别封装状态和节点。使用方法是继承这两个类，然后添加响应的接口和状态即可。  
 5. `PieceAdapter`封装了`state`和`instance`，继承它并实现诸如移动等操作，一般调用的是`state`的函数。  
 6. `PieceFactory`，创建棋子的工厂，需要继承`PieceFactoryBase`，然后将其挂载在`game.tscn`的`GameLoader`节点。  
+
+## 如何运行example
+在godot直接运行项目即可,在界面填入github token(需要开启discussion的写权限和repository读权限),然后点击create room作为房主进入游戏.其他人想要加入可以输入discussion的number(显示在房主的左上角).
