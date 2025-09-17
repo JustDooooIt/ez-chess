@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://cc4o8t2ewrdih"]
+[gd_scene load_steps=3 format=3 uid="uid://cc4o8t2ewrdih"]
 
 [ext_resource type="PackedScene" uid="uid://bwcgwpn25wptn" path="res://addons/ez-chess/scene/game_config.tscn" id="1_abwda"]
+[ext_resource type="PackedScene" uid="uid://c3xreokavvgfh" path="res://alamein/scene/game.tscn" id="2_t8h0t"]
 
 [node name="GameConfig" instance=ExtResource("1_abwda")]
+Scene = ExtResource("2_t8h0t")
 GameName = "Alamein"
+Factions = Array[String](["Axis", "Allies"])

@@ -1,11 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://cuavd51riac8e"]
 
-[ext_resource type="Script" uid="uid://m1f87c27dmw3" path="res://addons/ez-chess/script/game/GameManager.cs" id="1_p1ry8"]
-[ext_resource type="Script" uid="uid://dimmhwo2hwabl" path="res://addons/ez-chess/script/loader/GameLoader.cs" id="2_8n2gv"]
-[ext_resource type="Script" uid="uid://b0gx7ypr7ce75" path="res://addons/ez-chess/script/game/Camera.cs" id="2_p1ry8"]
-[ext_resource type="Script" uid="uid://b8fa2jwwe1pkh" path="res://addons/ez-chess/script/game/HexMap.cs" id="3_p1ry8"]
-[ext_resource type="Script" uid="uid://dtgrlxssnrxf3" path="res://addons/ez-chess/script/game/TerrainLayers.cs" id="3_xwcet"]
-[ext_resource type="Script" uid="uid://dlq2utd2273h1" path="res://addons/ez-chess/script/pipeline/Pipelines.cs" id="6_joknk"]
+[ext_resource type="Script" uid="uid://c60duxip3htb7" path="res://addons/ez-chess/script/game/GameManager.cs" id="1_p1ry8"]
+[ext_resource type="Script" uid="uid://duax42gf76pd2" path="res://addons/ez-chess/script/loader/GameLoader.cs" id="2_8n2gv"]
+[ext_resource type="Script" uid="uid://cj4qw1mq7imvs" path="res://addons/ez-chess/script/game/Camera.cs" id="2_p1ry8"]
+[ext_resource type="Script" uid="uid://d3r6yu3v4lvca" path="res://addons/ez-chess/script/game/HexMap.cs" id="3_p1ry8"]
+[ext_resource type="Script" uid="uid://dooie8gauyvut" path="res://addons/ez-chess/script/game/TerrainLayers.cs" id="3_xwcet"]
+[ext_resource type="Script" uid="uid://cfpkh3umnsy2y" path="res://addons/ez-chess/script/pipeline/Pipelines.cs" id="6_joknk"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_p1ry8")

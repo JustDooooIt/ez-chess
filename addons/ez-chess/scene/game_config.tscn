@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwcgwpn25wptn"]
+[gd_scene load_steps=2 format=3 uid="uid://bwcgwpn25wptn"]
 
-[ext_resource type="Script" uid="uid://c1fy2sp3gv7p8" path="res://addons/ez-chess/script/game/GameConfig.cs" id="1_iph5o"]
-[ext_resource type="PackedScene" uid="uid://c3xreokavvgfh" path="res://alamein/scene/game.tscn" id="2_5bpff"]
+[ext_resource type="Script" uid="uid://cnbp0la4w5p1a" path="res://addons/ez-chess/script/game/GameConfig.cs" id="1_iph5o"]
 
 [node name="GameConfig" type="Control"]
 layout_mode = 3
@@ -11,9 +10,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_iph5o")
-Scene = ExtResource("2_5bpff")
-GameName = "alamein"
-Factions = Array[String](["Axis", "Allies"])
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
