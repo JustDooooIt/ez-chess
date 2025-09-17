@@ -103,7 +103,7 @@ public partial class GameSelector : Control
 	public void OnItemActivated(long id)
 	{
 		GameState.Instance.Config = _itemList.GetItemMetadata((int)id).AsGodotDictionary();
-		var err = GetTree().ChangeSceneToFile("res://framework/scene/game_config.tscn");
+		var err = GetTree().ChangeSceneToFile("res://addons/ez-chess/scene/game_config.tscn");
 		if (err != Error.Ok)
 		{
 			GD.PrintErr("Error occurred while changing the scene.");

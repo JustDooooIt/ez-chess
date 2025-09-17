@@ -41,7 +41,7 @@ public partial class GameLoader : Node
 		_manager = GetNode<GameManager>("..");
 		_map = GetNode<HexMap>("../HexMap");
 		_piecesContainer = GetNode<Node>("../Pieces");
-		_piecesManagerScene = GD.Load<PackedScene>("res://framework/scene/pieces_manager.tscn");
+		_piecesManagerScene = GD.Load<PackedScene>("res://addons/ez-chess/scene/pieces_manager.tscn");
 		_config = LoadConfig();
 		_pieceFactory = (IPieceFactory)PieceFactoryScript.New().AsGodotObject();
 		_renderEventHandler = (BaseRenderEventHandler)RenderEventHandlerScript.New().AsGodotObject();
@@ -147,11 +147,11 @@ public partial class GameLoader : Node
 		PackedScene pipelineScene;
 		if (GameState.Instance.PlayerFactionName == name)
 		{
-			pipelineScene = GD.Load<PackedScene>("res://framework/scene/player.tscn");
+			pipelineScene = GD.Load<PackedScene>("res://addons/ez-chess/scene/player.tscn");
 		}
 		else
 		{
-			pipelineScene = GD.Load<PackedScene>("res://framework/scene/other.tscn");
+			pipelineScene = GD.Load<PackedScene>("res://addons/ez-chess/scene/other.tscn");
 		}
 		var pipeline = pipelineScene.Instantiate<PlayerPipeline>();
 		pipeline.Name = name;

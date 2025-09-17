@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://c8kf6kg2rjjr4"]
 
-[ext_resource type="Script" uid="uid://cyqt6digcshul" path="res://framework/script/instance/PieceInstance.cs" id="1_qgpfb"]
+[ext_resource type="Script" uid="uid://cyqt6digcshul" path="res://addons/ez-chess/script/instance/PieceInstance.cs" id="1_qgpfb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3653e"]
 

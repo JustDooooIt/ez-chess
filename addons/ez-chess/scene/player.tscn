@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgs17g33f3cku"]
+
+[ext_resource type="Script" uid="uid://ck35u8dp5ri1" path="res://addons/ez-chess/script/pipeline/PlayerPipeline.cs" id="1_4grpc"]
+[ext_resource type="Script" uid="uid://c01md7jcs04ok" path="res://addons/ez-chess/script/pipeline/StatePipeline.cs" id="2_eulwi"]
+[ext_resource type="Script" uid="uid://cjhlnnib8hsua" path="res://addons/ez-chess/script/pipeline/RenderPipeline.cs" id="3_cv1r8"]
+
+[node name="Player" type="Node"]
+script = ExtResource("1_4grpc")
+
+[node name="State" type="Node" parent="."]
+script = ExtResource("2_eulwi")
+
+[node name="Render" type="Node" parent="."]
+script = ExtResource("3_cv1r8")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://1x7sbial7rju"]
 
-[ext_resource type="Script" uid="uid://bl87kcg4k8u0d" path="res://framework/script/game/GameSelector.cs" id="1_qhh4e"]
+[ext_resource type="Script" uid="uid://bl87kcg4k8u0d" path="res://addons/ez-chess/script/game/GameSelector.cs" id="1_qhh4e"]
 
 [node name="GameSelector" type="Control"]
 layout_mode = 3

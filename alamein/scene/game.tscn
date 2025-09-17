@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=4 uid="uid://c3xreokavvgfh"]
 
-[ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://framework/scene/game.tscn" id="1_d4g3i"]
+[ext_resource type="PackedScene" uid="uid://cuavd51riac8e" path="res://addons/ez-chess/scene/game.tscn" id="1_d4g3i"]
 [ext_resource type="Texture2D" uid="uid://c7r6d8qd77t1s" path="res://alamein/resource/image/mainmap.jpg" id="2_01s2e"]
 [ext_resource type="Script" uid="uid://cajgi37xjcpfn" path="res://alamein/script/game/AlameinManager.cs" id="2_gitvn"]
 [ext_resource type="TileSet" uid="uid://dltldbi3addiq" path="res://alamein/resource/game.tres" id="3_nu8hi"]
