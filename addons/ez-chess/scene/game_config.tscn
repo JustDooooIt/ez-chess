@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bwcgwpn25wptn"]
 
-[ext_resource type="Script" uid="uid://c1fy2sp3gv7p8" path="res://framework/script/game/GameConfig.cs" id="1_iph5o"]
+[ext_resource type="Script" uid="uid://c1fy2sp3gv7p8" path="res://addons/ez-chess/script/game/GameConfig.cs" id="1_iph5o"]
 [ext_resource type="PackedScene" uid="uid://c3xreokavvgfh" path="res://alamein/scene/game.tscn" id="2_5bpff"]
 
 [node name="GameConfig" type="Control"]

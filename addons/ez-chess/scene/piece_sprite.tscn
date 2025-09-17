@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://0pd2rj1wae3i"]
 
-[ext_resource type="Shader" uid="uid://dlusptns2llm6" path="res://framework/shader/outline.gdshader" id="1_b3f0k"]
+[ext_resource type="Shader" uid="uid://dlusptns2llm6" path="res://addons/ez-chess/shader/outline.gdshader" id="1_b3f0k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_uqwud"]
 shader = ExtResource("1_b3f0k")

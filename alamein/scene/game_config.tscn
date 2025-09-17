@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cc4o8t2ewrdih"]
 
-[ext_resource type="PackedScene" uid="uid://bwcgwpn25wptn" path="res://framework/scene/game_config.tscn" id="1_abwda"]
+[ext_resource type="PackedScene" uid="uid://bwcgwpn25wptn" path="res://addons/ez-chess/scene/game_config.tscn" id="1_abwda"]
 
 [node name="GameConfig" instance=ExtResource("1_abwda")]
 GameName = "Alamein"

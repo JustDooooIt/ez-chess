@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxspo5lhvt3lj"]
+
+[ext_resource type="PackedScene" uid="uid://cgs17g33f3cku" path="res://addons/ez-chess/scene/player.tscn" id="1_ool0s"]
+[ext_resource type="Script" uid="uid://d3mrb7l86bcap" path="res://addons/ez-chess/script/pipeline/OtherPipeline.cs" id="2_cfw5f"]
+
+[node name="Other" instance=ExtResource("1_ool0s")]
+script = ExtResource("2_cfw5f")
