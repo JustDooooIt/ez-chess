@@ -12,8 +12,8 @@ public partial class PlayerPipeline : Node
   public RenderPipeline RenderPipeline { get; private set; }
   public override void _Ready()
   {
-	StatePipeline = GetChild<StatePipeline>(0);
-	RenderPipeline = GetChild<RenderPipeline>(1);
-	GameManager = GetNode<GameManager>("/root/Game");
+    StatePipeline = GetChild<StatePipeline>(0);
+    RenderPipeline = GetChild<RenderPipeline>(1);
+    GameManager = GetNode<GameManager>("/root/Game");
   }
 }

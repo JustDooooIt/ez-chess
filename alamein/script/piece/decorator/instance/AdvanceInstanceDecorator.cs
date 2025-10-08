@@ -1,6 +1,7 @@
 using Godot;
 
-public partial class AdvanceInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<AdvanceEvent>(wrapped), IAdvancable
+[RegisterValve("Advance", ValveTypes.INSTANCE)]
+public partial class AdvanceInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<AdvanceEvent>(wrapped), IAdvanceable
 {
   protected override void _ReciveEvent(AdvanceEvent @event)
   {

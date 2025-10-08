@@ -1,5 +1,6 @@
 using Godot;
 
+[RegisterValve("Attack", ValveTypes.INSTANCE)]
 public partial class AttackInstanceDecorator : PieceInstanceDecorator<AttackEvent>, IAttackable
 {
   private IPieceInstance _wrapped;

@@ -1,5 +1,6 @@
 using Godot;
 
+[RegisterValve("Dispose", ValveTypes.STATE, true)]
 public partial class DisposeStateDecorator(IPieceState wrapped) : PieceStateDecorator<DisposeEvent>(wrapped), IDisposable, IDisposeEventSender
 {
 

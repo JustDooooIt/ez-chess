@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
+[RegisterValve("Retreat", ValveTypes.INSTANCE)]
 public partial class RetreatInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<RetreatEvent>(wrapped), IRetreatable
 {
   protected override void _ReciveEvent(RetreatEvent @event)

@@ -1,5 +1,6 @@
 using Godot;
 
+[RegisterValve("Position", ValveTypes.INSTANCE)]
 public partial class PositionInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<PositionEvent>(wrapped), IPositionable
 {
   private Vector2I _mapPosition;
@@ -19,6 +20,6 @@ public partial class PositionInstanceDecorator(IPieceInstance wrapped) : PieceIn
 
   protected override void _ReciveEvent(PositionEvent @event)
   {
-
+    MapPosition = @event.position;
   }
 }

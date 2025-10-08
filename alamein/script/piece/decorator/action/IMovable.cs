@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Godot;
 
-public interface IMoveable : IAction<MoveEvent>
+public interface IMovable : IAction<MoveEvent>
 {
 }

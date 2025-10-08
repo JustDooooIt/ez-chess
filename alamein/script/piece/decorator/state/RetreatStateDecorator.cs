@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Godot;
 
+[RegisterValve("Retreat", ValveTypes.STATE, true)]
 public partial class RetreatStateDecorator(IPieceState piece) :
   PieceStateDecorator<RetreatEvent>(piece), IRetreatable, IRetreatRangeProvider, IRetreatEventSender
 {

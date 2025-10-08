@@ -1,6 +1,7 @@
 using Godot;
 
-public partial class AdvanceStateDecorator(IPieceState wrapped) : PieceStateDecorator<AdvanceEvent>(wrapped), IAdvancable, IAdvanceEventSender
+[RegisterValve("Advance", ValveTypes.STATE, true)]
+public partial class AdvanceStateDecorator(IPieceState wrapped) : PieceStateDecorator<AdvanceEvent>(wrapped), IAdvanceable, IAdvanceEventSender
 {
   public void SendAdvanceEvent(Vector2I from, Vector2I to)
   {

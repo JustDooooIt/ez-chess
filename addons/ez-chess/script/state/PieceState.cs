@@ -18,6 +18,6 @@ public partial class PieceState : RefCounted, IPieceState
 
   public IEnumerable<T> QueryAll<T>() where T : class
   {
-    return [];
+	return [];
   }
 }

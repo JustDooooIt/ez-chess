@@ -2,7 +2,9 @@
 .godot/
 /android/
 .vscode
-**.uid
+*.uid
 .config
 *.tmp
 node_modules
+.vs
+*.import

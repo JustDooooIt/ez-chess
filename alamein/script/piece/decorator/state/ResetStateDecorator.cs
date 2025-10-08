@@ -1,3 +1,4 @@
+[RegisterValve("Reset", ValveTypes.STATE, true)]
 public partial class ResetStateDecorator(IPieceState wrapped) : PieceStateDecorator<ResetEvent>(wrapped), IResetable
 {
 

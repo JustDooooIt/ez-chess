@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
+[RegisterValve("Attack", ValveTypes.STATE, true)]
 public partial class AttackStateDecorator : PieceStateDecorator<AttackEvent>, IAttackable, IAttackEventSender, IAttackPointProvider
 {
   public float AttackPoint { get; set; }

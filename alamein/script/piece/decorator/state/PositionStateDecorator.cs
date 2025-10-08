@@ -1,5 +1,6 @@
 using Godot;
 
+[RegisterValve("Position", ValveTypes.STATE, true)]
 public partial class PositionStateDecorator(IPieceState wrapped) : PieceStateDecorator<PositionEvent>(wrapped), IPositionable, IPositionEventSender
 {
   private Vector2I _mapPosition;

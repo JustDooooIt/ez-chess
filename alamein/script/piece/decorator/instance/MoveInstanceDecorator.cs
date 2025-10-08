@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using Godot;
 
-public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<MoveEvent>(wrapped), IMoveable
+[RegisterValve("Move", ValveTypes.INSTANCE)]
+public partial class MoveInstanceDecorator(IPieceInstance wrapped) : PieceInstanceDecorator<MoveEvent>(wrapped), IMovable
 {
   protected override void _ReciveEvent(MoveEvent @event)
   {
