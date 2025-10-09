@@ -1,0 +1,11 @@
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\bin\Debug\netstandard2.0\valve_generator.deps.json
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\bin\Debug\netstandard2.0\valve_generator.dll
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\bin\Debug\netstandard2.0\valve_generator.pdb
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.csproj.AssemblyReference.cache
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.GeneratedMSBuildEditorConfig.editorconfig
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.AssemblyInfoInputs.cache
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.AssemblyInfo.cs
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.csproj.CoreCompileInputs.cache
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.sourcelink.json
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.dll
+D:\Godot\ez-chess\addons\ez-chess\script\valve_generator\obj\Debug\netstandard2.0\valve_generator.pdb

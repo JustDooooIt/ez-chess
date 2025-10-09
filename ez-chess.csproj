@@ -4,47 +4,21 @@
     <CodeAnalysisRuleSet>d:\Godot\ez-chess\.vscode\ruleset.xml</CodeAnalysisRuleSet>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>ezchess</RootNamespace>
-    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <EnforceBuildAnalyzerReferences>true</EnforceBuildAnalyzerReferences>
-    <LangVersion>12.0</LangVersion>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.7.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <GeneratorSource Include="addons\ez-chess\script\generator\ValveGenerator.cs" />
-    <Compile Remove="@(GeneratorSource)" />
-    <GeneratorSharedSource Include="addons\ez-chess\script\generator\GeneratorHelper.cs" />
-  </ItemGroup>
-  
-  <PropertyGroup>
-    <SourceGeneratorSourceFiles>addons\ez-chess\script\generator\*.cs</SourceGeneratorSourceFiles>
-    <SourceGeneratorDllPath>$(IntermediateOutputPath)SourceGenerator\$(AssemblyName).SourceGenerator.dll</SourceGeneratorDllPath>
   </PropertyGroup>
 
-  <Target Name="CompileInlineSourceGenerator" BeforeTargets="CoreCompile" Inputs="@(GeneratorSource)" Outputs="$(IntermediateOutputPath)SourceGenerator\$(AssemblyName).SourceGenerator.dll">
-    <PropertyGroup>
-      <_GeneratorDllDir>$(IntermediateOutputPath)SourceGenerator\</_GeneratorDllDir>
-    </PropertyGroup>
-
-    <MakeDir Directories="$(_GeneratorDllDir)" />
-
-    <ItemGroup>
-      <_GeneratorReferences Remove="@(_GeneratorReferences)" />
-      <_GeneratorReferences Include="@(ReferencePath)" Condition="!$([System.String]::new('%(FileName)').StartsWith('GodotSharp'))" />
-    </ItemGroup>
-
-    <Message Text="Compiling Source Generator with references: @(_GeneratorReferences -> '%(FileName)%(Extension)',' ')" Importance="high" />
-
-    <Csc Sources="@(GeneratorSource);@(GeneratorSharedSource)" References="@(_GeneratorReferences)" TargetType="Library" OutputAssembly="$(_GeneratorDllDir)$(AssemblyName).SourceGenerator.dll" />
-    <Copy SourceFiles="@(_GeneratorReferences)" DestinationFolder="$(_GeneratorDllDir)" SkipUnchangedFiles="true" />
-
-  </Target>
+  <ItemGroup>
+      <ProjectReference Include="addons\ez-chess\script\valve_generator\valve_generator.csproj" 
+        OutputItemType="Analyzer"
+        ReferenceOutputAssembly="false"
+        CopyToOutputDirectory="Never">
+    </ProjectReference>
+  </ItemGroup>
 
   <ItemGroup>
-    <Analyzer Include="$(SourceGeneratorDllPath)" Condition="Exists('$(SourceGeneratorDllPath)')" />
+    <Compile Remove="addons\ez-chess\script\valve_generator\**\*.cs" />
+    <Compile Include="addons\ez-chess\script\valve_generator\GeneratorHelper.cs">
+      <Link>Generated\Shared\GeneratorHelper.cs</Link>
+    </Compile>
+    <Compile Include="Generated\**\*.cs" />
   </ItemGroup>
-</Project>
+</Project> 

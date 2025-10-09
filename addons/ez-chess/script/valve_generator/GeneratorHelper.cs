@@ -6,14 +6,32 @@ public enum ValveTypes
   STATE, INSTANCE
 }
 
-public record ValveData(string Action, ValveTypes ValveType, bool EventReciveable);
+public class ValveData 
+{
+   public string Action { get; set; }
+   public ValveTypes ValveType { get; set; } 
+   public bool EventReciveable { get; set; }
+
+    public ValveData(string action, ValveTypes valveType, bool eventReciveable) 
+    {
+        Action = action;
+        ValveType = valveType;
+        EventReciveable = eventReciveable;
+    }
+}
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class RegisterValveAttribute(string action, ValveTypes type, bool eventReciveable = false) : Attribute
+public class RegisterValveAttribute : Attribute
 {
-  public string Action { get; set; } = action;
-  public ValveTypes ValveType { get; set; } = type;
-  public bool EventReciveable { get; set; } = eventReciveable;
+  public string Action { get; set; }
+  public ValveTypes ValveType { get; set; }
+  public bool EventReciveable { get; set; }
+
+  public RegisterValveAttribute(string action, ValveTypes type, bool eventReciveable = false) { 
+    Action = action;
+    ValveType = type;
+    EventReciveable = eventReciveable;
+  }
 }
 public static class AdjectiveConverter
 {
@@ -61,7 +79,7 @@ public static class AdjectiveConverter
             IsConsonant(lowerVerb[len - 3]) &&
             IsVowel(lowerVerb[len - 2]) &&
             IsConsonant(lowerVerb[len - 1]) &&
-            !"wxy".Contains(lowerVerb[len - 1]))
+            !"wxy".Contains(lowerVerb[len - 1].ToString()))
         {
             var commonCvcVerbs = new HashSet<string> { "stop", "plan", "admit", "forget", "regret", "submit" };
             if (commonCvcVerbs.Contains(lowerVerb))
